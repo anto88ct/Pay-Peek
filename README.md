@@ -1,27 +1,52 @@
-# PayPeekFrontend
+PayPeek - README
+PayPeek è una PWA mobile-first per l'analisi intelligente delle buste paga tramite IA. L'applicazione estrae automaticamente dati chiave (stipendio, ferie, permessi, ROL, contributi) da PDF, rileva anomalie e offre dashboard interattive con grafici e trend.​
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.6.
+Architettura
+Frontend: Angular 16 PWA + Bootstrap 5 + PrimeNG 20 (tabelle, calendari, charts). Lazy loading, i18n (IT/EN), temi dark/light, layout mobile-first.​
 
-## Development server
+Backend: Spring Boot REST API con JWT, MongoDB per dati, MinIO per storage PDF. Modulo IA dedicato con OCR Tesseract + pattern matching per estrazione dati.​
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+DevOps: Docker Compose (frontend, backend, MongoDB, MinIO, Redis), CI/CD pronto per Kubernetes. Testing Cypress E2E + JUnit.​
 
-## Code scaffolding
+Funzionalità Principali
+Upload PDF buste paga con elaborazione asincrona
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Estrazione IA stipendio netto/lordo, ferie residue, permessi, ROL, contributi
 
-## Build
+Dashboard KPI, grafici trend 12 mesi, filtri mese/anno, export PDF/Excel
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Anomalie rilevamento automatico (calo stipendio, ferie elevate)
 
-## Running unit tests
+Sicurezza JWT, OTP email, bcrypt, HTTPS, rate limiting
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+UX multilingua IT/EN, temi dark/light/system, PWA installabile
 
-## Running end-to-end tests
+Stack Tecnologico
+Componente	Tecnologie
+Frontend	Angular 16, PrimeNG 20, Bootstrap 5, RxJS, ngx-translate
+Backend	Spring Boot 3.1, MongoDB, MinIO S3, Tesseract OCR
+Sicurezza	JWT, BCrypt, Redis OTP cache
+DevOps	Docker Compose, Cypress, JUnit, Prometheus/Grafana ready
+Setup Locale (Docker Compose)
+bash
+git clone <repo>
+cd pay-peek
+cp .env.example .env  # Configura SMTP, JWT_SECRET, MinIO
+docker-compose up -d
+# Frontend: http://localhost:4200
+# Backend: http://localhost:8080/swagger-ui.html
+Roadmap MVP
+Fase 1 (4 settimane): Upload PDF, OCR base, dashboard semplice IT/EN
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Fase 2 (4 settimane): Dark mode, anomalie, export, grafici avanzati
 
-## Further help
+Fase 3: Onboarding biometrico, modelli IA avanzati, Kubernetes​
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Contributo
+text
+# Frontend
+npm install
+npm run dev
+
+# Backend  
+mvn spring-boot:run
