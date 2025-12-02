@@ -1,7 +1,7 @@
 // src/app/shared/services/auth.service.ts (aggiunta)
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, of, tap} from 'rxjs';
-import {HttpClient} from "@angular/common/http";
+import { BehaviorSubject, catchError, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,38 @@ export class AuthService {
       })
     );
   }
+
+  loginFake(credentials: { email: string; password: string }): Observable<any> {
+    return this.http.get<any>('assets/data/credentials.json').pipe(
+      switchMap((data) => {
+        const user = data.credentials?.find((u: any) =>
+          u.email === credentials.email && u.password === credentials.password
+        );
+
+        if (user) {
+          const token = `fake-jwt.${user.role}.${Date.now()}`;
+          localStorage.setItem('jwt_token', token);
+          localStorage.setItem('user_role', user.role);
+
+          return of({
+            success: true,
+            token,
+            user: {
+              email: user.email,
+              role: user.role,
+              name: user.name,
+              preferences: { language: 'it', theme: 'light' }
+            }
+          });
+        }
+        return throwError(() => new Error('Credenziali non valide'));
+      }),
+      catchError((error) => {
+        return throwError(() => new Error('Credenziali non valide'));
+      })
+    );
+  }
+
 
   // src/app/shared/services/auth.service.ts (snippet)
   setToken(token: string, refreshToken: string): void {

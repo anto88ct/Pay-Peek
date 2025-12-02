@@ -1,0 +1,14 @@
+:host ::ng-deep .custom-border-radius {
+    border-radius: 50px !important;
+    /* Angoli arrotondati */
+}
+
+:host ::ng-deep .custom-border-radius.p-button {
+    border-radius: 50px !important;
+}
+
+/* Opzionale: effetti hover */
+:host ::ng-deep .custom-border-radius:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

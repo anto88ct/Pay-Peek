@@ -12,6 +12,7 @@ import { CommonModule, NgClass } from "@angular/common";
 import { ButtonModule } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
 import { ToolboxModule } from "../../../toolbox/toolbox.module";
+import { ClientError } from "../../../core/models/error-response.dto";
 
 @Component({
   selector: 'app-login',
@@ -53,15 +54,17 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      this.authService.login(this.loginForm.value).subscribe({
+      this.errorMessage = ''; // Clear previous errors
+      this.authService.loginFake(this.loginForm.value).subscribe({
         next: (response) => {
-          this.authService.setToken(response.token, response.refreshToken);
+          this.authService.setToken(response.token, response.refreshToken || '');
           this.themeService.setTheme(response.user.preferences.theme);
           this.languageService.setLanguage(response.user.preferences.language);
           this.router.navigate(['/dashboard']);
         },
-        error: (error) => {
-          this.errorMessage = error.error.message || 'auth.login.error';
+        error: (clientError: ClientError) => {
+          // The error is already transformed by the interceptor
+          this.errorMessage = clientError.message || 'Si è verificato un errore durante il login';
           this.isLoading = false;
         }
       });

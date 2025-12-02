@@ -6,12 +6,13 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from "@angular/common/http";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TRANSLATE_HTTP_LOADER_CONFIG, TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestComponentsComponent } from './pages/test-components/test-components.component';
 import { ToolboxModule } from './toolbox/toolbox.module';
+import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,11 @@ import { ToolboxModule } from './toolbox/toolbox.module';
         prefix: './assets/i18n/',
         suffix: '.json'
       }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

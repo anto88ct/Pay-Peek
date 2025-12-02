@@ -1,5 +1,5 @@
-<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light wrapper">
-  <div class="card shadow-sm" style="max-width: 800px; width: 100%;">
+<div class="d-flex justify-content-center align-items-center min-vh-100 wrapper">
+  <div class="card border-0 mx-auto" style="max-width: 800px; width: 100%;">
     <div class="text-center mb-3">
       <img src="assets/icons/paypeek-logo.png" alt="PayPeek Logo" style="height: 150px;">
     </div>
@@ -35,7 +35,8 @@
         </ad-checkbox>
       </div>
 
-      <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage | translate" class="mb-3"></p-message>
+      <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage | translate" class="mb-3"
+        styleClass="w-100 mb-3"></p-message>
 
       <div class="d-flex flex-column gap-2 mb-3 w-100">
         <div class="d-flex flex-column gap-2 mb-3 w-100">
