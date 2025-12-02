@@ -1,0 +1,65 @@
+<div class="container mt-5">
+    <h2>Toolbox Components Test</h2>
+
+    <div class="card p-4 mb-4">
+        <h3>Buttons</h3>
+        <div class="flex gap-2">
+            <ad-button label="Primary" (onClick)="onButtonClick()"></ad-button>
+            <ad-button label="Secondary" styleClass="p-button-secondary" (onClick)="onButtonClick()"></ad-button>
+            <ad-button label="Success" styleClass="p-button-success" (onClick)="onButtonClick()"></ad-button>
+            <ad-button label="Danger" styleClass="p-button-danger" (onClick)="onButtonClick()"></ad-button>
+            <ad-button label="Loading" [loading]="true"></ad-button>
+            <ad-button label="Disabled" [disabled]="true"></ad-button>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-4">
+        <h3>Inputs</h3>
+        <div class="flex flex-column gap-3">
+            <ad-input label="Text Input" [(ngModel)]="inputValue" placeholder="Type something..."></ad-input>
+            <p>Value: {{inputValue}}</p>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-4">
+        <h3>Checkbox</h3>
+        <div class="flex flex-column gap-3">
+            <ad-checkbox label="Check me" [(ngModel)]="checkboxValue"></ad-checkbox>
+            <p>Value: {{checkboxValue}}</p>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-4">
+        <h3>Dropdown</h3>
+        <div class="flex flex-column gap-3">
+            <ad-dropdown [options]="dropdownOptions" [(ngModel)]="dropdownValue" placeholder="Select an option">
+            </ad-dropdown>
+            <p>Value: {{dropdownValue}}</p>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-4">
+        <h3>MultiSelect</h3>
+        <div class="flex flex-column gap-3">
+            <ad-multiselect [options]="dropdownOptions" [(ngModel)]="multiSelectValue"
+                placeholder="Select multiple options">
+            </ad-multiselect>
+            <p>Value: {{multiSelectValue}}</p>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-4">
+        <h3>Dialog</h3>
+        <ad-button label="Show Dialog" (onClick)="showDialog()"></ad-button>
+        <ad-dialog header="Test Dialog" [(visible)]="dialogVisible">
+            <p>This is a test dialog content.</p>
+            <ad-button label="Close" (onClick)="dialogVisible = false"></ad-button>
+        </ad-dialog>
+    </div>
+
+    <div class="card p-4 mb-4">
+        <h3>File Uploader</h3>
+        <ad-fileuploader mode="basic" chooseLabel="Select File" (onSelect)="onUpload($event)">
+        </ad-fileuploader>
+    </div>
+</div>

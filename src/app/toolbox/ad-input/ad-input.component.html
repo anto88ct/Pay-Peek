@@ -1,0 +1,5 @@
+<div class="flex flex-column gap-2">
+    <label *ngIf="label" [for]="id">{{label}}</label>
+    <input pInputText [id]="id" [type]="type" [placeholder]="placeholder" [value]="value" [disabled]="disabled"
+        [class]="styleClass" (input)="onInput($event)" (blur)="onTouch()" />
+</div>

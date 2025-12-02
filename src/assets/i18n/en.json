@@ -1,0 +1,20 @@
+{
+  "auth": {
+    "login": {
+      "title": "Sign in to paypeek",
+      "email": "Email",
+      "password": "Password",
+      "signIn": "Sign In",
+      "signingIn": "Signing in...",
+      "email.invalid": "Invalid email",
+      "password.invalid": "Invalid password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign Up"
+    }
+  },
+  "app": {
+    "title": "paypeek"
+  }
+}

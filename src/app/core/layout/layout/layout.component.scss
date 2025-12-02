@@ -1,0 +1,21 @@
+.layout-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-desktop {
+  display: flex;
+  width: 100%;
+}
+
+.layout-sidebar { width: 280px; min-height: 100vh; }
+.layout-main { flex: 1; display: flex; flex-direction: column; }
+
+.layout-mobile {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.layout-content-mobile { flex: 1; overflow-y: auto; }

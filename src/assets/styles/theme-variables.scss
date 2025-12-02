@@ -1,0 +1,9 @@
+:root {
+  --color-primary: #208085;
+  --color-bg-primary: #fcfcf9;
+}
+
+[data-color-scheme="dark"] {
+  --color-bg-primary: #1f2121;
+  --color-primary: #32b8c6;
+}

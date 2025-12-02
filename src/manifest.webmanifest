@@ -1,8 +1,8 @@
 {
-  "name": "pay-peek-frontend",
-  "short_name": "pay-peek-frontend",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "PAY_PEEK",
+  "short_name": "PAY_PEEK",
+  "theme_color": "#208085",
+  "background_color": "#ffffff",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

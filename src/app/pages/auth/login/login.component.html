@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%;">
+    <div class="text-center mb-4">
+      <img src="assets/icons/paypeek-logo.png" alt="PayPeek Logo" style="height: 60px;">
+    </div>
+
+    <h2 class="text-center mb-4">{{ 'auth.login.title' | translate }}</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <ad-input formControlName="email" label="{{ 'auth.login.email' | translate }}" id="email" type="email"
+          placeholder="{{'auth.login.email' | translate}}" styleClass="w-100">
+        </ad-input>
+        <div
+          *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)"
+          class="text-danger small mt-1">
+          {{ 'auth.login.email.invalid' | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <ad-input formControlName="password" label="{{ 'auth.login.password' | translate }}" id="password"
+          type="password" placeholder="{{'auth.login.password' | translate}}" styleClass="w-100">
+        </ad-input>
+        <div
+          *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)"
+          class="text-danger small mt-1">
+          {{ 'auth.login.password.invalid' | translate }}
+        </div>
+      </div>
+
+      <div class="form-check mb-3">
+        <ad-checkbox formControlName="rememberMe" inputId="rememberMe" [binary]="true"
+          label="{{ 'auth.login.rememberMe' | translate }}">
+        </ad-checkbox>
+      </div>
+
+      <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage | translate" class="mb-3"></p-message>
+
+      <div class="d-flex align-items-center justify-content-between">
+        <ad-button type="submit" size="small"
+          [label]="isLoading ? ('auth.login.signingIn' | translate) : ('auth.login.signIn' | translate)"
+          [disabled]="isLoading" [loading]="isLoading" styleClass="w-100 mb-3">
+        </ad-button>
+        <ad-button type="button" label="PassKey" severity="secondary" [outlined]="true" size="small"
+          (onClick)="openBiometricLogin()">
+        </ad-button>
+      </div>
+    </form>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <a routerLink="/auth/forgot-password">{{ 'auth.login.forgotPassword' | translate }}</a>
+    </div>
+
+    <div class="text-center">
+      <span>{{ 'auth.login.noAccount' | translate }} </span>
+      <a routerLink="/auth/signup">{{ 'auth.login.signUp' | translate }}</a>
+    </div>
+  </div>
+</div>
