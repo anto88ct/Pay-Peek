@@ -1,0 +1,17 @@
+<div class="ad-sidebar">
+    <div class="logo-container">
+        <i class="fa-solid fa-wallet logo-icon"></i>
+    </div>
+
+    <div class="nav-items">
+        <div *ngFor="let item of items" class="ad-sidebar-item" [class.active]="item.id === activeItemId"
+            (click)="onItemClick(item)" [title]="item.label">
+
+            <div class="icon-container">
+                <i [class]="item.icon"></i>
+                <span *ngIf="item.badge" class="badge">{{ item.badge }}</span>
+            </div>
+            <div class="indicator"></div>
+        </div>
+    </div>
+</div>
