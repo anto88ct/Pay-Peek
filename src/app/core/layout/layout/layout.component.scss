@@ -9,8 +9,16 @@
   width: 100%;
 }
 
-.layout-sidebar { width: 280px; min-height: 100vh; }
-.layout-main { flex: 1; display: flex; flex-direction: column; }
+.layout-sidebar {
+  width: 81px;
+  min-height: 100vh;
+}
+
+.layout-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 
 .layout-mobile {
   display: flex;
@@ -18,4 +26,7 @@
   height: 100vh;
 }
 
-.layout-content-mobile { flex: 1; overflow-y: auto; }
+.layout-content-mobile {
+  flex: 1;
+  overflow-y: auto;
+}

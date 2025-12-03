@@ -18,6 +18,7 @@ import { AdDropdownComponent } from './ad-dropdown/ad-dropdown.component';
 import { AdMultiSelectComponent } from './ad-multiselect/ad-multiselect.component';
 import { AdBottomNavComponent } from './ad-bottom-nav/ad-bottom-nav.component';
 import { AdSidebarComponent } from './ad-sidebar/ad-sidebar.component';
+import { AdLabelComponent } from './ad-label/ad-label.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AdSidebarComponent } from './ad-sidebar/ad-sidebar.component';
     AdDropdownComponent,
     AdMultiSelectComponent,
     AdBottomNavComponent,
-    AdSidebarComponent
+    AdSidebarComponent,
+    AdLabelComponent
   ],
   imports: [
     CommonModule,

@@ -1,7 +1,8 @@
 // src/app/shared/services/auth.service.ts (aggiunta)
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, forkJoin, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
+import { UserDto } from '../models/user.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -33,34 +34,43 @@ export class AuthService {
   }
 
   loginFake(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.get<any>('assets/data/fake-credentials.json').pipe(
-      switchMap((data) => {
-        console.log(data);
-
-        const user = data.credentials?.find((u: any) =>
+    return forkJoin({
+      credentials: this.http.get<any>('assets/data/fake-credentials.json'),
+      users: this.http.get<any>('assets/data/user-fake.json')
+    }).pipe(
+      switchMap(({ credentials: credData, users: userData }) => {
+        const validCredential = credData.credentials?.find((u: any) =>
           u.email === credentials.email && u.password === credentials.password
         );
 
-        if (user) {
-          const token = `fake-jwt.${user.role}.${Date.now()}`;
+        if (validCredential && userData.users && userData.users.length > 0) {
+          // Randomly select a user from user-fake.json
+          const randomIndex = Math.floor(Math.random() * userData.users.length);
+          const randomUser = userData.users[randomIndex];
+
+          const token = `fake-jwt.${validCredential.role}.${Date.now()}`;
           localStorage.setItem('jwt_token', token);
-          localStorage.setItem('user_role', user.role);
-          this.authenticatedSubject.next(true); // ← Aggiunto per aggiornare lo stato di autenticazione
+          localStorage.setItem('user_role', validCredential.role);
+
+          // Store complete user data
+          const userDto: UserDto = {
+            ...randomUser,
+            email: credentials.email // Override with login email
+          };
+          localStorage.setItem('current_user', JSON.stringify(userDto));
+
+          this.authenticatedSubject.next(true);
 
           return of({
             success: true,
             token,
-            user: {
-              email: user.email,
-              role: user.role,
-              name: user.name,
-              preferences: { language: 'it', theme: 'light' }
-            }
+            user: userDto
           });
         }
         return throwError(() => new Error('Credenziali non valide'));
       }),
       catchError((error) => {
+        console.error('Login error:', error);
         return throwError(() => new Error('Credenziali non valide'));
       })
     );
@@ -76,8 +86,23 @@ export class AuthService {
   }
 
 
+  getCurrentUser(): UserDto | null {
+    const userStr = localStorage.getItem('current_user');
+    if (userStr) {
+      try {
+        return JSON.parse(userStr) as UserDto;
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+        return null;
+      }
+    }
+    return null;
+  }
+
   logout() {
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('current_user');
+    localStorage.removeItem('user_role');
     this.authenticatedSubject.next(false);
     // eventuale navigazione alla pagina login gestita esternamente al service
   }

@@ -1,0 +1,167 @@
+<div class="profile-container">
+    <div class="container-fluid py-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-8">
+                <!-- Profile Header -->
+                <div class="profile-header mb-4">
+                    <h2 class="mb-1">
+                        <i class="fas fa-user-circle me-2"></i>
+                        Il Mio Profilo
+                    </h2>
+                    <p class="text-muted">Gestisci le tue informazioni personali</p>
+                </div>
+
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <!-- Profile Image Section -->
+                    <div class="profile-image-section">
+                        <div class="profile-image-wrapper" (click)="triggerFileInput()">
+                            <img [src]="profileImageUrl" alt="Profile Image" class="profile-image" />
+                            <div class="image-upload-overlay">
+                                <i class="fas fa-camera"></i>
+                                <span class="upload-text">Carica Foto</span>
+                            </div>
+                        </div>
+                        <input type="file" id="profileImageInput" (change)="onFileSelected($event)"
+                            accept=".png,.jpg,.jpeg" style="display: none;" />
+                        <div class="error-message" *ngIf="uploadError">
+                            <i class="fas fa-exclamation-circle me-1"></i>
+                            {{ uploadError }}
+                        </div>
+                    </div>
+
+                    <!-- Profile Form -->
+                    <form [formGroup]="profileForm" class="profile-form">
+                        <div class="row g-3">
+                            <!-- First Name -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-user me-2"></i>
+                                    Nome
+                                </label>
+                                <input type="text" formControlName="firstName" class="form-control"
+                                    placeholder="Inserisci il nome" />
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-user me-2"></i>
+                                    Cognome
+                                </label>
+                                <input type="text" formControlName="lastName" class="form-control"
+                                    placeholder="Inserisci il cognome" />
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-12">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    Email
+                                </label>
+                                <input type="email" formControlName="email" class="form-control"
+                                    placeholder="email@example.com" />
+                            </div>
+
+                            <!-- Password -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-lock me-2"></i>
+                                    Password
+                                </label>
+                                <input type="text" formControlName="password" class="form-control"
+                                    placeholder="••••••••" readonly />
+                            </div>
+
+                            <!-- Passkey -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-key me-2"></i>
+                                    Passkey
+                                </label>
+                                <input type="text" formControlName="passkey" class="form-control" placeholder="••••"
+                                    readonly />
+                            </div>
+
+                            <!-- Job Type -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-briefcase me-2"></i>
+                                    Lavoro
+                                </label>
+                                <input type="text" formControlName="jobType" class="form-control"
+                                    placeholder="Es. Informatico, Notaio..." />
+                            </div>
+
+                            <!-- Nationality -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-flag me-2"></i>
+                                    Nazionalità
+                                </label>
+                                <input type="text" formControlName="nationality" class="form-control"
+                                    placeholder="Es. Italiana" />
+                            </div>
+
+                            <!-- City -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-city me-2"></i>
+                                    Città
+                                </label>
+                                <input type="text" formControlName="city" class="form-control"
+                                    placeholder="Es. Milano" />
+                            </div>
+
+                            <!-- Country -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-globe me-2"></i>
+                                    Paese
+                                </label>
+                                <input type="text" formControlName="country" class="form-control"
+                                    placeholder="Es. Italia" />
+                            </div>
+
+                            <!-- Uploaded Documents Count -->
+                            <div class="col-12">
+                                <label class="form-label">
+                                    <i class="fas fa-file-alt me-2"></i>
+                                    Documenti Caricati
+                                </label>
+                                <div class="documents-badge">
+                                    <span class="badge">
+                                        <i class="fas fa-folder me-2"></i>
+                                        {{ profileForm.get('uploadedDocumentsCount')?.value || 0 }} documenti
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <div *ngIf="!isEditMode" class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-primary" (click)="toggleEditMode()">
+                                    <i class="fas fa-edit me-2"></i>
+                                    Modifica Profilo
+                                </button>
+                            </div>
+
+                            <div *ngIf="isEditMode" class="d-flex justify-content-end gap-2">
+                                <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">
+                                    <i class="fas fa-times me-2"></i>
+                                    Annulla
+                                </button>
+                                <button type="button" class="btn btn-success" (click)="saveProfile()"
+                                    [disabled]="!profileForm.valid">
+                                    <i class="fas fa-save me-2"></i>
+                                    Salva Modifiche
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

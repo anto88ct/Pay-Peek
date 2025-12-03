@@ -12,9 +12,10 @@ export class AdButtonComponent {
   @Input() styleClass: string = '';
   @Input() disabled: boolean = false;
   @Input() loading: boolean = false;
-  @Input() severity: string = 'primary'; // primary, secondary, success, info, warning, danger
+  @Input() severity: string = 'primary';
   @Input() outlined: boolean = false;
-  @Input() size: 'small' | 'large' | undefined = undefined; // small, large, undefined (medium)
+  @Input() size: 'small' | 'large' | undefined = undefined;
+  @Input() customSeverity?: 'custom-blue' | 'custom-green' | 'custom-orange';
 
   @Output() onClick = new EventEmitter<any>();
 
@@ -23,4 +24,12 @@ export class AdButtonComponent {
       this.onClick.emit(event);
     }
   }
+
+  getButtonClasses(): string {
+    const base = 'w-full custom-border-radius';
+    return this.customSeverity
+      ? `${base} p-button-${this.customSeverity}`
+      : base;
+  }
+
 }

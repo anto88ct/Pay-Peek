@@ -29,7 +29,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
+        loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule)
       },
       {
         path: 'settings',

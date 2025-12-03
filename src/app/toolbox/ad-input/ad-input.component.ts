@@ -20,8 +20,10 @@ export class AdInputComponent implements ControlValueAccessor {
   @Input() id: string = '';
   @Input() disabled: boolean = false;
   @Input() styleClass: string = '';
+  @Input() inputIcon: string = '';
 
   value: string = '';
+  showPassword = false;
 
   onChange: any = () => { };
   onTouch: any = () => { };
@@ -32,6 +34,10 @@ export class AdInputComponent implements ControlValueAccessor {
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   registerOnTouched(fn: any): void {

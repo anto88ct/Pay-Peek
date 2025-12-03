@@ -11,13 +11,23 @@ import { map, shareReplay } from 'rxjs/operators';
 export class LayoutComponent implements OnInit {
   isMobile$!: Observable<boolean>;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
+    console.log('🔍 LayoutComponent ngOnInit');  // ← AGGIUNGI
+
     this.isMobile$ = this.breakpointObserver.observe(Breakpoints.Handset)
       .pipe(
-        map(result => result.matches),
-        shareReplay()
+        map(result => {
+          console.log('📱 isMobile:', result.matches, 'width:', window.innerWidth);  // ← AGGIUNGI
+          return result.matches;
+        }),
+        shareReplay(1)
       );
+
+    // SUBSCRIBE per vedere il valore reale
+    this.isMobile$.subscribe(isMobile => {
+      console.log('🎯 isMobile$ valore FINALE:', isMobile);
+    });
   }
 }
