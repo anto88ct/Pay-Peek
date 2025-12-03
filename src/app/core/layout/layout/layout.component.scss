@@ -18,15 +18,27 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.layout-content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f8f9fa;
 }
 
 .layout-mobile {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+  display: block; // Changed from flex to block to allow fixed children to position relative to viewport
+  min-height: 100vh;
+  background-color: #f8f9fa; // Ensure background covers full height
 }
 
 .layout-content-mobile {
-  flex: 1;
-  overflow-y: auto;
+  // Add padding to prevent content from being hidden behind fixed bars
+  // Header height approx 60px + spacing
+  padding-top: 70px;
+  // Bottom nav height approx 70px + spacing
+  padding-bottom: 90px;
+  min-height: 100vh;
 }

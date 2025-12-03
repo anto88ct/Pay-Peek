@@ -1,0 +1,104 @@
+.app-headbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030; // Standard Bootstrap z-index for fixed navbar
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+    background: #0f172a;
+    color: #e5e7eb;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+
+    .headbar-left,
+    .headbar-center,
+    .headbar-right {
+        display: flex;
+        align-items: center;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        .brand-title {
+            font-weight: 600;
+            letter-spacing: .03em;
+        }
+    }
+
+    .page-title {
+        font-size: .95rem;
+        color: #9ca3af;
+    }
+
+    .headbar-right {
+        gap: .25rem;
+    }
+
+    .icon-button {
+        position: relative;
+        border: none;
+        background: transparent;
+        color: #e5e7eb;
+        padding: .35rem .45rem;
+        border-radius: 999px;
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(148, 163, 184, 0.2);
+        }
+
+        .badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: translate(30%, -30%);
+            background: #ef4444;
+            color: white;
+            border-radius: 999px;
+            font-size: .65rem;
+            padding: 0 .3rem;
+        }
+    }
+
+    .profile-mini {
+        display: flex;
+        align-items: center;
+        padding: .25rem .4rem;
+        border-radius: 999px;
+        cursor: pointer;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.5);
+
+        &:hover {
+            background: rgba(30, 64, 175, 0.4);
+            border-color: #60a5fa;
+        }
+
+        .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: .4rem;
+        }
+
+        .username {
+            font-size: .85rem;
+        }
+    }
+}
+
+:host(.desktop-header) {
+    .app-headbar {
+        position: relative;
+        width: 100%;
+        left: auto;
+        top: auto;
+        z-index: 10;
+    }
+}

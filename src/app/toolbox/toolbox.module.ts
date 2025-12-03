@@ -19,6 +19,12 @@ import { AdMultiSelectComponent } from './ad-multiselect/ad-multiselect.componen
 import { AdBottomNavComponent } from './ad-bottom-nav/ad-bottom-nav.component';
 import { AdSidebarComponent } from './ad-sidebar/ad-sidebar.component';
 import { AdLabelComponent } from './ad-label/ad-label.component';
+import { AdYearPickerComponent } from './ad-year-picker/ad-year-picker.component';
+import { AdMonthPickerComponent } from './ad-month-picker/ad-month-picker.component';
+import { AdColorPickerComponent } from './ad-color-picker/ad-color-picker.component';
+
+import { CalendarModule } from 'primeng/calendar';
+import { ColorPickerModule } from 'primeng/colorpicker';
 
 @NgModule({
   declarations: [
@@ -31,7 +37,10 @@ import { AdLabelComponent } from './ad-label/ad-label.component';
     AdMultiSelectComponent,
     AdBottomNavComponent,
     AdSidebarComponent,
-    AdLabelComponent
+    AdLabelComponent,
+    AdYearPickerComponent,
+    AdMonthPickerComponent,
+    AdColorPickerComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +52,9 @@ import { AdLabelComponent } from './ad-label/ad-label.component';
     InputTextModule,
     CheckboxModule,
     DropdownModule,
-    MultiSelectModule
+    MultiSelectModule,
+    CalendarModule,
+    ColorPickerModule
   ],
   exports: [
     AdButtonComponent,
@@ -55,7 +66,10 @@ import { AdLabelComponent } from './ad-label/ad-label.component';
     AdMultiSelectComponent,
     AdBottomNavComponent,
     AdLabelComponent,
-    AdSidebarComponent
+    AdSidebarComponent,
+    AdYearPickerComponent,
+    AdMonthPickerComponent,
+    AdColorPickerComponent
   ]
 })
 export class ToolboxModule { }

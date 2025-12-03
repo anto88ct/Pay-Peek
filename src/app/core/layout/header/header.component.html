@@ -1,1 +1,30 @@
-<p>header works!</p>
+<header class="app-headbar">
+    <div class="headbar-left">
+        <div class="brand" (click)="goHome()">
+            <span class="brand-title">Pay Peek</span>
+        </div>
+    </div>
+
+    <div class="headbar-center d-none d-md-flex">
+        <span class="page-title">
+            Il Mio Profilo
+        </span>
+    </div>
+
+    <div class="headbar-right">
+        <button class="icon-button me-2" type="button" (click)="openNotifications()">
+            <i class="fas fa-bell"></i>
+            <span class="badge" *ngIf="notificationCount > 0">{{ notificationCount }}</span>
+        </button>
+
+        <button class="icon-button me-2" type="button" (click)="toggleTheme()">
+            <i class="fas fa-moon"></i>
+        </button>
+
+        <div class="profile-mini" (click)="openProfileMenu()">
+            <img [src]="profileImageUrl" alt="Profile" class="avatar" />
+            <span class="username d-none d-md-inline">{{ userName }}</span>
+            <i class="fas fa-chevron-down ms-1"></i>
+        </div>
+    </div>
+</header>

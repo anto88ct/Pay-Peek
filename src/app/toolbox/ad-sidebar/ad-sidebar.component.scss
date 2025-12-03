@@ -4,7 +4,7 @@
     left: 0;
     width: 80px;
     height: 100vh;
-    background-color: #ffffff;
+    background-color: #131a2a;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,7 +12,15 @@
     z-index: 1000;
     padding-top: 20px;
 
+    .logo-icon {
+        height: 40px;
+        width: 40px;
+    }
+
     .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-bottom: 40px;
         color: var(--primary-color, #2C3E50);
         font-size: 2rem;
@@ -46,8 +54,6 @@
                 position: absolute;
                 top: -8px;
                 right: -8px;
-                background-color: #ef4444;
-                color: white;
                 font-size: 0.65rem;
                 font-weight: bold;
                 min-width: 16px;
@@ -67,18 +73,18 @@
             transform: translateY(-50%);
             width: 4px;
             height: 0;
-            background-color: var(--secondary-color, #18BC9C);
+            background-color: #204cb3;
             border-top-right-radius: 4px;
             border-bottom-right-radius: 4px;
             transition: height 0.3s ease;
         }
 
         &.active {
-            color: var(--primary-color, #2C3E50);
-            background-color: rgba(24, 188, 156, 0.05);
+            color: #204cb3;
+            background-color: #5d49b42a;
 
             .icon-container {
-                color: var(--secondary-color, #18BC9C);
+                color: white;
                 transform: scale(1.1);
             }
 
@@ -88,7 +94,7 @@
         }
 
         &:hover:not(.active) {
-            color: var(--primary-color, #2C3E50);
+            color: var(--primary-color, #b8c6ed);
             background-color: rgba(0, 0, 0, 0.02);
 
             .icon-container {

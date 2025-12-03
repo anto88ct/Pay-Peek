@@ -3,7 +3,7 @@
   <div class="layout-desktop" *ngIf="!(isMobile$ | async)">
     <app-sidebar class="layout-sidebar"></app-sidebar>
     <div class="layout-main">
-      <app-header></app-header>
+      <app-header class="desktop-header"></app-header>
       <main class="layout-content">
         <router-outlet></router-outlet>
       </main>

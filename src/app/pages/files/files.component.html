@@ -1,0 +1,134 @@
+<div class="files-container p-4 fade-in">
+    <!-- Header & Search -->
+    <div class="flex justify-content-between align-items-center mb-4">
+        <h1 class="m-0 text-2xl font-bold text-800">Files</h1>
+
+        <div class="search-box">
+            <ad-input icon="fa-solid fa-search" placeholder="Search folders or files..."
+                (inputChange)="onSearch($event)">
+            </ad-input>
+        </div>
+    </div>
+
+    <!-- Breadcrumbs -->
+    <div class="mb-4 flex align-items-center gap-2 text-600" *ngIf="currentView === 'year'">
+        <span class="cursor-pointer hover:text-primary transition-colors" (click)="goBackToRoot()">Files</span>
+        <i class="fa-solid fa-chevron-right text-xs"></i>
+        <span class="font-bold text-primary">{{ selectedYearFolder?.year }}</span>
+    </div>
+
+    <!-- Empty State (Root) -->
+    <div *ngIf="currentView === 'root' && filteredFolders.length === 0 && !searchQuery"
+        class="empty-state flex flex-column align-items-center justify-content-center h-20rem border-2 border-dashed border-300 border-round-xl bg-white-alpha-50 cursor-pointer hover:bg-white-alpha-80 transition-all"
+        (click)="openCreateYearDialog()">
+        <div
+            class="icon-circle bg-primary-50 text-primary border-circle w-4rem h-4rem flex align-items-center justify-content-center mb-3">
+            <i class="fa-solid fa-plus text-2xl"></i>
+        </div>
+        <h3 class="m-0 text-700">No Pay Slips Yet</h3>
+        <p class="text-500 mt-2">Click to create your first Year Folder</p>
+    </div>
+
+    <!-- Root View: Year Folders Grid -->
+    <div *ngIf="currentView === 'root' && (filteredFolders.length > 0 || searchQuery)" class="grid">
+        <!-- Add New Year Card -->
+        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+            <div class="folder-card create-card h-full flex flex-column align-items-center justify-content-center p-4 border-1 border-dashed border-300 border-round-xl cursor-pointer hover:surface-50 transition-all"
+                (click)="openCreateYearDialog()">
+                <i class="fa-solid fa-plus text-3xl text-400 mb-2"></i>
+                <span class="text-600 font-medium">New Year Folder</span>
+            </div>
+        </div>
+
+        <!-- Year Folders -->
+        <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngFor="let folder of filteredFolders">
+            <div class="folder-card h-full p-4 surface-card border-1 border-200 border-round-xl cursor-pointer hover:shadow-2 transition-all relative overflow-hidden"
+                (click)="openYearFolder(folder)">
+                <!-- Color Strip -->
+                <div class="absolute top-0 left-0 w-full h-1" [style.background-color]="folder.color"></div>
+
+                <div class="flex align-items-center justify-content-between mb-3">
+                    <i class="fa-solid fa-folder text-4xl" [style.color]="folder.color"></i>
+                    <span class="text-500 text-sm">{{ folder.months.length }} months</span>
+                </div>
+                <h3 class="text-xl font-bold text-800 m-0">{{ folder.year }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Year View: Month Folders Grid -->
+    <div *ngIf="currentView === 'year' && selectedYearFolder" class="grid">
+        <!-- Add New Month Card -->
+        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+            <div class="folder-card create-card h-full flex flex-column align-items-center justify-content-center p-4 border-1 border-dashed border-300 border-round-xl cursor-pointer hover:surface-50 transition-all"
+                (click)="openCreateMonthDialog()">
+                <i class="fa-solid fa-plus text-3xl text-400 mb-2"></i>
+                <span class="text-600 font-medium">New Month Folder</span>
+            </div>
+        </div>
+
+        <!-- Month Folders -->
+        <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngFor="let month of displayedMonths">
+            <div
+                class="folder-card h-full p-4 surface-card border-1 border-200 border-round-xl cursor-pointer hover:shadow-2 transition-all">
+                <div class="flex align-items-center justify-content-between mb-3">
+                    <i class="fa-regular fa-folder-open text-4xl text-primary"></i>
+                    <span class="badge bg-primary-50 text-primary border-round px-2 py-1 text-xs font-bold"
+                        *ngIf="month.files.length > 0">
+                        PDF
+                    </span>
+                </div>
+                <h3 class="text-lg font-bold text-800 m-0 mb-2">{{ month.name }}</h3>
+
+                <!-- File Preview (if exists) -->
+                <div *ngIf="month.files.length > 0"
+                    class="file-preview flex align-items-center gap-2 p-2 surface-50 border-round">
+                    <i class="fa-solid fa-file-pdf text-red-500"></i>
+                    <span class="text-xs text-600 white-space-nowrap overflow-hidden text-overflow-ellipsis">{{
+                        month.files[0].name }}</span>
+                </div>
+                <div *ngIf="month.files.length === 0" class="text-xs text-400 italic">
+                    No files yet
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Year Dialog -->
+<ad-dialog [(visible)]="showYearDialog" header="Create Year Folder" [style]="{width: '400px'}">
+
+    <div class="flex flex-column gap-3">
+        <ad-year-picker label="Year" [(year)]="newYearData.year">
+        </ad-year-picker>
+
+        <ad-color-picker label="Folder Color" [(color)]="newYearData.color">
+        </ad-color-picker>
+
+        <ad-fileuploader label="Upload Payslip (Optional)" accept=".pdf" mode="basic"
+            (onSelect)="onYearFileSelect($event)">
+        </ad-fileuploader>
+
+        <div class="flex justify-content-end gap-2 mt-2">
+            <ad-button label="Cancel" severity="secondary" (onClick)="showYearDialog = false"></ad-button>
+            <ad-button label="Create" (onClick)="createYear()"></ad-button>
+        </div>
+    </div>
+</ad-dialog>
+
+<!-- Create Month Dialog -->
+<ad-dialog [(visible)]="showMonthDialog" header="Create Month Folder" [style]="{width: '400px'}">
+
+    <div class="flex flex-column gap-3">
+        <ad-month-picker label="Month" [(month)]="newMonthData.month">
+        </ad-month-picker>
+
+        <ad-fileuploader label="Upload Payslip" accept=".pdf" mode="basic" (onSelect)="onMonthFileSelect($event)">
+        </ad-fileuploader>
+
+        <div class="flex justify-content-end gap-2 mt-2">
+            <ad-button label="Cancel" severity="secondary" (onClick)="showMonthDialog = false"></ad-button>
+            <ad-button label="Create" (onClick)="createMonth()"></ad-button>
+        </div>
+    </div>
+</ad-dialog>

@@ -22,6 +22,7 @@ export class AdInputComponent implements ControlValueAccessor {
   @Input() styleClass: string = '';
   @Input() inputIcon: string = '';
   @Input() readonly: boolean = false;
+  @Output() inputChange = new EventEmitter<string>();
 
   value: string = '';
   showPassword = false;
@@ -56,5 +57,6 @@ export class AdInputComponent implements ControlValueAccessor {
     this.value = event.target.value;
     this.onChange(this.value);
     this.onTouch();
+    this.inputChange.emit(this.value);
   }
 }

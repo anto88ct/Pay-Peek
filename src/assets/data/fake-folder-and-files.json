@@ -1,0 +1,61 @@
+[
+    {
+        "id": "year-2024",
+        "year": 2024,
+        "color": "#FF5733",
+        "months": [
+            {
+                "id": "month-2024-01",
+                "month": 1,
+                "name": "January",
+                "files": [
+                    {
+                        "id": "file-2024-01-01",
+                        "name": "busta_paga_gennaio_2024.pdf",
+                        "url": "assets/files/sample.pdf",
+                        "type": "pdf",
+                        "size": 102400,
+                        "uploadDate": "2024-01-15T10:00:00Z"
+                    }
+                ]
+            },
+            {
+                "id": "month-2024-02",
+                "month": 2,
+                "name": "February",
+                "files": [
+                    {
+                        "id": "file-2024-02-01",
+                        "name": "busta_paga_febbraio_2024.pdf",
+                        "url": "assets/files/sample.pdf",
+                        "type": "pdf",
+                        "size": 102400,
+                        "uploadDate": "2024-02-15T10:00:00Z"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "year-2023",
+        "year": 2023,
+        "color": "#33FF57",
+        "months": [
+            {
+                "id": "month-2023-12",
+                "month": 12,
+                "name": "December",
+                "files": [
+                    {
+                        "id": "file-2023-12-01",
+                        "name": "busta_paga_dicembre_2023.pdf",
+                        "url": "assets/files/sample.pdf",
+                        "type": "pdf",
+                        "size": 102400,
+                        "uploadDate": "2023-12-15T10:00:00Z"
+                    }
+                ]
+            }
+        ]
+    }
+]

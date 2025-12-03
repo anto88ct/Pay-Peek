@@ -1,0 +1,64 @@
+.files-container {
+    min-height: 100%;
+    background-color: var(--surface-ground);
+}
+
+.search-box {
+    width: 300px;
+
+    @media (max-width: 576px) {
+        width: 100%;
+    }
+}
+
+.folder-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: #ffffff;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    &.create-card {
+        background: transparent;
+        border-style: dashed !important;
+
+        &:hover {
+            border-color: var(--primary-color) !important;
+
+            i,
+            span {
+                color: var(--primary-color) !important;
+            }
+        }
+    }
+}
+
+.empty-state {
+    min-height: 400px;
+
+    &:hover {
+        border-color: var(--primary-color) !important;
+
+        .icon-circle {
+            background-color: var(--primary-color) !important;
+            color: #ffffff !important;
+        }
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
