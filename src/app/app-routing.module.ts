@@ -9,11 +9,11 @@ const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent)
   },
-  // {
-  //   path: 'dashboard',
-  //   loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    canActivate: [AuthGuard]
+  },
   { path: 'test-components', component: TestComponentsComponent },
   { path: '**', redirectTo: '/login' }
 ];

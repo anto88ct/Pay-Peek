@@ -16,5 +16,9 @@
   },
   "app": {
     "title": "paypeek"
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "WELCOME": "Benvenuto su PayPeek!"
   }
 }

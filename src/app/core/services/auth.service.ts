@@ -33,8 +33,10 @@ export class AuthService {
   }
 
   loginFake(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.get<any>('assets/data/credentials.json').pipe(
+    return this.http.get<any>('assets/data/fake-credentials.json').pipe(
       switchMap((data) => {
+        console.log(data);
+
         const user = data.credentials?.find((u: any) =>
           u.email === credentials.email && u.password === credentials.password
         );
@@ -43,6 +45,7 @@ export class AuthService {
           const token = `fake-jwt.${user.role}.${Date.now()}`;
           localStorage.setItem('jwt_token', token);
           localStorage.setItem('user_role', user.role);
+          this.authenticatedSubject.next(true); // ← Aggiunto per aggiornare lo stato di autenticazione
 
           return of({
             success: true,
