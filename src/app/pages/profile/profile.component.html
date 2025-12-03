@@ -35,100 +35,79 @@
                         <div class="row g-3">
                             <!-- First Name -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">
-                                    <i class="fas fa-user me-2"></i>
-                                    Nome
-                                </label>
-                                <input type="text" formControlName="firstName" class="form-control"
-                                    placeholder="Inserisci il nome" />
+                                <ad-label icon="fas fa-user" label="Nome" placeholder="Inserisci il nome"></ad-label>
+                                <ad-input formControlName="firstName" [readonly]="!isEditMode"
+                                    placeholder="Inserisci il nome">
+                                </ad-input>
                             </div>
 
                             <!-- Last Name -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">
-                                    <i class="fas fa-user me-2"></i>
-                                    Cognome
-                                </label>
-                                <input type="text" formControlName="lastName" class="form-control"
-                                    placeholder="Inserisci il cognome" />
+                                <ad-label icon="fas fa-user" label="Cognome"
+                                    placeholder="Inserisci il cognome"></ad-label>
+                                <ad-input formControlName="lastName" [readonly]="!isEditMode"
+                                    placeholder="Inserisci il cognome">
+                                </ad-input>
                             </div>
 
                             <!-- Email -->
                             <div class="col-12">
-                                <label class="form-label">
-                                    <i class="fas fa-envelope me-2"></i>
-                                    Email
-                                </label>
-                                <input type="email" formControlName="email" class="form-control"
-                                    placeholder="email@example.com" />
+                                <ad-label icon="fas fa-envelope" label="Email"
+                                    placeholder="email@example.com"></ad-label>
+                                <ad-input formControlName="email" type="email" [readonly]="!isEditMode"
+                                    placeholder="email@example.com">
+                                </ad-input>
                             </div>
 
                             <!-- Password -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">
-                                    <i class="fas fa-lock me-2"></i>
-                                    Password
-                                </label>
-                                <input type="text" formControlName="password" class="form-control"
-                                    placeholder="••••••••" readonly />
+                                <ad-label icon="fas fa-lock" label="Password"></ad-label>
+                                <ad-input formControlName="password" type="password" [readonly]="true"
+                                    placeholder="••••••••">
+                                </ad-input>
                             </div>
 
                             <!-- Passkey -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">
-                                    <i class="fas fa-key me-2"></i>
-                                    Passkey
-                                </label>
-                                <input type="text" formControlName="passkey" class="form-control" placeholder="••••"
-                                    readonly />
+                                <ad-label icon="fas fa-key" label="Passkey"></ad-label>
+                                <ad-input formControlName="passkey" [readonly]="true" placeholder="••••">
+                                </ad-input>
                             </div>
 
                             <!-- Job Type -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">
-                                    <i class="fas fa-briefcase me-2"></i>
-                                    Lavoro
-                                </label>
-                                <input type="text" formControlName="jobType" class="form-control"
-                                    placeholder="Es. Informatico, Notaio..." />
+                                <ad-label icon="fas fa-briefcase" label="Lavoro"
+                                    placeholder="Es. Informatico, Notaio..."></ad-label>
+                                <ad-input formControlName="jobType" [readonly]="!isEditMode"
+                                    placeholder="Es. Informatico, Notaio...">
+                                </ad-input>
                             </div>
 
                             <!-- Nationality -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">
-                                    <i class="fas fa-flag me-2"></i>
-                                    Nazionalità
-                                </label>
-                                <input type="text" formControlName="nationality" class="form-control"
-                                    placeholder="Es. Italiana" />
+                                <ad-label icon="fas fa-flag" label="Nazionalità" placeholder="Es. Italiana"></ad-label>
+                                <ad-input formControlName="nationality" [readonly]="!isEditMode"
+                                    placeholder="Es. Italiana">
+                                </ad-input>
                             </div>
 
                             <!-- City -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">
-                                    <i class="fas fa-city me-2"></i>
-                                    Città
-                                </label>
-                                <input type="text" formControlName="city" class="form-control"
-                                    placeholder="Es. Milano" />
+                                <ad-label icon="fas fa-city" label="Città" placeholder="Es. Milano"></ad-label>
+                                <ad-input formControlName="city" [readonly]="!isEditMode" placeholder="Es. Milano">
+                                </ad-input>
                             </div>
 
                             <!-- Country -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">
-                                    <i class="fas fa-globe me-2"></i>
-                                    Paese
-                                </label>
-                                <input type="text" formControlName="country" class="form-control"
-                                    placeholder="Es. Italia" />
+                                <ad-label icon="fas fa-globe" label="Paese" placeholder="Es. Italia"></ad-label>
+                                <ad-input formControlName="country" [readonly]="!isEditMode" placeholder="Es. Italia">
+                                </ad-input>
                             </div>
 
                             <!-- Uploaded Documents Count -->
                             <div class="col-12">
-                                <label class="form-label">
-                                    <i class="fas fa-file-alt me-2"></i>
-                                    Documenti Caricati
-                                </label>
+                                <ad-label icon="fas fa-file-alt" label="Documenti Caricati"></ad-label>
                                 <div class="documents-badge">
                                     <span class="badge">
                                         <i class="fas fa-folder me-2"></i>
@@ -141,22 +120,21 @@
                         <!-- Action Buttons -->
                         <div class="action-buttons">
                             <div *ngIf="!isEditMode" class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-primary" (click)="toggleEditMode()">
-                                    <i class="fas fa-edit me-2"></i>
-                                    Modifica Profilo
-                                </button>
+                                <ad-button label="Modifica Profilo" icon="fas fa-edit"
+                                    styleClass="w-full w-md-auto custom-border-radius" severity="primary"
+                                    (onClick)="toggleEditMode()">
+                                </ad-button>
                             </div>
 
                             <div *ngIf="isEditMode" class="d-flex justify-content-end gap-2">
-                                <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">
-                                    <i class="fas fa-times me-2"></i>
-                                    Annulla
-                                </button>
-                                <button type="button" class="btn btn-success" (click)="saveProfile()"
-                                    [disabled]="!profileForm.valid">
-                                    <i class="fas fa-save me-2"></i>
-                                    Salva Modifiche
-                                </button>
+                                <ad-button label="Annulla" icon="fas fa-times"
+                                    styleClass="w-full w-md-auto custom-border-radius" severity="secondary"
+                                    [outlined]="true" (onClick)="cancelEdit()">
+                                </ad-button>
+                                <ad-button label="Salva Modifiche" icon="fas fa-save"
+                                    styleClass="w-full w-md-auto custom-border-radius" severity="success"
+                                    [disabled]="!profileForm.valid" (onClick)="saveProfile()">
+                                </ad-button>
                             </div>
                         </div>
                     </form>

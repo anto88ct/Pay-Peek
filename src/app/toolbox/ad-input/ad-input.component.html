@@ -1,15 +1,17 @@
 <div class="flex flex-column gap-2">
-    <!-- label *ngIf="label" [for]="id">{{label}}</label -->
     <ad-label *ngIf="label" [label]="label" [icon]="inputIcon"></ad-label>
+
     <div *ngIf="type === 'password'; else regularInput" class="p-input-icon-right">
-        <input pInputText [id]="id" type="{{ showPassword ? 'text' : 'password' }}" [placeholder]="placeholder"
-            class="form-control" [value]="value" [disabled]="disabled" [class]="styleClass" (input)="onInput($event)"
-            (blur)="onTouch()" />
+        <input pInputText [id]="id" [type]="showPassword ? 'text' : 'password'" [placeholder]="placeholder"
+            class="form-control" [value]="value" [disabled]="disabled" [readonly]="readonly" [class]="styleClass"
+            (input)="onInput($event)" (blur)="onTouch()" />
         <i class="fa" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"
             (click)="togglePasswordVisibility()"></i>
     </div>
+
     <ng-template #regularInput>
         <input pInputText [id]="id" [type]="type" [placeholder]="placeholder" class="form-control" [value]="value"
-            [disabled]="disabled" [class]="styleClass" (input)="onInput($event)" (blur)="onTouch()" />
+            [disabled]="disabled" [readonly]="readonly" [class]="styleClass" (input)="onInput($event)"
+            (blur)="onTouch()" />
     </ng-template>
 </div>

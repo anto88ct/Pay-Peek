@@ -21,6 +21,7 @@ export class AdInputComponent implements ControlValueAccessor {
   @Input() disabled: boolean = false;
   @Input() styleClass: string = '';
   @Input() inputIcon: string = '';
+  @Input() readonly: boolean = false;
 
   value: string = '';
   showPassword = false;
@@ -49,6 +50,9 @@ export class AdInputComponent implements ControlValueAccessor {
   }
 
   onInput(event: any) {
+    if (this.readonly || this.disabled) {
+      return;
+    }
     this.value = event.target.value;
     this.onChange(this.value);
     this.onTouch();

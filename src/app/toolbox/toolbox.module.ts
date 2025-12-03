@@ -54,6 +54,7 @@ import { AdLabelComponent } from './ad-label/ad-label.component';
     AdDropdownComponent,
     AdMultiSelectComponent,
     AdBottomNavComponent,
+    AdLabelComponent,
     AdSidebarComponent
   ]
 })
