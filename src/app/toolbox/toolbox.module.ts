@@ -16,6 +16,7 @@ import { AdInputComponent } from './ad-input/ad-input.component';
 import { AdCheckboxComponent } from './ad-checkbox/ad-checkbox.component';
 import { AdDropdownComponent } from './ad-dropdown/ad-dropdown.component';
 import { AdMultiSelectComponent } from './ad-multiselect/ad-multiselect.component';
+import { AdBottomNavComponent } from './ad-bottom-nav/ad-bottom-nav.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AdMultiSelectComponent } from './ad-multiselect/ad-multiselect.componen
     AdInputComponent,
     AdCheckboxComponent,
     AdDropdownComponent,
-    AdMultiSelectComponent
+    AdMultiSelectComponent,
+    AdBottomNavComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +48,8 @@ import { AdMultiSelectComponent } from './ad-multiselect/ad-multiselect.componen
     AdInputComponent,
     AdCheckboxComponent,
     AdDropdownComponent,
-    AdMultiSelectComponent
+    AdMultiSelectComponent,
+    AdBottomNavComponent
   ]
 })
 export class ToolboxModule { }

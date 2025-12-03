@@ -1,0 +1,11 @@
+<div class="ad-bottom-nav">
+    <div *ngFor="let item of items" class="ad-bottom-nav-item" [class.active]="item.id === activeItemId"
+        (click)="onItemClick(item)">
+
+        <div class="icon-container">
+            <i [class]="item.icon"></i>
+            <span *ngIf="item.badge" class="badge">{{ item.badge }}</span>
+        </div>
+        <div class="indicator"></div>
+    </div>
+</div>

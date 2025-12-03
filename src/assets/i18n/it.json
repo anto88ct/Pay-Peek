@@ -1,7 +1,7 @@
 {
   "auth": {
     "login": {
-      "title": "Accedi a paypeek",
+      "title": "Accedi",
       "email": "Email",
       "password": "Password",
       "signIn": "Accedi",

@@ -5,6 +5,7 @@ import { LayoutComponent } from './layout/layout/layout.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { BottomNavComponent } from './layout/bottom-nav/bottom-nav.component';
+import { ToolboxModule } from '../toolbox/toolbox.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { BottomNavComponent } from './layout/bottom-nav/bottom-nav.component';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    ToolboxModule
   ],
   exports: [
     LayoutComponent,
