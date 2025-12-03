@@ -25,13 +25,13 @@
 .layout-content {
   flex: 1;
   overflow-y: auto;
-  background-color: #f8f9fa;
+  background-color: var(--color-bg-primary);
 }
 
 .layout-mobile {
   display: block; // Changed from flex to block to allow fixed children to position relative to viewport
   min-height: 100vh;
-  background-color: #f8f9fa; // Ensure background covers full height
+  background-color: var(--color-bg-primary); // Ensure background covers full height
 }
 
 .layout-content-mobile {

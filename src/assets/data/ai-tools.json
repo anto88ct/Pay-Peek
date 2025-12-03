@@ -1,26 +1,26 @@
 [
     {
         "name": "Antigravity",
-        "imageUrl": "assets/images/ai/antigravity.png"
+        "imageUrl": "assets/icons/ai/antigravity.png"
     },
     {
         "name": "Perplexity",
-        "imageUrl": "assets/images/ai/perplexity.png"
+        "imageUrl": "assets/icons/ai/perplexity.svg"
     },
     {
         "name": "ChatGPT",
-        "imageUrl": "assets/images/ai/chatgpt.png"
+        "imageUrl": "assets/icons/ai/openai.svg"
     },
     {
         "name": "Junie",
-        "imageUrl": "assets/images/ai/junie.png"
+        "imageUrl": "assets/icons/ai/junie.svg"
     },
     {
         "name": "Claude",
-        "imageUrl": "assets/images/ai/claude.png"
+        "imageUrl": "assets/icons/ai/claude.svg"
     },
     {
         "name": "GitHub Copilot",
-        "imageUrl": "assets/images/ai/copilot.png"
+        "imageUrl": "assets/icons/ai/copilot.svg"
     }
 ]

@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { AdButtonComponent } from './ad-button/ad-button.component';
 import { AdDialogComponent } from './ad-dialog/ad-dialog.component';
@@ -22,6 +23,7 @@ import { AdLabelComponent } from './ad-label/ad-label.component';
 import { AdYearPickerComponent } from './ad-year-picker/ad-year-picker.component';
 import { AdMonthPickerComponent } from './ad-month-picker/ad-month-picker.component';
 import { AdColorPickerComponent } from './ad-color-picker/ad-color-picker.component';
+import { AdInputSwitchComponent } from './ad-input-switch/ad-input-switch.component';
 
 import { CalendarModule } from 'primeng/calendar';
 import { ColorPickerModule } from 'primeng/colorpicker';
@@ -40,7 +42,8 @@ import { ColorPickerModule } from 'primeng/colorpicker';
     AdLabelComponent,
     AdYearPickerComponent,
     AdMonthPickerComponent,
-    AdColorPickerComponent
+    AdColorPickerComponent,
+    AdInputSwitchComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +57,8 @@ import { ColorPickerModule } from 'primeng/colorpicker';
     DropdownModule,
     MultiSelectModule,
     CalendarModule,
-    ColorPickerModule
+    ColorPickerModule,
+    InputSwitchModule
   ],
   exports: [
     AdButtonComponent,
@@ -69,7 +73,8 @@ import { ColorPickerModule } from 'primeng/colorpicker';
     AdSidebarComponent,
     AdYearPickerComponent,
     AdMonthPickerComponent,
-    AdColorPickerComponent
+    AdColorPickerComponent,
+    AdInputSwitchComponent
   ]
 })
 export class ToolboxModule { }

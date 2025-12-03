@@ -1,0 +1,128 @@
+.ad-input-switch-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .switch-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-color);
+        margin: 0;
+    }
+
+    .switch-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        opacity: 0.4;
+        transition: all 0.3s ease;
+
+        i {
+            font-size: 1rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        &.active {
+            opacity: 1;
+            transform: scale(1.1);
+
+            i {
+                color: var(--primary-color);
+            }
+        }
+
+        &.icon-off.active i {
+            animation: moonGlow 0.3s ease;
+        }
+
+        &.icon-on.active i {
+            animation: sunSpin 0.5s ease;
+        }
+    }
+}
+
+// Custom styling for PrimeNG InputSwitch
+::ng-deep {
+    .custom-switch {
+        .p-inputswitch {
+            width: 3rem;
+            height: 1.75rem;
+
+            .p-inputswitch-slider {
+                background: var(--surface-300);
+                border-radius: 1rem;
+                transition: all 0.3s ease;
+
+                &:before {
+                    width: 1.25rem;
+                    height: 1.25rem;
+                    left: 0.25rem;
+                    bottom: 0.25rem;
+                    background: var(--surface-0);
+                    border-radius: 50%;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+            }
+
+            &.p-inputswitch-checked {
+                .p-inputswitch-slider {
+                    background: var(--primary-color);
+
+                    &:before {
+                        transform: translateX(1.25rem);
+                    }
+                }
+            }
+
+            &:not(.p-disabled):hover {
+                .p-inputswitch-slider {
+                    box-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+                }
+            }
+        }
+    }
+}
+
+// Animations
+@keyframes moonGlow {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+        filter: brightness(1.5);
+    }
+
+    100% {
+        transform: scale(1.1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes sunSpin {
+    0% {
+        transform: scale(1) rotate(0deg);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.2) rotate(180deg);
+        filter: brightness(1.5);
+    }
+
+    100% {
+        transform: scale(1.1) rotate(360deg);
+        filter: brightness(1);
+    }
+}

@@ -1,0 +1,14 @@
+<div class="ad-input-switch-wrapper" [class]="styleClass">
+    <label *ngIf="label" class="switch-label">{{ label }}</label>
+    <div class="switch-container">
+        <div class="icon-wrapper icon-off" [class.active]="!checked">
+            <i class="fas {{ iconOff }}"></i>
+        </div>
+        <p-inputSwitch [(ngModel)]="checked" (onChange)="onToggle($event)" [disabled]="disabled"
+            styleClass="custom-switch">
+        </p-inputSwitch>
+        <div class="icon-wrapper icon-on" [class.active]="checked">
+            <i class="fas {{ iconOn }}"></i>
+        </div>
+    </div>
+</div>
