@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Antigravity",
+        "imageUrl": "assets/images/ai/antigravity.png"
+    },
+    {
+        "name": "Perplexity",
+        "imageUrl": "assets/images/ai/perplexity.png"
+    },
+    {
+        "name": "ChatGPT",
+        "imageUrl": "assets/images/ai/chatgpt.png"
+    },
+    {
+        "name": "Junie",
+        "imageUrl": "assets/images/ai/junie.png"
+    },
+    {
+        "name": "Claude",
+        "imageUrl": "assets/images/ai/claude.png"
+    },
+    {
+        "name": "GitHub Copilot",
+        "imageUrl": "assets/images/ai/copilot.png"
+    }
+]

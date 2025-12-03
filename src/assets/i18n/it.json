@@ -20,5 +20,38 @@
   "DASHBOARD": {
     "TITLE": "Dashboard",
     "WELCOME": "Benvenuto su PayPeek!"
+  },
+  "SETTINGS": {
+    "TITLE": "Impostazioni",
+    "FAQ": {
+      "TITLE": "FAQ",
+      "OVERVIEW": {
+        "QUESTION": "Panoramica dell'applicazione",
+        "ANSWER": "PayPeek è un'applicazione per la gestione e l'analisi delle buste paga."
+      },
+      "UPLOAD": {
+        "QUESTION": "Come caricare una busta paga?",
+        "ANSWER": "Vai nella sezione File e clicca il pulsante di caricamento."
+      },
+      "FOLDERS": {
+        "QUESTION": "Come creare una cartella?",
+        "ANSWER": "Nella sezione File, clicca il pulsante + per creare una nuova cartella."
+      },
+      "PWA": {
+        "QUESTION": "Come scaricare la PWA?",
+        "ANSWER": "Clicca il pulsante di installazione nella barra degli indirizzi del browser."
+      }
+    },
+    "SUPPORT": {
+      "TITLE": "Supporto e Contatti",
+      "SEND": "Invia Email",
+      "MESSAGE_PLACEHOLDER": "Scrivi il tuo messaggio qui..."
+    },
+    "CONTRIBUTIONS": {
+      "TITLE": "Contributi",
+      "TEAM": "Team",
+      "AI_TOOLS": "AI Utilizzate"
+    },
+    "LOGOUT": "Esci"
   }
 }

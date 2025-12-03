@@ -1,0 +1,225 @@
+.settings-container {
+    padding: 1rem;
+    min-height: 100vh;
+    background: var(--surface-ground);
+
+    @media (min-width: 768px) {
+        padding: 2rem;
+    }
+}
+
+.settings-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+
+    @media (min-width: 768px) {
+        font-size: 2.25rem;
+    }
+}
+
+.settings-section {
+    background: var(--surface-card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (min-width: 768px) {
+        padding: 2rem;
+    }
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+
+    i {
+        color: var(--primary-color);
+    }
+
+    @media (min-width: 768px) {
+        font-size: 1.5rem;
+    }
+}
+
+.subsection-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+// FAQ Section
+::ng-deep .faq-accordion {
+    .p-accordion-header-link {
+        background: transparent;
+        border: 1px solid var(--surface-border);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: var(--surface-hover);
+        }
+    }
+
+    .p-accordion-content {
+        background: transparent;
+        border: none;
+        padding: 1rem;
+        color: var(--text-color-secondary);
+    }
+}
+
+// Support Section
+.support-form {
+    .support-textarea {
+        background: var(--surface-ground);
+        border: 1px solid var(--surface-border);
+        border-radius: 8px;
+        color: var(--text-color);
+        padding: 1rem;
+        font-size: 1rem;
+        resize: vertical;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
+        }
+
+        &::placeholder {
+            color: var(--text-color-secondary);
+        }
+    }
+}
+
+// Contributions Section
+.contributions-subsection {
+    margin-bottom: 2rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.contributors-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @media (min-width: 576px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 992px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.contributor-card {
+    background: var(--surface-ground);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.contributor-link {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    text-decoration: none;
+    color: inherit;
+    gap: 1rem;
+}
+
+.contributor-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-color);
+}
+
+.contributor-info {
+    flex: 1;
+}
+
+.contributor-name {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.25rem;
+}
+
+.contributor-role {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+}
+
+// AI Tools Section
+.ai-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
+    @media (min-width: 576px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (min-width: 992px) {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.ai-tool-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background: var(--surface-ground);
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.ai-tool-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+    border: 2px solid var(--surface-border);
+}
+
+.ai-tool-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-color);
+    text-align: center;
+}

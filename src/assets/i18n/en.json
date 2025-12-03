@@ -20,5 +20,38 @@
   "DASHBOARD": {
     "TITLE": "Dashboard",
     "WELCOME": "Welcome to PayPeek!"
+  },
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "FAQ": {
+      "TITLE": "FAQ",
+      "OVERVIEW": {
+        "QUESTION": "App Overview",
+        "ANSWER": "PayPeek is an application for managing and analyzing payslips."
+      },
+      "UPLOAD": {
+        "QUESTION": "How to upload a payslip?",
+        "ANSWER": "Go to the Files section and click the upload button."
+      },
+      "FOLDERS": {
+        "QUESTION": "How to create a folder?",
+        "ANSWER": "In the Files section, click the + button to create a new folder."
+      },
+      "PWA": {
+        "QUESTION": "How to download the PWA?",
+        "ANSWER": "Click the install button in your browser address bar."
+      }
+    },
+    "SUPPORT": {
+      "TITLE": "Support & Contacts",
+      "SEND": "Send Email",
+      "MESSAGE_PLACEHOLDER": "Write your message here..."
+    },
+    "CONTRIBUTIONS": {
+      "TITLE": "Contributions",
+      "TEAM": "Team",
+      "AI_TOOLS": "AI Tools Used"
+    },
+    "LOGOUT": "Logout"
   }
 }

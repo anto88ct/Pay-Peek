@@ -1,0 +1,78 @@
+<div class="settings-container">
+    <div class="container-fluid">
+        <h1 class="settings-title mb-4">{{ 'SETTINGS.TITLE' | translate }}</h1>
+
+        <!-- FAQ Section -->
+        <section class="settings-section mb-5">
+            <h2 class="section-title">
+                <i class="fas fa-question-circle me-2"></i>{{ 'SETTINGS.FAQ.TITLE' | translate }}
+            </h2>
+            <p-accordion [multiple]="true" class="faq-accordion">
+                <p-accordionTab *ngFor="let faq of faqs" [header]="faq.question | translate">
+                    <p>{{ faq.answer | translate }}</p>
+                </p-accordionTab>
+            </p-accordion>
+        </section>
+
+        <!-- Support Section -->
+        <section class="settings-section mb-5">
+            <h2 class="section-title">
+                <i class="fas fa-headset me-2"></i>{{ 'SETTINGS.SUPPORT.TITLE' | translate }}
+            </h2>
+            <div class="support-form">
+                <div class="mb-3">
+                    <textarea class="form-control support-textarea" rows="5" [(ngModel)]="supportMessage"
+                        [placeholder]="'SETTINGS.SUPPORT.MESSAGE_PLACEHOLDER' | translate">
+          </textarea>
+                </div>
+                <ad-button [label]="'SETTINGS.SUPPORT.SEND' | translate" icon="fas fa-paper-plane"
+                    customSeverity="custom-blue" (onClick)="sendSupportEmail()">
+                </ad-button>
+            </div>
+        </section>
+
+        <!-- Contributions Section -->
+        <section class="settings-section mb-5">
+            <h2 class="section-title">
+                <i class="fas fa-users me-2"></i>{{ 'SETTINGS.CONTRIBUTIONS.TITLE' | translate }}
+            </h2>
+
+            <!-- Team -->
+            <div class="contributions-subsection mb-4">
+                <h3 class="subsection-title">{{ 'SETTINGS.CONTRIBUTIONS.TEAM' | translate }}</h3>
+                <div class="contributors-grid">
+                    <div *ngFor="let contributor of contributors" class="contributor-card">
+                        <a [href]="contributor.githubUrl" target="_blank" class="contributor-link">
+                            <img [src]="contributor.avatarUrl" [alt]="contributor.name" class="contributor-avatar">
+                            <div class="contributor-info">
+                                <div class="contributor-name">{{ contributor.name }}</div>
+                                <div class="contributor-role">{{ contributor.role }}</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Tools -->
+            <div class="contributions-subsection">
+                <h3 class="subsection-title">{{ 'SETTINGS.CONTRIBUTIONS.AI_TOOLS' | translate }}</h3>
+                <div class="ai-tools-grid">
+                    <div *ngFor="let tool of aiTools" class="ai-tool-card">
+                        <img [src]="tool.imageUrl" [alt]="tool.name" class="ai-tool-image">
+                        <div class="ai-tool-name">{{ tool.name }}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logout Section -->
+        <section class="settings-section mb-5">
+            <h2 class="section-title">
+                <i class="fas fa-sign-out-alt me-2"></i>{{ 'SETTINGS.LOGOUT' | translate }}
+            </h2>
+            <ad-button [label]="'SETTINGS.LOGOUT' | translate" icon="fas fa-sign-out-alt" customSeverity="custom-orange"
+                (onClick)="logout()">
+            </ad-button>
+        </section>
+    </div>
+</div>

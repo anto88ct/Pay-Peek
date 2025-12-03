@@ -1,0 +1,18 @@
+[
+    {
+        "question": "SETTINGS.FAQ.OVERVIEW.QUESTION",
+        "answer": "SETTINGS.FAQ.OVERVIEW.ANSWER"
+    },
+    {
+        "question": "SETTINGS.FAQ.UPLOAD.QUESTION",
+        "answer": "SETTINGS.FAQ.UPLOAD.ANSWER"
+    },
+    {
+        "question": "SETTINGS.FAQ.FOLDERS.QUESTION",
+        "answer": "SETTINGS.FAQ.FOLDERS.ANSWER"
+    },
+    {
+        "question": "SETTINGS.FAQ.PWA.QUESTION",
+        "answer": "SETTINGS.FAQ.PWA.ANSWER"
+    }
+]
