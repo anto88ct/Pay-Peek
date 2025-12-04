@@ -41,11 +41,11 @@ export class AdInputSwitchComponent implements ControlValueAccessor {
         this.disabled = isDisabled;
     }
 
-    onToggle(event: any): void {
+    toggle(): void {
         if (this.disabled) {
             return;
         }
-        this.checked = event.checked;
+        this.checked = !this.checked;
         this.onChange(this.checked);
         this.onTouch();
         this.checkedChange.emit(this.checked);

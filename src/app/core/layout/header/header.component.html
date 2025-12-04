@@ -21,11 +21,12 @@
             iconOn="fa-sun">
         </ad-input-switch>
 
+        <ad-input-switch class="me-2" [checked]="isItalian" (checkedChange)="onLanguageChange($event)"
+            iconOff="fa-flag-usa" iconOn="fa-flag">
+        </ad-input-switch>
 
-        <div class="profile-mini" (click)="openProfileMenu()">
-            <img [src]="profileImageUrl" alt="Profile" class="avatar" />
-            <span class="username d-none d-md-inline">{{ userName }}</span>
-            <i class="fas fa-chevron-down ms-1"></i>
-        </div>
+        <ad-dropdown mode="profile" [menuItems]="profileMenuItems" [profileName]="userName"
+            [profileImage]="profileImageUrl">
+        </ad-dropdown>
     </div>
 </header>

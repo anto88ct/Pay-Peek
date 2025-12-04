@@ -1,4 +1,23 @@
-<p-dropdown [options]="options" [optionLabel]="optionLabel" [optionValue]="optionValue" [placeholder]="placeholder"
-    [disabled]="disabled" [styleClass]="styleClass" [showClear]="showClear" [filter]="filter" [(ngModel)]="value"
-    (onChange)="onModelChange($event.value)">
+<!-- Standard Dropdown Mode -->
+<p-dropdown *ngIf="mode === 'standard'" [options]="options" [optionLabel]="optionLabel" [optionValue]="optionValue"
+    [placeholder]="placeholder" [disabled]="disabled" [styleClass]="styleClass" [showClear]="showClear"
+    [filter]="filter" [(ngModel)]="value" (onChange)="onModelChange($event.value)">
 </p-dropdown>
+
+<!-- Profile Menu Mode -->
+<div *ngIf="mode === 'profile'" class="ad-dropdown-profile" [class.disabled]="disabled">
+    <div class="profile-trigger" (click)="toggleMenu()">
+        <img [src]="profileImage" alt="Profile" class="profile-avatar" />
+        <span class="profile-name d-none d-md-inline">{{ profileName }}</span>
+        <i class="fas fa-chevron-down chevron-icon" [class.active]="menuVisible"></i>
+    </div>
+
+    <div class="profile-menu-overlay" *ngIf="menuVisible" (click)="closeMenu()">
+        <div class="profile-menu" (click)="$event.stopPropagation()">
+            <div *ngFor="let item of menuItems" class="menu-item" (click)="onMenuItemClick(item)">
+                <i *ngIf="item.icon" class="fas {{ item.icon }} menu-icon"></i>
+                <span class="menu-label">{{ item.label }}</span>
+            </div>
+        </div>
+    </div>
+</div>
