@@ -1,4 +1,36 @@
-<div class="dashboard-container">
-    <h1>{{ 'DASHBOARD.TITLE' | translate }}</h1>
-    <p>{{ 'DASHBOARD.WELCOME' | translate }}</p>
+<div class="dashboard-container fade-in">
+    <div class="header-section mb-4 flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="text-3xl font-bold mb-1">{{ 'DASHBOARD.TITLE' | translate }}</h1>
+            <p class="text-500 m-0">{{ 'DASHBOARD.WELCOME' | translate }}</p>
+        </div>
+
+        <div class="filter-section">
+            <ad-dropdown [options]="years" [(ngModel)]="selectedYear" optionLabel="label" placeholder="Select Year">
+            </ad-dropdown>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="col-12 lg:col-8">
+            <div class="card p-4 h-full shadow-2 border-round-xl surface-card">
+                <h3 class="text-xl font-semibold mb-3">{{ 'DASHBOARD.SALARY_TREND' | translate }}</h3>
+                <p-chart type="line" [data]="salaryData" [options]="salaryOptions" height="350px"></p-chart>
+            </div>
+        </div>
+        <div class="col-12 lg:col-4">
+            <div class="card p-4 h-full shadow-2 border-round-xl surface-card">
+                <h3 class="text-xl font-semibold mb-3">{{ 'DASHBOARD.EXPENSES' | translate }}</h3>
+                <div class="flex justify-content-center">
+                    <p-chart type="doughnut" [data]="expensesData" [options]="expensesOptions" height="300px"></p-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card p-4 shadow-2 border-round-xl surface-card">
+                <h3 class="text-xl font-semibold mb-3">{{ 'DASHBOARD.HOLIDAYS' | translate }}</h3>
+                <p-chart type="bar" [data]="holidaysData" [options]="holidaysOptions" height="300px"></p-chart>
+            </div>
+        </div>
+    </div>
 </div>

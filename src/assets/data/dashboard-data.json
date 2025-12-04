@@ -1,0 +1,112 @@
+{
+    "salaryTrend": {
+        "labels": [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+        ],
+        "datasets": [
+            {
+                "label": "Net Salary",
+                "data": [
+                    1800,
+                    1800,
+                    1850,
+                    1800,
+                    1900,
+                    1800,
+                    2200,
+                    1800,
+                    1800,
+                    1800,
+                    1800,
+                    3000
+                ],
+                "borderColor": "#18BC9C",
+                "backgroundColor": "rgba(24, 188, 156, 0.2)",
+                "fill": true
+            },
+            {
+                "label": "Gross Salary",
+                "data": [
+                    2500,
+                    2500,
+                    2550,
+                    2500,
+                    2600,
+                    2500,
+                    3000,
+                    2500,
+                    2500,
+                    2500,
+                    2500,
+                    4000
+                ],
+                "borderColor": "#2C3E50",
+                "backgroundColor": "rgba(44, 62, 80, 0.2)",
+                "fill": true
+            }
+        ]
+    },
+    "expensesBreakdown": {
+        "labels": [
+            "Taxes",
+            "Social Security",
+            "Insurance",
+            "Other Deductions"
+        ],
+        "datasets": [
+            {
+                "data": [
+                    400,
+                    200,
+                    50,
+                    50
+                ],
+                "backgroundColor": [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#4BC0C0"
+                ],
+                "hoverBackgroundColor": [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#4BC0C0"
+                ]
+            }
+        ]
+    },
+    "holidays": {
+        "labels": [
+            "Annual Leave",
+            "Sick Leave",
+            "Rollover"
+        ],
+        "datasets": [
+            {
+                "label": "Days",
+                "data": [
+                    20,
+                    5,
+                    10
+                ],
+                "backgroundColor": [
+                    "#18BC9C",
+                    "#F39C12",
+                    "#2C3E50"
+                ]
+            }
+        ]
+    }
+}

@@ -19,7 +19,10 @@
   },
   "DASHBOARD": {
     "TITLE": "Dashboard",
-    "WELCOME": "Benvenuto su PayPeek!"
+    "WELCOME": "Benvenuto su PayPeek!",
+    "SALARY_TREND": "Andamento Stipendio",
+    "EXPENSES": "Spese e Trattenute",
+    "HOLIDAYS": "Ferie e Permessi"
   },
   "CHATBOT": {
     "TITLE": "Assistente Virtuale",
