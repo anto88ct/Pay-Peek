@@ -1,7 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'ad-button',
+  standalone: true,
+  imports: [CommonModule, ButtonModule],
   templateUrl: './ad-button.component.html',
   styleUrls: ['./ad-button.component.scss']
 })

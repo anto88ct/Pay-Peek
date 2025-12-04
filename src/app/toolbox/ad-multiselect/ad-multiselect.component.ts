@@ -1,8 +1,12 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'ad-multiselect',
+  standalone: true,
+  imports: [CommonModule, FormsModule, MultiSelectModule],
   templateUrl: './ad-multiselect.component.html',
   styleUrls: ['./ad-multiselect.component.scss'],
   providers: [

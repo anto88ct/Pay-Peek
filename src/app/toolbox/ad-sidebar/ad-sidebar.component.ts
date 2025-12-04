@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 export interface SidebarItem {
     id: string;
@@ -9,6 +10,8 @@ export interface SidebarItem {
 
 @Component({
     selector: 'ad-sidebar',
+    standalone: true,
+    imports: [CommonModule],
     templateUrl: './ad-sidebar.component.html',
     styleUrls: ['./ad-sidebar.component.scss']
 })

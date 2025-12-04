@@ -1,7 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @Component({
   selector: 'ad-fileuploader',
+  standalone: true,
+  imports: [CommonModule, FileUploadModule],
   templateUrl: './ad-fileuploader.component.html',
   styleUrls: ['./ad-fileuploader.component.scss']
 })

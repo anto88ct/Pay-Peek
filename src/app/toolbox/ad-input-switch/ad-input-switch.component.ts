@@ -1,8 +1,12 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
     selector: 'ad-input-switch',
+    standalone: true,
+    imports: [CommonModule, FormsModule, InputSwitchModule],
     templateUrl: './ad-input-switch.component.html',
     styleUrls: ['./ad-input-switch.component.scss'],
     providers: [

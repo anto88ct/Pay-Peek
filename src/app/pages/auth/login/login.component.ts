@@ -11,7 +11,9 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { CommonModule, NgClass } from "@angular/common";
 import { ButtonModule } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
-import { ToolboxModule } from "../../../toolbox/toolbox.module";
+import { AdInputComponent } from '../../../toolbox/ad-input/ad-input.component';
+import { AdButtonComponent } from '../../../toolbox/ad-button/ad-button.component';
+import { AdCheckboxComponent } from '../../../toolbox/ad-checkbox/ad-checkbox.component';
 import { ClientError } from "../../../core/models/error-response.dto";
 
 @Component({
@@ -23,7 +25,9 @@ import { ClientError } from "../../../core/models/error-response.dto";
     ReactiveFormsModule,
     TranslateModule,        // ← CORRETTO
     MessageModule,
-    ToolboxModule,
+    AdInputComponent,
+    AdButtonComponent,
+    AdCheckboxComponent,
     RouterModule
   ],
   styleUrls: ['./login.component.scss']

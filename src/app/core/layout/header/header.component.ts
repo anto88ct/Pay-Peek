@@ -1,12 +1,24 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 import { ThemeService, Theme } from '../../services/theme.service';
 import { LanguageService, Language } from '../../services/language.service';
 import { MenuItem } from '../../../toolbox/ad-dropdown/ad-dropdown.component';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
+import { AdInputSwitchComponent } from '../../../toolbox/ad-input-switch/ad-input-switch.component';
+import { AdDropdownComponent } from '../../../toolbox/ad-dropdown/ad-dropdown.component';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    TranslateModule,
+    AdInputSwitchComponent,
+    AdDropdownComponent
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

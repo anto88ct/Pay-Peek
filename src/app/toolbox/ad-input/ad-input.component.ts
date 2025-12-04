@@ -1,8 +1,13 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { AdLabelComponent } from '../ad-label/ad-label.component';
 
 @Component({
   selector: 'ad-input',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, AdLabelComponent],
   templateUrl: './ad-input.component.html',
   styleUrls: ['./ad-input.component.scss'],
   providers: [

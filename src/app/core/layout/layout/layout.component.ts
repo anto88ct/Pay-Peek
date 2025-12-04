@@ -1,10 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { BreakpointObserver, Breakpoints, LayoutModule } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { HeaderComponent } from '../header/header.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { BottomNavComponent } from '../bottom-nav/bottom-nav.component';
 
 @Component({
   selector: 'app-layout',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    LayoutModule,
+    HeaderComponent,
+    SidebarComponent,
+    BottomNavComponent
+  ],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })

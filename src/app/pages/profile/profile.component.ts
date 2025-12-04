@@ -1,11 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from '../../core/services/user.service';
 import { UserDto } from '../../core/models/user.dto';
+import { TranslateModule } from '@ngx-translate/core';
+import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
+import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
+import { AdLabelComponent } from '../../toolbox/ad-label/ad-label.component';
 
 @Component({
     selector: 'app-profile',
+    standalone: true,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        AdInputComponent,
+        AdButtonComponent,
+        AdLabelComponent
+    ],
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss']
 })

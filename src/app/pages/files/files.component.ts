@@ -4,7 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 // Toolbox Components
-import { ToolboxModule } from '../../toolbox/toolbox.module';
+import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
+import { AdDialogComponent } from '../../toolbox/ad-dialog/ad-dialog.component';
+import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
+import { AdYearPickerComponent } from '../../toolbox/ad-year-picker/ad-year-picker.component';
+import { AdMonthPickerComponent } from '../../toolbox/ad-month-picker/ad-month-picker.component';
+import { AdColorPickerComponent } from '../../toolbox/ad-color-picker/ad-color-picker.component';
+import { AdFileUploaderComponent } from '../../toolbox/ad-fileuploader/ad-fileuploader.component';
 
 // Models
 import { YearFolder, MonthFolder, FileItem } from '../../core/models/file-system.dto';
@@ -16,7 +22,13 @@ import { YearFolder, MonthFolder, FileItem } from '../../core/models/file-system
         CommonModule,
         FormsModule,
         HttpClientModule,
-        ToolboxModule
+        AdInputComponent,
+        AdDialogComponent,
+        AdButtonComponent,
+        AdYearPickerComponent,
+        AdMonthPickerComponent,
+        AdColorPickerComponent,
+        AdFileUploaderComponent
     ],
     templateUrl: './files.component.html',
     styleUrls: ['./files.component.scss']

@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { SidebarItem } from 'src/app/toolbox/ad-sidebar/ad-sidebar.component';
+import { AdSidebarComponent } from '../../../toolbox/ad-sidebar/ad-sidebar.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sidebar',
+  standalone: true,
+  imports: [CommonModule, RouterModule, AdSidebarComponent],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })

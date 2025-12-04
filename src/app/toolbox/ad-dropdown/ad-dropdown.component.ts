@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { DropdownModule } from 'primeng/dropdown';
 
 export interface MenuItem {
   label: string;
@@ -10,6 +12,8 @@ export interface MenuItem {
 
 @Component({
   selector: 'ad-dropdown',
+  standalone: true,
+  imports: [CommonModule, FormsModule, DropdownModule],
   templateUrl: './ad-dropdown.component.html',
   styleUrls: ['./ad-dropdown.component.scss'],
   providers: [

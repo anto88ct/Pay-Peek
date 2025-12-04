@@ -1,7 +1,28 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
+import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
+import { AdCheckboxComponent } from '../../toolbox/ad-checkbox/ad-checkbox.component';
+import { AdDropdownComponent } from '../../toolbox/ad-dropdown/ad-dropdown.component';
+import { AdMultiSelectComponent } from '../../toolbox/ad-multiselect/ad-multiselect.component';
+import { AdDialogComponent } from '../../toolbox/ad-dialog/ad-dialog.component';
+import { AdFileUploaderComponent } from '../../toolbox/ad-fileuploader/ad-fileuploader.component';
 
 @Component({
   selector: 'app-test-components',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    AdButtonComponent,
+    AdInputComponent,
+    AdCheckboxComponent,
+    AdDropdownComponent,
+    AdMultiSelectComponent,
+    AdDialogComponent,
+    AdFileUploaderComponent
+  ],
   templateUrl: './test-components.component.html',
   styleUrls: ['./test-components.component.scss']
 })

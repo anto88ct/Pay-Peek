@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ChartModule } from 'primeng/chart';
 import { HttpClient } from '@angular/common/http';
-import { ToolboxModule } from '../../toolbox/toolbox.module';
+import { AdDropdownComponent } from '../../toolbox/ad-dropdown/ad-dropdown.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
         CommonModule,
         TranslateModule,
         ChartModule,
-        ToolboxModule,
+        AdDropdownComponent,
         FormsModule
     ],
     templateUrl: './dashboard.component.html',

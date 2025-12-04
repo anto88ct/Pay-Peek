@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
-import { ToolboxModule } from '../../toolbox/toolbox.module';
+import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
+import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
 
 interface Message {
     id: string;
@@ -27,7 +28,7 @@ interface ChatHistory {
 @Component({
     selector: 'app-chatbot',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, ToolboxModule],
+    imports: [CommonModule, FormsModule, TranslateModule, AdInputComponent, AdButtonComponent],
     templateUrl: './chatbot.component.html',
     styleUrls: ['./chatbot.component.scss']
 })

@@ -1,7 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'ad-dialog',
+  standalone: true,
+  imports: [CommonModule, DialogModule],
   templateUrl: './ad-dialog.component.html',
   styleUrls: ['./ad-dialog.component.scss']
 })

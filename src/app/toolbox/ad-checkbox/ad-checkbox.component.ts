@@ -1,8 +1,12 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'ad-checkbox',
+  standalone: true,
+  imports: [CommonModule, FormsModule, CheckboxModule],
   templateUrl: './ad-checkbox.component.html',
   styleUrls: ['./ad-checkbox.component.scss'],
   providers: [

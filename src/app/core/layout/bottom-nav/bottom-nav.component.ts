@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { BottomNavItem } from 'src/app/toolbox/ad-bottom-nav/ad-bottom-nav.component';
+import { AdBottomNavComponent } from '../../../toolbox/ad-bottom-nav/ad-bottom-nav.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bottom-nav',
+  standalone: true,
+  imports: [CommonModule, RouterModule, AdBottomNavComponent],
   templateUrl: './bottom-nav.component.html',
   styleUrls: ['./bottom-nav.component.scss']
 })

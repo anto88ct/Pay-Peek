@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'ad-year-picker',
+  standalone: true,
+  imports: [CommonModule, CalendarModule, FormsModule],
   template: `
     <div class="flex flex-column gap-2">
       <label *ngIf="label" class="font-bold text-sm">{{ label }}</label>
