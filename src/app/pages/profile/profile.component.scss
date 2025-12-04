@@ -1,29 +1,30 @@
 .profile-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: var(--color-bg-primary);
     // Remove bottom padding as it's handled by layout-content-mobile
     padding-bottom: 0;
 }
 
 .profile-header {
     h2 {
-        color: #2C3E50;
+        color: var(--color-text-primary);
         font-weight: 600;
         font-size: 2rem;
     }
 
     .text-muted {
-        color: #6c757d !important;
+        color: var(--color-text-secondary) !important;
     }
 }
 
 .profile-card {
-    background: white;
+    background: var(--color-bg-secondary);
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     padding: 2.5rem;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem; // Add bottom margin
+    border: 1px solid var(--color-border);
 
     @media (max-width: 768px) {
         padding: 1.25rem; // Reduce padding further
@@ -61,7 +62,7 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid #d4a017;
+    border: 4px solid var(--color-secondary);
     box-shadow: 0 4px 15px rgba(24, 188, 156, 0.3);
     transition: all 0.3s ease;
 }
@@ -94,51 +95,53 @@
 }
 
 .error-message {
-    color: #dc3545;
+    color: var(--color-error);
     font-size: 0.875rem;
     margin-top: 0.75rem;
     text-align: center;
     padding: 0.5rem 1rem;
-    background: #f8d7da;
+    background: rgba(239, 68, 68, 0.1);
     border-radius: 8px;
-    border: 1px solid #f5c2c7;
+    border: 1px solid var(--color-error);
 }
 
 .profile-form {
     .form-label {
         font-weight: 500;
-        color: #2C3E50;
+        color: var(--color-text-primary);
         margin-bottom: 0.5rem;
         font-size: 0.95rem;
 
         i {
-            color: #d4a017;
+            color: var(--color-primary); // Updated to use primary color for better visibility
             width: 20px;
         }
     }
 
     .form-control {
-        border: 2px solid #e9ecef;
+        border: 2px solid var(--color-border);
         border-radius: 10px;
         padding: 0.75rem 1rem;
         font-size: 0.95rem;
         transition: all 0.3s ease;
-        background: #f8f9fa;
+        background: var(--color-bg-input);
+        color: var(--color-text-primary);
 
         &:focus {
-            border-color: #18BC9C;
+            border-color: var(--color-secondary);
             box-shadow: 0 0 0 0.2rem rgba(24, 188, 156, 0.15);
-            background: white;
+            background: var(--color-bg-secondary);
         }
 
         &:disabled {
-            background: #f8f9fa;
+            background: var(--color-bg-input);
             cursor: not-allowed;
-            color: #6c757d;
+            color: var(--color-text-primary); // Made text color same as primary for readability
+            opacity: 0.7; // Reduced opacity slightly to indicate disabled state but keep readable
         }
 
         &[readonly] {
-            background: #e9ecef;
+            background: var(--color-border);
             cursor: default;
         }
     }
@@ -146,7 +149,7 @@
 
 .documents-badge {
     .badge {
-        background: linear-gradient(135deg, #d4a017 0%, #f0af09 100%);
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
         color: white;
         padding: 0.75rem 1.5rem;
         font-size: 1rem;
@@ -165,7 +168,7 @@
 .action-buttons {
     margin-top: 2rem;
     padding-top: 2rem;
-    border-top: 2px solid #e9ecef;
+    border-top: 2px solid var(--color-border);
 
     .btn {
         padding: 0.75rem 2rem;
@@ -180,8 +183,9 @@
         }
 
         &.btn-primary {
-            background: linear-gradient(135deg, #18BC9C 0%, #16a085 100%);
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #16a085 100%);
             box-shadow: 0 4px 15px rgba(24, 188, 156, 0.3);
+            color: white;
 
             &:hover {
                 transform: translateY(-2px);
@@ -194,7 +198,7 @@
         }
 
         &.btn-success {
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+            background: linear-gradient(135deg, var(--color-success) 0%, #218838 100%);
             color: white;
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
 
@@ -215,12 +219,12 @@
         }
 
         &.btn-outline-secondary {
-            border: 2px solid #6c757d;
-            color: #6c757d;
+            border: 2px solid var(--color-text-secondary);
+            color: var(--color-text-secondary);
             background: transparent;
 
             &:hover {
-                background: #6c757d;
+                background: var(--color-text-secondary);
                 color: white;
                 transform: translateY(-2px);
             }

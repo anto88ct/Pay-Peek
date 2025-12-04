@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { LanguageService } from "./core/services/language.service";
+import { ThemeService } from "./core/services/theme.service";
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,10 @@ export class AppComponent {
   title = 'pay-peek-frontend';
 
   // Nel componente (es. app.component.ts)
-  constructor(private languageService: LanguageService) {
+  constructor(
+    private languageService: LanguageService,
+    private themeService: ThemeService // Inject to initialize theme
+  ) {
     this.languageService.currentLanguage$.subscribe(lang => {
       console.log('Lingua attiva:', lang); // 'it' o 'en'
     });
@@ -22,6 +26,7 @@ export class AppComponent {
     // Cambia lingua
     this.languageService.setLanguage('en');
   }
-
-
 }
+
+
+

@@ -1,11 +1,11 @@
 .form-label {
     font-weight: 500;
-    color: #2C3E50;
+    color: var(--color-text-primary);
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
 
     i {
-        color: #d4a017;
+        color: var(--color-secondary);
         width: 20px;
     }
 }

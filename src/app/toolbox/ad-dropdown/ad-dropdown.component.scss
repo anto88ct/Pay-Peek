@@ -13,12 +13,12 @@
         padding: 0.25rem 0.5rem;
         border-radius: 999px;
         cursor: pointer;
-        background: var(--color-bg-profile);
+        background: var(--color-bg-secondary);
         border: 1px solid var(--color-border);
         transition: all 0.2s ease;
 
         &:hover {
-            background: var(--color-bg-profile-hover);
+            background: var(--color-bg-hover);
             border-color: var(--color-border-hover);
         }
 
@@ -33,12 +33,12 @@
         .profile-name {
             font-size: 0.85rem;
             margin-right: 0.25rem;
-            color: var(--text-color);
+            color: var(--color-text-primary);
         }
 
         .chevron-icon {
             font-size: 0.7rem;
-            color: var(--text-color-secondary);
+            color: var(--color-text-secondary);
             transition: transform 0.2s ease;
             margin-left: 0.25rem;
 
@@ -63,8 +63,8 @@
         top: calc(100% + 0.5rem);
         right: 0;
         min-width: 180px;
-        background: var(--surface-card);
-        border: 1px solid var(--surface-border);
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         overflow: hidden;
@@ -77,16 +77,16 @@
             padding: 0.75rem 1rem;
             cursor: pointer;
             transition: background-color 0.15s ease;
-            color: var(--text-color);
+            color: var(--color-text-primary);
 
             &:hover {
-                background: var(--surface-hover);
+                background: var(--color-bg-hover);
             }
 
             .menu-icon {
                 font-size: 0.9rem;
                 margin-right: 0.75rem;
-                color: var(--primary-color);
+                color: var(--color-primary);
                 width: 1.25rem;
                 text-align: center;
             }
@@ -96,7 +96,7 @@
             }
 
             &+.menu-item {
-                border-top: 1px solid var(--surface-border);
+                border-top: 1px solid var(--color-border);
             }
         }
     }

@@ -5,6 +5,7 @@ import { ChartModule } from 'primeng/chart';
 import { HttpClient } from '@angular/common/http';
 import { AdDropdownComponent } from '../../toolbox/ad-dropdown/ad-dropdown.component';
 import { FormsModule } from '@angular/forms';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -33,12 +34,20 @@ export class DashboardComponent implements OnInit {
     years: any[] = [];
     selectedYear: any;
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private themeService: ThemeService
+    ) { }
 
     ngOnInit(): void {
         this.initFilters();
         this.initChartOptions();
         this.loadDashboardData();
+
+        // Subscribe to theme changes to update charts
+        this.themeService.theme$.subscribe(() => {
+            this.initChartOptions();
+        });
     }
 
     initFilters() {

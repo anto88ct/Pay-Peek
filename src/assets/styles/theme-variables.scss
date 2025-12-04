@@ -9,11 +9,12 @@
   // Background colors
   --color-bg-primary: #fcfcf9;
   --color-bg-secondary: #ffffff;
-  --color-bg-header: #0f172a;
+  --color-bg-header: #ffffff;
   --color-bg-sidebar: #1e293b;
   --color-bg-hover: rgba(148, 163, 184, 0.2);
   --color-bg-profile: rgba(15, 23, 42, 0.7);
   --color-bg-profile-hover: rgba(30, 64, 175, 0.4);
+  --color-bg-input: #f8f9fa; // Added for inputs
 
   // Text colors
   --color-text-primary: #1f2937;
@@ -30,6 +31,20 @@
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
+
+  // Shadows
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  // PrimeNG Mappings
+  --surface-ground: var(--color-bg-primary);
+  --surface-card: var(--color-bg-secondary);
+  --surface-overlay: var(--color-bg-secondary);
+  --surface-border: var(--color-border);
+  --surface-hover: var(--color-bg-hover);
+  --text-color: var(--color-text-primary);
+  --text-color-secondary: var(--color-text-secondary);
+  --primary-color: var(--color-primary);
+  --primary-color-text: #ffffff;
 }
 
 // Dark Theme
@@ -44,10 +59,11 @@
   --color-bg-primary: #1f2121;
   --color-bg-secondary: #2a2c2e;
   --color-bg-header: #181a1b;
-  --color-bg-sidebar: #1a1c1e;
+  --color-bg-sidebar: #181a1b;
   --color-bg-hover: rgba(255, 255, 255, 0.1);
   --color-bg-profile: rgba(42, 44, 46, 0.7);
   --color-bg-profile-hover: rgba(50, 184, 198, 0.2);
+  --color-bg-input: #2a2c2e; // Dark input bg
 
   // Text colors
   --color-text-primary: #e5e7eb;
@@ -64,4 +80,15 @@
   --color-success: #34d399;
   --color-warning: #fbbf24;
   --color-info: #60a5fa;
+
+  // PrimeNG Mappings
+  --surface-ground: var(--color-bg-primary);
+  --surface-card: var(--color-bg-secondary);
+  --surface-overlay: var(--color-bg-secondary);
+  --surface-border: var(--color-border);
+  --surface-hover: var(--color-bg-hover);
+  --text-color: var(--color-text-primary);
+  --text-color-secondary: var(--color-text-secondary);
+  --primary-color: var(--color-primary);
+  --primary-color-text: #1f2937;
 }

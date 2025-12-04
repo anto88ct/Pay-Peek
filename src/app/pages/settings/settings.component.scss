@@ -1,7 +1,7 @@
 .settings-container {
     padding: 1rem;
     min-height: 100vh;
-    background: var(--surface-ground);
+    background: var(--color-bg-primary);
 
     @media (min-width: 768px) {
         padding: 2rem;
@@ -64,14 +64,14 @@
 ::ng-deep .faq-accordion {
     .p-accordion-header-link {
         background: transparent;
-        border: 1px solid var(--surface-border);
+        border: 1px solid var(--color-border);
         border-radius: 8px;
         padding: 1rem;
         margin-bottom: 0.5rem;
         transition: all 0.3s ease;
 
         &:hover {
-            background: var(--surface-hover);
+            background: var(--color-bg-hover);
         }
     }
 
@@ -79,17 +79,17 @@
         background: transparent;
         border: none;
         padding: 1rem;
-        color: var(--text-color-secondary);
+        color: var(--color-text-secondary);
     }
 }
 
 // Support Section
 .support-form {
     .support-textarea {
-        background: var(--surface-ground);
-        border: 1px solid var(--surface-border);
+        background: var(--color-bg-input);
+        border: 1px solid var(--color-border);
         border-radius: 8px;
-        color: var(--text-color);
+        color: var(--color-text-primary);
         padding: 1rem;
         font-size: 1rem;
         resize: vertical;
@@ -97,12 +97,12 @@
 
         &:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: var(--color-primary);
             box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
         }
 
         &::placeholder {
-            color: var(--text-color-secondary);
+            color: var(--color-text-secondary);
         }
     }
 }
@@ -131,7 +131,7 @@
 }
 
 .contributor-card {
-    background: var(--surface-ground);
+    background: var(--color-bg-secondary);
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -156,7 +156,7 @@
     height: 60px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid var(--primary-color);
+    border: 3px solid var(--color-primary);
 }
 
 .contributor-info {

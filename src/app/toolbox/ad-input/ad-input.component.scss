@@ -1,35 +1,36 @@
 .p-input-icon-right i {
     cursor: pointer;
-    color: #d4a017;
+    color: var(--color-primary);
 
     &:hover {
-        color: #a4d4cb;
+        color: var(--color-primary-hover);
     }
 }
 
 
 .form-control {
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--color-border);
     border-radius: 10px;
     padding: 0.75rem 1rem;
     font-size: 0.95rem;
     transition: all 0.3s ease;
-    background: #f8f9fa;
+    background: var(--color-bg-input);
+    color: var(--color-text-primary);
 
     &:focus {
-        border-color: #d4a017;
-        box-shadow: 0 0 0 0.2rem #d49e173b;
-        background: white;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 0.2rem var(--color-bg-profile-hover); // Using profile hover as a transparent primary
+        background: var(--color-bg-secondary);
     }
 
     &:disabled {
-        background: #f8f9fa;
+        background: var(--color-bg-input);
         cursor: not-allowed;
-        color: #6c757d;
+        color: var(--color-text-muted);
     }
 
     &[readonly] {
-        background: #e9ecef;
+        background: var(--color-border);
         cursor: default;
     }
 }

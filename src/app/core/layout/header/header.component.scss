@@ -9,7 +9,7 @@
     justify-content: space-between;
     padding: .5rem 1rem;
     background: var(--color-bg-header);
-    color: var(--color-text-header);
+    color: var(--color-text-primary);
     border-bottom: 1px solid var(--color-border);
 
     .headbar-left,
@@ -32,7 +32,7 @@
 
     .page-title {
         font-size: .95rem;
-        color: var(--color-text-muted);
+        color: var(--color-text-secondary);
     }
 
     .headbar-right {
@@ -43,7 +43,7 @@
         position: relative;
         border: none;
         background: transparent;
-        color: var(--color-text-header);
+        color: var(--color-text-primary);
         padding: .35rem .45rem;
         border-radius: 999px;
         cursor: pointer;
