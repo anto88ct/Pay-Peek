@@ -1,0 +1,61 @@
+{
+    "sessions": [
+        {
+            "id": "1",
+            "title": "Richiesta Ferie",
+            "date": "2023-10-27T10:00:00",
+            "messages": [
+                {
+                    "id": "m1",
+                    "sender": "user",
+                    "text": "Vorrei richiedere ferie per la prossima settimana.",
+                    "timestamp": "2023-10-27T10:00:00"
+                },
+                {
+                    "id": "m2",
+                    "sender": "bot",
+                    "text": "Certamente! Per quali giorni esattamente vorresti richiedere le ferie?",
+                    "timestamp": "2023-10-27T10:00:05"
+                },
+                {
+                    "id": "m3",
+                    "sender": "user",
+                    "text": "Dal 5 al 10 Novembre.",
+                    "timestamp": "2023-10-27T10:01:00"
+                },
+                {
+                    "id": "m4",
+                    "sender": "bot",
+                    "text": "Ho inoltrato la tua richiesta per il periodo dal 5 al 10 Novembre. Riceverai una notifica appena sarà approvata.",
+                    "timestamp": "2023-10-27T10:01:05"
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "title": "Spiegazione Busta Paga",
+            "date": "2023-10-20T14:30:00",
+            "messages": [
+                {
+                    "id": "m1",
+                    "sender": "user",
+                    "text": "Non capisco la voce 'Trattenute IRPEF' nella mia ultima busta paga.",
+                    "timestamp": "2023-10-20T14:30:00"
+                },
+                {
+                    "id": "m2",
+                    "sender": "bot",
+                    "text": "L'IRPEF è l'Imposta sul Reddito delle Persone Fisiche. È una tassa che viene trattenuta direttamente dal tuo stipendio in base al tuo scaglione di reddito. Vuoi sapere qual è la tua aliquota?",
+                    "timestamp": "2023-10-20T14:30:10"
+                }
+            ]
+        }
+    ],
+    "suggestions": [
+        "Dammi i roll",
+        "Dammi le ferie",
+        "Spiegami la busta paga",
+        "Calcola stipendio netto",
+        "Giorni di malattia residui"
+    ]
+}

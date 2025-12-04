@@ -21,6 +21,12 @@
     "TITLE": "Dashboard",
     "WELCOME": "Benvenuto su PayPeek!"
   },
+  "CHATBOT": {
+    "TITLE": "Assistente Virtuale",
+    "HISTORY": "Cronologia Chat",
+    "NEW_CHAT": "Nuova Chat",
+    "PLACEHOLDER": "Scrivi un messaggio..."
+  },
   "SETTINGS": {
     "TITLE": "Impostazioni",
     "FAQ": {
