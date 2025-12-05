@@ -33,26 +33,25 @@
     <div *ngIf="currentView === 'root' && (filteredFolders.length > 0 || searchQuery)" class="grid">
         <!-- Add New Year Card -->
         <div class="col-12 sm:col-6 md:col-4 lg:col-3">
-            <div class="folder-card create-card h-full flex flex-column align-items-center justify-content-center p-4 border-1 border-dashed border-300 border-round-xl cursor-pointer hover:surface-50 transition-all"
-                (click)="openCreateYearDialog()">
+            <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="true"
+                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed hover:surface-50"
+                (onClick)="openCreateYearDialog()">
                 <i class="fa-solid fa-plus text-3xl text-400 mb-2"></i>
                 <span class="text-600 font-medium">New Year Folder</span>
-            </div>
+            </ad-card>
         </div>
 
         <!-- Year Folders -->
         <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngFor="let folder of filteredFolders">
-            <div class="folder-card h-full p-4 surface-card border-1 border-200 border-round-xl cursor-pointer hover:shadow-2 transition-all relative overflow-hidden"
-                (click)="openYearFolder(folder)">
-                <!-- Color Strip -->
-                <div class="absolute top-0 left-0 w-full h-1" [style.background-color]="folder.color"></div>
-
+            <ad-card padding="large" shadow="medium" borderRadius="xl" [border]="true" [hoverable]="true"
+                [clickable]="true" [colorStrip]="folder.color" styleClass="folder-card h-full"
+                (onClick)="openYearFolder(folder)">
                 <div class="flex align-items-center justify-content-between mb-3">
                     <i class="fa-solid fa-folder text-4xl" [style.color]="folder.color"></i>
                     <span class="text-500 text-sm">{{ folder.months.length }} months</span>
                 </div>
                 <h3 class="text-xl font-bold text-800 m-0">{{ folder.year }}</h3>
-            </div>
+            </ad-card>
         </div>
     </div>
 
@@ -60,17 +59,18 @@
     <div *ngIf="currentView === 'year' && selectedYearFolder" class="grid">
         <!-- Add New Month Card -->
         <div class="col-12 sm:col-6 md:col-4 lg:col-3">
-            <div class="folder-card create-card h-full flex flex-column align-items-center justify-content-center p-4 border-1 border-dashed border-300 border-round-xl cursor-pointer hover:surface-50 transition-all"
-                (click)="openCreateMonthDialog()">
+            <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="true"
+                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed hover:surface-50"
+                (onClick)="openCreateMonthDialog()">
                 <i class="fa-solid fa-plus text-3xl text-400 mb-2"></i>
                 <span class="text-600 font-medium">New Month Folder</span>
-            </div>
+            </ad-card>
         </div>
 
         <!-- Month Folders -->
         <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngFor="let month of displayedMonths">
-            <div
-                class="folder-card h-full p-4 surface-card border-1 border-200 border-round-xl cursor-pointer hover:shadow-2 transition-all">
+            <ad-card padding="large" shadow="medium" borderRadius="xl" [border]="true" [hoverable]="true"
+                styleClass="folder-card h-full">
                 <div class="flex align-items-center justify-content-between mb-3">
                     <i class="fa-regular fa-folder-open text-4xl text-primary"></i>
                     <span class="badge bg-primary-50 text-primary border-round px-2 py-1 text-xs font-bold"
@@ -90,7 +90,7 @@
                 <div *ngIf="month.files.length === 0" class="text-xs text-400 italic">
                     No files yet
                 </div>
-            </div>
+            </ad-card>
         </div>
     </div>
 </div>

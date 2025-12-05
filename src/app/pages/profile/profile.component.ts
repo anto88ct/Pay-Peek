@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
 import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
 import { AdLabelComponent } from '../../toolbox/ad-label/ad-label.component';
+import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 
 @Component({
     selector: 'app-profile',
@@ -18,7 +19,8 @@ import { AdLabelComponent } from '../../toolbox/ad-label/ad-label.component';
         TranslateModule,
         AdInputComponent,
         AdButtonComponent,
-        AdLabelComponent
+        AdLabelComponent,
+        AdCardComponent
     ],
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss']

@@ -1,0 +1,126 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.ad-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--surface-card); // Apply background by default
+
+    // Background variants
+    &--bg-default {
+        background-color: var(--surface-card);
+    }
+
+    &--bg-transparent {
+        background-color: transparent;
+    }
+
+    // Padding variants
+    &--padding-none {
+        padding: 0;
+    }
+
+    &--padding-small {
+        padding: 0.75rem;
+    }
+
+    &--padding-medium {
+        padding: 1rem;
+    }
+
+    &--padding-large {
+        padding: 1.5rem;
+    }
+
+    // Shadow variants
+    &--shadow-small {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+
+    &--shadow-medium {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    &--shadow-large {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    // Border radius variants
+    &--radius-small {
+        border-radius: 0.25rem;
+    }
+
+    &--radius-medium {
+        border-radius: 0.5rem;
+    }
+
+    &--radius-large {
+        border-radius: 0.75rem;
+    }
+
+    &--radius-xl {
+        border-radius: 1rem;
+    }
+
+    // Border
+    &--border {
+        border: 1px solid var(--surface-border);
+    }
+
+    // Hoverable effect
+    &--hoverable {
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.15), 0 6px 8px -3px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    // Clickable cursor
+    &--clickable {
+        cursor: pointer;
+    }
+
+    // Color strip at the top
+    &__color-strip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+    }
+
+    // Content wrapper
+    &__content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+// Dark mode adjustments
+:host-context([data-color-scheme="dark"]) {
+    .ad-card {
+        &--shadow-small {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        &--shadow-medium {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        &--shadow-large {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        &--hoverable:hover {
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.4), 0 6px 8px -3px rgba(0, 0, 0, 0.3);
+        }
+    }
+}

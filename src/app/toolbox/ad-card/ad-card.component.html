@@ -1,0 +1,9 @@
+<div [class]="getCardClasses()" (click)="handleClick($event)">
+    <!-- Optional Color Strip -->
+    <div *ngIf="colorStrip" class="ad-card__color-strip" [style.background-color]="colorStrip"></div>
+
+    <!-- Card Content -->
+    <div class="ad-card__content">
+        <ng-content></ng-content>
+    </div>
+</div>

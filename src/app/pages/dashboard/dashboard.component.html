@@ -13,24 +13,24 @@
 
     <div class="grid">
         <div class="col-12 lg:col-8">
-            <div class="card p-4 h-full shadow-2 border-round-xl surface-card">
+            <ad-card padding="large" shadow="large" borderRadius="xl">
                 <h3 class="text-xl font-semibold mb-3">{{ 'DASHBOARD.SALARY_TREND' | translate }}</h3>
                 <p-chart type="line" [data]="salaryData" [options]="salaryOptions" height="350px"></p-chart>
-            </div>
+            </ad-card>
         </div>
         <div class="col-12 lg:col-4">
-            <div class="card p-4 h-full shadow-2 border-round-xl surface-card">
+            <ad-card padding="large" shadow="large" borderRadius="xl">
                 <h3 class="text-xl font-semibold mb-3">{{ 'DASHBOARD.EXPENSES' | translate }}</h3>
                 <div class="flex justify-content-center">
                     <p-chart type="doughnut" [data]="expensesData" [options]="expensesOptions" height="300px"></p-chart>
                 </div>
-            </div>
+            </ad-card>
         </div>
         <div class="col-12">
-            <div class="card p-4 shadow-2 border-round-xl surface-card">
+            <ad-card padding="large" shadow="large" borderRadius="xl">
                 <h3 class="text-xl font-semibold mb-3">{{ 'DASHBOARD.HOLIDAYS' | translate }}</h3>
                 <p-chart type="bar" [data]="holidaysData" [options]="holidaysOptions" height="300px"></p-chart>
-            </div>
+            </ad-card>
         </div>
     </div>
 </div>

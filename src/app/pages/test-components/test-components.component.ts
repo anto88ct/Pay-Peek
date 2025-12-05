@@ -8,6 +8,7 @@ import { AdDropdownComponent } from '../../toolbox/ad-dropdown/ad-dropdown.compo
 import { AdMultiSelectComponent } from '../../toolbox/ad-multiselect/ad-multiselect.component';
 import { AdDialogComponent } from '../../toolbox/ad-dialog/ad-dialog.component';
 import { AdFileUploaderComponent } from '../../toolbox/ad-fileuploader/ad-fileuploader.component';
+import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 
 @Component({
   selector: 'app-test-components',
@@ -21,7 +22,8 @@ import { AdFileUploaderComponent } from '../../toolbox/ad-fileuploader/ad-fileup
     AdDropdownComponent,
     AdMultiSelectComponent,
     AdDialogComponent,
-    AdFileUploaderComponent
+    AdFileUploaderComponent,
+    AdCardComponent
   ],
   templateUrl: './test-components.component.html',
   styleUrls: ['./test-components.component.scss']

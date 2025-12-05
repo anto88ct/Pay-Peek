@@ -11,6 +11,7 @@ import { AdYearPickerComponent } from '../../toolbox/ad-year-picker/ad-year-pick
 import { AdMonthPickerComponent } from '../../toolbox/ad-month-picker/ad-month-picker.component';
 import { AdColorPickerComponent } from '../../toolbox/ad-color-picker/ad-color-picker.component';
 import { AdFileUploaderComponent } from '../../toolbox/ad-fileuploader/ad-fileuploader.component';
+import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 
 // Models
 import { YearFolder, MonthFolder, FileItem } from '../../core/models/file-system.dto';
@@ -28,7 +29,8 @@ import { YearFolder, MonthFolder, FileItem } from '../../core/models/file-system
         AdYearPickerComponent,
         AdMonthPickerComponent,
         AdColorPickerComponent,
-        AdFileUploaderComponent
+        AdFileUploaderComponent,
+        AdCardComponent
     ],
     templateUrl: './files.component.html',
     styleUrls: ['./files.component.scss']

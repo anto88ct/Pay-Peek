@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ChartModule } from 'primeng/chart';
 import { HttpClient } from '@angular/common/http';
 import { AdDropdownComponent } from '../../toolbox/ad-dropdown/ad-dropdown.component';
+import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 import { FormsModule } from '@angular/forms';
 import { ThemeService } from '../../core/services/theme.service';
 
@@ -15,6 +16,7 @@ import { ThemeService } from '../../core/services/theme.service';
         TranslateModule,
         ChartModule,
         AdDropdownComponent,
+        AdCardComponent,
         FormsModule
     ],
     templateUrl: './dashboard.component.html',

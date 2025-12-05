@@ -14,6 +14,7 @@ import { InputTextModule } from "primeng/inputtext";
 import { AdInputComponent } from '../../../toolbox/ad-input/ad-input.component';
 import { AdButtonComponent } from '../../../toolbox/ad-button/ad-button.component';
 import { AdCheckboxComponent } from '../../../toolbox/ad-checkbox/ad-checkbox.component';
+import { AdCardComponent } from '../../../toolbox/ad-card/ad-card.component';
 import { ClientError } from "../../../core/models/error-response.dto";
 
 @Component({
@@ -28,6 +29,7 @@ import { ClientError } from "../../../core/models/error-response.dto";
     AdInputComponent,
     AdButtonComponent,
     AdCheckboxComponent,
+    AdCardComponent,
     RouterModule
   ],
   styleUrls: ['./login.component.scss']
