@@ -33,4 +33,9 @@
         background: var(--color-border);
         cursor: default;
     }
+
+    &::placeholder {
+        color: var(--text-color-secondary);
+        opacity: 1;
+    }
 }
