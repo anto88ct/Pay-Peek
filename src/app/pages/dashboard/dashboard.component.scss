@@ -1,6 +1,11 @@
 .dashboard-container {
     padding: 1.5rem;
-    padding-bottom: 6rem; // Space for bottom navbar on mobile
+    padding-bottom: 6rem;
+    background-color: var(--color-bg-secondary);
+
+    .title-section {
+        color: var(--color-text-primary);
+    }
 
     .card {
         background: var(--color-bg-secondary);

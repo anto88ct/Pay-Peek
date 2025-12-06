@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccordionModule } from 'primeng/accordion';
-import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
 import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
+import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 import { HttpClient } from '@angular/common/http';
 
 interface FAQ {
@@ -28,7 +28,7 @@ interface AITool {
 @Component({
     selector: 'app-settings',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, AccordionModule, AdInputComponent, AdButtonComponent],
+    imports: [CommonModule, FormsModule, TranslateModule, AccordionModule, AdButtonComponent, AdCardComponent],
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss']
 })

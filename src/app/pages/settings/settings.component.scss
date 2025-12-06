@@ -1,7 +1,7 @@
 .settings-container {
     padding: 1rem;
     min-height: 100vh;
-    background: var(--color-bg-primary);
+    background-color: var(--color-bg-secondary);
 
     @media (min-width: 768px) {
         padding: 2rem;
@@ -19,22 +19,7 @@
     }
 }
 
-.settings-section {
-    background: var(--surface-card);
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    @media (min-width: 768px) {
-        padding: 2rem;
-    }
-}
 
 .section-title {
     font-size: 1.25rem;
