@@ -1,12 +1,56 @@
-.p-input-icon-right i {
-    cursor: pointer;
+:host {
+    display: block;
+    width: 100%;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* Left Icon */
+.input-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 1rem;
+    color: var(--color-text-secondary);
+    z-index: 1;
+    pointer-events: none;
+
+    &.clickable {
+        pointer-events: auto;
+        cursor: pointer;
+    }
+}
+
+/* Right Icon */
+.input-icon-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1rem;
     color: var(--color-primary);
+    z-index: 10;
+    cursor: pointer;
 
     &:hover {
         color: var(--color-primary-hover);
     }
 }
 
+.form-control.has-icon {
+    padding-left: 2.5rem;
+}
+
+.form-control.has-icon-right {
+    padding-right: 2.5rem;
+}
+
+/* Legacy support or override PrimeNG if needed */
+.p-input-icon-right {
+    width: 100%;
+}
 
 .form-control {
     border: 2px solid var(--color-border);
@@ -16,10 +60,11 @@
     transition: all 0.3s ease;
     background: var(--color-bg-input);
     color: var(--color-text-primary);
+    width: 100%;
 
     &:focus {
         border-color: var(--color-primary);
-        box-shadow: 0 0 0 0.2rem var(--color-bg-profile-hover); // Using profile hover as a transparent primary
+        box-shadow: 0 0 0 0.2rem var(--color-bg-profile-hover);
         background: var(--color-bg-secondary);
     }
 

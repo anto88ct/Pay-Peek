@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, forwardRef, OnChanges, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
@@ -8,6 +8,7 @@ export interface MenuItem {
   icon?: string;
   command?: () => void;
   value?: any;
+  disabled?: boolean;
 }
 
 @Component({
@@ -24,7 +25,8 @@ export interface MenuItem {
     }
   ]
 })
-export class AdDropdownComponent implements ControlValueAccessor {
+export class AdDropdownComponent implements ControlValueAccessor, OnChanges {
+
   // Standard dropdown inputs
   @Input() options: any[] = [];
   @Input() optionLabel: string = 'label';
@@ -71,6 +73,7 @@ export class AdDropdownComponent implements ControlValueAccessor {
   }
 
   toggleMenu(): void {
+    console.log('AdDropdown toggleMenu clicked. Disabled:', this.disabled, 'Current Visibility:', this.menuVisible);
     if (!this.disabled) {
       this.menuVisible = !this.menuVisible;
     }
@@ -82,6 +85,12 @@ export class AdDropdownComponent implements ControlValueAccessor {
       item.command();
     }
     this.itemClick.emit(item);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['menuItems']) {
+      console.log('AdDropdown menuItems changed:', changes['menuItems'].currentValue);
+    }
   }
 
   closeMenu(): void {

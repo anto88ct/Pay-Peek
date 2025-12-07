@@ -1,17 +1,26 @@
 <div class="flex flex-column gap-2">
-    <ad-label *ngIf="label" [label]="label" [icon]="inputIcon"></ad-label>
+    <ad-label *ngIf="label" [label]="label" [icon]="labelIcon"></ad-label>
 
-    <div *ngIf="type === 'password'; else regularInput" class="p-input-icon-right">
+    <div *ngIf="type === 'password'; else regularInput" class="input-wrapper">
+        <i *ngIf="inputIcon" [class]="'fas ' + inputIcon + ' input-icon'"></i>
         <input pInputText [id]="id" [type]="showPassword ? 'text' : 'password'" [placeholder]="placeholder"
-            class="form-control" [value]="value" [disabled]="disabled" [readonly]="readonly" [class]="styleClass"
+            class="form-control" [value]="value" [disabled]="disabled" [readonly]="readonly"
+            [ngClass]="{'has-icon': inputIcon, 'has-icon-right': true, 'custom-input': true}" [class]="styleClass"
             (input)="onInput($event)" (blur)="onTouch()" />
-        <i class="fa" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"
+        <i class="fas input-icon-right clickable" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"
             (click)="togglePasswordVisibility()"></i>
     </div>
 
     <ng-template #regularInput>
-        <input pInputText [id]="id" [type]="type" [placeholder]="placeholder" class="form-control" [value]="value"
-            [disabled]="disabled" [readonly]="readonly" [class]="styleClass" (input)="onInput($event)"
-            (blur)="onTouch()" />
+        <div class="input-wrapper">
+            <i *ngIf="inputIcon" [class]="'fas ' + inputIcon + ' input-icon'"></i>
+            <i *ngIf="showPasswordToggle"
+                [class]="'fas ' + (showPassword ? 'fa-eye-slash' : 'fa-eye') + ' input-icon-right clickable'"
+                (click)="togglePasswordVisibility()"></i>
+            <input pInputText [type]="showPassword ? 'text' : type" [placeholder]="placeholder" [id]="id"
+                [disabled]="disabled" [readonly]="readonly" class="form-control"
+                [ngClass]="{'has-icon': inputIcon, 'has-icon-right': showPasswordToggle, 'custom-input': true}"
+                [class]="styleClass" [(ngModel)]="value" (input)="onInput($event)" (blur)="onTouch()">
+        </div>
     </ng-template>
 </div>

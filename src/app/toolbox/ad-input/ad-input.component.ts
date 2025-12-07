@@ -26,7 +26,9 @@ export class AdInputComponent implements ControlValueAccessor {
   @Input() disabled: boolean = false;
   @Input() styleClass: string = '';
   @Input() inputIcon: string = '';
+  @Input() labelIcon: string = '';
   @Input() readonly: boolean = false;
+  @Input() showPasswordToggle: boolean = false;
   @Output() inputChange = new EventEmitter<string>();
 
   value: string = '';

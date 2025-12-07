@@ -9,6 +9,8 @@ import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
 import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
 import { AdLabelComponent } from '../../toolbox/ad-label/ad-label.component';
 import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
+import { AdDialogComponent } from '../../toolbox/ad-dialog/ad-dialog.component';
+import { ResetPasswordComponent } from '../../shared/components/reset-password/reset-password.component';
 
 @Component({
     selector: 'app-profile',
@@ -20,7 +22,9 @@ import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
         AdInputComponent,
         AdButtonComponent,
         AdLabelComponent,
-        AdCardComponent
+        AdCardComponent,
+        AdDialogComponent,
+        ResetPasswordComponent
     ],
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss']
@@ -32,6 +36,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     profileImageUrl = 'assets/images/placeholder-avatar.png';
     selectedFile: File | null = null;
     uploadError = '';
+
+    showResetPasswordDialog = false;
+
     private destroy$ = new Subject<void>();
 
     constructor(
@@ -257,6 +264,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     console.error('Error uploading image:', error);
                 }
             });
+    }
+
+    openResetPassword(): void {
+        this.showResetPasswordDialog = true;
     }
 }
 

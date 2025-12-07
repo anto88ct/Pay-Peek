@@ -24,3 +24,30 @@
         </ad-dropdown>
     </div>
 </header>
+
+<!-- Reset Cache Confirmation Dialog -->
+<ad-dialog [(visible)]="showResetCacheDialog" [header]="isItalian ? 'Conferma Reset Cache' : 'Confirm Cache Reset'"
+    [modal]="true" [style]="{width: '350px'}">
+    <div class="d-flex flex-column gap-3">
+        <p class="m-0">
+            {{ isItalian
+            ? 'Sei sicuro di voler resettare la cache? Questo cancellerà tutti i dati locali e verrai disconnesso.'
+            : 'Are you sure you want to reset the cache? This will clear all local data and you will be logged out.' }}
+        </p>
+        <div class="d-flex justify-content-end gap-2">
+            <ad-button [label]="isItalian ? 'Annulla' : 'Cancel'" severity="secondary" [outlined]="true"
+                (onClick)="showResetCacheDialog = false">
+            </ad-button>
+            <ad-button [label]="isItalian ? 'Reset & Logout' : 'Reset & Logout'" severity="danger"
+                (onClick)="onResetCacheConfirm()">
+            </ad-button>
+        </div>
+    </div>
+</ad-dialog>
+
+<!-- Reset Password Dialog -->
+<ad-dialog [(visible)]="showResetPasswordDialog" [header]="isItalian ? 'Resetta Password' : 'Reset Password'"
+    [modal]="true" [style]="{width: '400px'}">
+    <app-reset-password *ngIf="showResetPasswordDialog" (close)="showResetPasswordDialog = false">
+    </app-reset-password>
+</ad-dialog>

@@ -9,6 +9,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent)
     },
     {
+        path: 'auth/passkey',
+        loadComponent: () => import('./pages/auth/passkey/passkey.component').then(m => m.PasskeyComponent)
+    },
+
+    {
         path: '',
         component: LayoutComponent,
         canActivate: [AuthGuard],

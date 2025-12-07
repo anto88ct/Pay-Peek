@@ -12,12 +12,13 @@
         <i class="fas fa-chevron-down chevron-icon" [class.active]="menuVisible"></i>
     </div>
 
-    <div class="profile-menu-overlay" *ngIf="menuVisible" (click)="closeMenu()">
-        <div class="profile-menu" (click)="$event.stopPropagation()">
-            <div *ngFor="let item of menuItems" class="menu-item" (click)="onMenuItemClick(item)">
-                <i *ngIf="item.icon" class="fas {{ item.icon }} menu-icon"></i>
-                <span class="menu-label">{{ item.label }}</span>
-            </div>
+    <div class="profile-menu-overlay" *ngIf="menuVisible" (click)="closeMenu()"></div>
+
+    <div class="profile-menu" *ngIf="menuVisible" (click)="$event.stopPropagation()">
+        <div *ngFor="let item of menuItems" class="menu-item" [class.disabled]="item.disabled"
+            (click)="!item.disabled && onMenuItemClick(item)">
+            <i *ngIf="item.icon" class="fas {{ item.icon }} menu-icon"></i>
+            <span class="menu-label">{{ item.label }}</span>
         </div>
     </div>
 </div>

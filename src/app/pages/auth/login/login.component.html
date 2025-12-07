@@ -11,7 +11,7 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
           <ad-input formControlName="email" label="{{ 'auth.login.email' | translate }}" id="email" type="email"
-            inputIcon="fa-solid fa-envelope" placeholder="{{'auth.login.email' | translate}}" styleClass="w-100">
+            labelIcon="fa-solid fa-envelope" placeholder="{{'auth.login.email' | translate}}" styleClass="w-100">
           </ad-input>
           <div
             *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)"
@@ -22,7 +22,7 @@
 
         <div class="mb-3">
           <ad-input formControlName="password" label="{{ 'auth.login.password' | translate }}" id="password"
-            inputIcon="fa-solid fa-lock" type="password" placeholder="{{'auth.login.password' | translate}}"
+            labelIcon="fa-solid fa-lock" type="password" placeholder="{{'auth.login.password' | translate}}"
             styleClass="w-100">
           </ad-input>
           <div
@@ -49,17 +49,20 @@
             </ad-button>
           </div>
 
-          <div class="d-flex flex-column gap-2 mb-3 w-100">
+          <div class="d-flex flex-column gap-2 mb-3 w-100" *ngIf="hasRegisteredUser">
             <ad-button type="button" label="PassKey" styleClass="w-full custom-border-radius p-button-custom-green"
               [outlined]="true" size="small" (onClick)="openBiometricLogin()">
             </ad-button>
           </div>
+
         </div>
       </form>
 
       <div class="px-2 pb-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <a routerLink="/auth/forgot-password">{{ 'auth.login.forgotPassword' | translate }}</a>
+          <a class="cursor-pointer" (click)="showResetPasswordDialog = true">{{ 'auth.login.forgotPassword' | translate
+            }}</a>
+
         </div>
 
         <div class="text-center">
@@ -68,5 +71,11 @@
         </div>
       </div>
     </ad-card>
+
+    <p-dialog header="{{ 'auth.login.forgotPassword' | translate }}" [(visible)]="showResetPasswordDialog"
+      [modal]="true" [style]="{width: '450px'}" [draggable]="false" [resizable]="false" [baseZIndex]="10000">
+      <app-reset-password (close)="showResetPasswordDialog = false"></app-reset-password>
+    </p-dialog>
+
   </div>
 </div>

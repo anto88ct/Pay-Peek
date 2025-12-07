@@ -16,6 +16,9 @@ import { AdButtonComponent } from '../../../toolbox/ad-button/ad-button.componen
 import { AdCheckboxComponent } from '../../../toolbox/ad-checkbox/ad-checkbox.component';
 import { AdCardComponent } from '../../../toolbox/ad-card/ad-card.component';
 import { ClientError } from "../../../core/models/error-response.dto";
+import { ResetPasswordComponent } from '../../../shared/components/reset-password/reset-password.component';
+import { DialogModule } from 'primeng/dialog';
+
 
 @Component({
   selector: 'app-login',
@@ -29,15 +32,22 @@ import { ClientError } from "../../../core/models/error-response.dto";
     AdInputComponent,
     AdButtonComponent,
     AdCheckboxComponent,
+    AdCheckboxComponent,
     AdCardComponent,
-    RouterModule
+    RouterModule,
+    ResetPasswordComponent,
+    DialogModule
   ],
+
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading = false;
   errorMessage = '';
+  showResetPasswordDialog = false;
+  hasRegisteredUser = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -55,7 +65,13 @@ export class LoginComponent implements OnInit {
     });
     this.themeService.initTheme();
     this.languageService.initLanguage();
+    this.checkUserRegistration();
   }
+
+  checkUserRegistration() {
+    this.hasRegisteredUser = !!localStorage.getItem('registered_user');
+  }
+
 
   onSubmit() {
     if (this.loginForm.valid) {
@@ -66,7 +82,18 @@ export class LoginComponent implements OnInit {
           this.authService.setToken(response.token, response.refreshToken || '');
           this.themeService.setTheme(response.user.preferences.theme);
           this.languageService.setLanguage(response.user.preferences.language);
+
+          // Store registered user for PassKey feature
+          localStorage.setItem('registered_user', JSON.stringify({
+            email: response.user.email,
+            firstName: response.user.firstName,
+            profileImageUrl: response.user.profileImageUrl,
+            passkey: response.user.passkey || '1234', // Fallback or from user payload
+            password: response.user.password // Storing password is insecure but needed for this fake-backend prototype
+          }));
+
           this.router.navigate(['/dashboard']);
+
         },
         error: (clientError: ClientError) => {
           // The error is already transformed by the interceptor
@@ -78,9 +105,8 @@ export class LoginComponent implements OnInit {
   }
 
   openBiometricLogin(): void {
-    // Logica per aprire dialog o navigare a componente biometrico
-    // Esempio: naviga alla pagina login biometrico
-    this.router.navigate(['/auth/login-biometric']);
+    this.router.navigate(['/auth/passkey']);
   }
+
 
 }

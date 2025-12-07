@@ -25,11 +25,35 @@
                     <i class="fas fa-headset me-2"></i>{{ 'SETTINGS.SUPPORT.TITLE' | translate }}
                 </h2>
                 <div class="support-form">
-                    <div class="mb-3">
+                    <div class="rich-textarea-container mb-3">
                         <textarea class="form-control support-textarea" rows="5" [(ngModel)]="supportMessage"
                             [placeholder]="'SETTINGS.SUPPORT.MESSAGE_PLACEHOLDER' | translate">
-              </textarea>
+                        </textarea>
+
+                        <div class="attachment-previews" *ngIf="attachments.length > 0">
+                            <div class="attachment-item" *ngFor="let attachment of attachments; let i = index">
+                                <div class="preview-content">
+                                    <img *ngIf="attachment.type === 'image'" [src]="attachment.previewUrl"
+                                        class="preview-image">
+                                    <i *ngIf="attachment.type === 'pdf'" class="fas fa-file-pdf pdf-icon"></i>
+                                    <span *ngIf="attachment.type === 'pdf'" class="pdf-name">{{attachment.name}}</span>
+                                </div>
+                                <button class="remove-btn" (click)="removeAttachment(i)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="textarea-actions">
+                            <button class="attachment-btn" (click)="triggerFileUpload()" title="Add attachment">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                        </div>
                     </div>
+
+                    <input type="file" id="file-upload" (change)="onFileSelected($event)" accept=".png,.jpg,.jpeg,.pdf"
+                        multiple hidden>
+
                     <ad-button [label]="'SETTINGS.SUPPORT.SEND' | translate" icon="fas fa-paper-plane"
                         customSeverity="custom-blue" (onClick)="sendSupportEmail()">
                     </ad-button>

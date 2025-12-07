@@ -8,6 +8,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { AdInputSwitchComponent } from '../../../toolbox/ad-input-switch/ad-input-switch.component';
 import { AdDropdownComponent } from '../../../toolbox/ad-dropdown/ad-dropdown.component';
+import { AdDialogComponent } from '../../../toolbox/ad-dialog/ad-dialog.component';
+import { AdButtonComponent } from '../../../toolbox/ad-button/ad-button.component';
+import { ResetPasswordComponent } from '../../../shared/components/reset-password/reset-password.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +22,11 @@ import { AdDropdownComponent } from '../../../toolbox/ad-dropdown/ad-dropdown.co
     RouterModule,
     TranslateModule,
     AdInputSwitchComponent,
-    AdDropdownComponent
+    AdInputSwitchComponent,
+    AdDropdownComponent,
+    AdDialogComponent,
+    AdButtonComponent,
+    ResetPasswordComponent
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
@@ -31,11 +40,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   profileMenuItems: MenuItem[] = [];
 
+  // Dialog states
+  showResetCacheDialog = false;
+  showResetPasswordDialog = false;
+
   private destroy$ = new Subject<void>();
 
   constructor(
     private themeService: ThemeService,
     private languageService: LanguageService,
+    private userService: UserService,
+    private authService: AuthService,
     private router: Router
   ) { }
 
@@ -86,8 +101,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   updateProfileMenuItems(): void {
+    console.log('Header updateProfileMenuItems called');
     const currentLang = this.languageService.getCurrentLanguage();
+    const currentUser = this.userService.getCurrentUserSync();
+    const email = currentUser?.email || 'user@example.com';
+
     this.profileMenuItems = [
+      {
+        label: email,
+        icon: 'fa-envelope',
+        disabled: true
+      },
+      {
+        label: currentLang === 'it' ? 'Reset Password' : 'Reset Password',
+        icon: 'fa-key',
+        command: () => this.openResetPassword()
+      },
+      {
+        label: currentLang === 'it' ? 'Reset Cache' : 'Reset Cache',
+        icon: 'fa-broom',
+        command: () => this.confirmResetCache()
+      },
       {
         label: currentLang === 'it' ? 'Profilo' : 'Profile',
         icon: 'fa-user',
@@ -99,6 +133,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
         command: () => this.onLogoutClick()
       }
     ];
+    console.log('Header profileMenuItems:', this.profileMenuItems);
+  }
+
+  confirmResetCache(): void {
+    this.showResetCacheDialog = true;
+  }
+
+  onResetCacheConfirm(): void {
+    this.showResetCacheDialog = false;
+    localStorage.clear();
+    // Redirect to login
+    this.router.navigate(['/login']);
+    // Force reload to clear memory state if needed, or just navigate
+    // window.location.reload(); 
+  }
+
+  openResetPassword(): void {
+    this.showResetPasswordDialog = true;
   }
 
   onProfileClick(): void {
@@ -108,6 +160,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogoutClick(): void {
     console.log('Logout clicked');
-    // TODO: Implement logout logic
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

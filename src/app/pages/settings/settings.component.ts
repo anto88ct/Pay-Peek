@@ -7,6 +7,15 @@ import { AccordionModule } from 'primeng/accordion';
 import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
 import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 import { HttpClient } from '@angular/common/http';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
+interface Attachment {
+    file: File;
+    previewUrl: SafeUrl;
+    type: 'image' | 'pdf';
+    name: string;
+}
+
 
 interface FAQ {
     question: string;
@@ -37,10 +46,12 @@ export class SettingsComponent implements OnInit {
     contributors: Contributor[] = [];
     aiTools: AITool[] = [];
     supportMessage: string = '';
+    attachments: Attachment[] = [];
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private sanitizer: DomSanitizer
     ) { }
 
     ngOnInit(): void {
@@ -61,11 +72,58 @@ export class SettingsComponent implements OnInit {
         });
     }
 
+    triggerFileUpload(): void {
+        const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+        if (fileInput) {
+            fileInput.click();
+        }
+    }
+
+    onFileSelected(event: any): void {
+        const files: FileList = event.target.files;
+        if (files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = (e: any) => {
+                    const type = file.type.includes('image') ? 'image' : 'pdf';
+                    this.attachments.push({
+                        file: file,
+                        previewUrl: this.sanitizer.bypassSecurityTrustUrl(e.target.result),
+                        type: type,
+                        name: file.name
+                    });
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+        // Reset input value to allow selecting the same file again if needed
+        event.target.value = '';
+    }
+
+    removeAttachment(index: number): void {
+        this.attachments.splice(index, 1);
+    }
+
     sendSupportEmail(): void {
-        // In a real application, this would send an email
+        // In a real application, this would send an email with attachments
         console.log('Support message:', this.supportMessage);
-        alert('Support message sent! (This is a demo)');
-        this.supportMessage = '';
+        console.log('Attachments:', this.attachments);
+
+        let valid = true;
+        if (!this.supportMessage && this.attachments.length === 0) {
+            valid = false;
+        }
+
+        if (valid) {
+            alert('Support message sent! (This is a demo)');
+            this.supportMessage = '';
+            this.attachments = [];
+        } else {
+            alert('Please enter a message or attach a file.');
+        }
     }
 
     logout(): void {

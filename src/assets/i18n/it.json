@@ -12,6 +12,10 @@
       "forgotPassword": "Password dimenticata?",
       "noAccount": "Non hai un account?",
       "signUp": "Registrati"
+    },
+    "passkey": {
+      "welcomeBack": "Bentornato, {{name}}",
+      "subtitle": "Usa la tua passkey per accedere"
     }
   },
   "app": {

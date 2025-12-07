@@ -1,0 +1,65 @@
+.wrapper {
+    background-color: var(--surface-ground);
+}
+
+.mode-selector {
+    border-bottom: 2px solid transparent;
+    color: var(--text-color-secondary);
+    transition: all 0.2s;
+
+    &:hover {
+        color: var(--primary-color);
+    }
+
+    &.active-mode {
+        border-bottom-color: var(--primary-color);
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+}
+
+.pin-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    transition: all 0.2s;
+
+    &.filled {
+        background-color: var(--primary-color);
+    }
+}
+
+.keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    max-width: 250px;
+    margin: 0 auto;
+}
+
+.keypad-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-card);
+    color: var(--text-color);
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.1s;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:active {
+        background: var(--primary-color);
+        color: white;
+        transform: scale(0.95);
+    }
+
+    &:hover {
+        background: var(--surface-hover);
+    }
+}

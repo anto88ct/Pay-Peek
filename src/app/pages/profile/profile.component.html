@@ -119,7 +119,11 @@
 
                         <!-- Action Buttons -->
                         <div class="action-buttons">
-                            <div *ngIf="!isEditMode" class="d-flex justify-content-end">
+                            <div *ngIf="!isEditMode" class="d-flex justify-content-end gap-2">
+                                <ad-button label="Reset Password" icon="fas fa-key"
+                                    styleClass="w-full w-md-auto custom-border-radius" severity="warning"
+                                    [outlined]="true" (onClick)="openResetPassword()">
+                                </ad-button>
                                 <ad-button label="Modifica Profilo" icon="fas fa-edit"
                                     styleClass="w-full w-md-auto custom-border-radius" severity="primary"
                                     (onClick)="toggleEditMode()">
@@ -142,4 +146,10 @@
             </div>
         </div>
     </div>
+
+    <!-- Reset Password Dialog -->
+    <ad-dialog [(visible)]="showResetPasswordDialog" header="Reset Password" [modal]="true" [style]="{width: '400px'}">
+        <app-reset-password *ngIf="showResetPasswordDialog" (close)="showResetPasswordDialog = false">
+        </app-reset-password>
+    </ad-dialog>
 </div>
