@@ -63,6 +63,9 @@ export class FilesComponent implements OnInit {
         file: null
     };
 
+    // Payslip Upload State
+    payslipFiles: File[] = [];
+
     constructor(private http: HttpClient) { }
 
     ngOnInit() {
@@ -195,6 +198,37 @@ export class FilesComponent implements OnInit {
 
     onMonthFileSelect(event: any) {
         this.newMonthData.file = event.files[0];
+    }
+
+    // Payslip Bulk Upload
+    triggerPayslipInput() {
+        const fileInput = document.getElementById('payslipInput') as HTMLInputElement;
+        if (fileInput) {
+            fileInput.click();
+        }
+    }
+
+    onPayslipsSelected(event: any) {
+        const files = event.target.files;
+        if (files) {
+            for (let i = 0; i < files.length; i++) {
+                if (files[i].type === 'application/pdf') {
+                    this.payslipFiles.push(files[i]);
+                }
+            }
+        }
+        // Reset input value to allow selecting same files again if needed
+        event.target.value = '';
+    }
+
+    uploadPayslips() {
+        console.log('Uploading files:', this.payslipFiles);
+        // TODO: Implement actual upload logic here
+        this.payslipFiles = [];
+    }
+
+    cancelPayslipUpload() {
+        this.payslipFiles = [];
     }
 
     // Helpers

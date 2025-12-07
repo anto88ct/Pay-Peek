@@ -31,13 +31,54 @@
 
     <!-- Root View: Year Folders Grid -->
     <div *ngIf="currentView === 'root' && (filteredFolders.length > 0 || searchQuery)" class="grid">
+        <!-- Add Payslips Card -->
+        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+            <input type="file" id="payslipInput" multiple accept=".pdf" style="display: none"
+                (change)="onPayslipsSelected($event)">
+
+            <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="payslipFiles.length === 0"
+                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed hover:surface-50 transition-all"
+                (onClick)="payslipFiles.length === 0 ? triggerPayslipInput() : null">
+
+                <!-- Empty State -->
+                <div *ngIf="payslipFiles.length === 0" class="flex flex-column align-items-center">
+                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-400 mb-2"></i>
+                    <span class="text-600 font-medium text-center">Aggiungi le tue buste paga</span>
+                </div>
+
+                <!-- Selected State -->
+                <div *ngIf="payslipFiles.length > 0" class="w-full">
+                    <div class="flex flex-wrap gap-2 mb-3 justify-content-center"
+                        style="max-height: 150px; overflow-y: auto;">
+                        <div *ngFor="let file of payslipFiles"
+                            class="flex flex-column align-items-center p-2 surface-100 border-round"
+                            style="width: 80px;" title="{{file.name}}">
+                            <i class="fa-solid fa-file-pdf text-2xl text-red-500 mb-1"></i>
+                            <span
+                                class="text-xs text-700 white-space-nowrap overflow-hidden text-overflow-ellipsis w-full text-center">
+                                {{ file.name }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 justify-content-center w-full">
+                        <ad-button label="Annulla" severity="secondary" size="small"
+                            (onClick)="cancelPayslipUpload()"></ad-button>
+                        <ad-button label="Carica" size="small" (onClick)="uploadPayslips()"></ad-button>
+                    </div>
+                </div>
+            </ad-card>
+        </div>
+
         <!-- Add New Year Card -->
         <div class="col-12 sm:col-6 md:col-4 lg:col-3">
             <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="true"
-                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed hover:surface-50"
+                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed hover:surface-50 text-center"
                 (onClick)="openCreateYearDialog()">
-                <i class="fa-solid fa-plus text-3xl text-400 mb-2"></i>
-                <span class="text-600 font-medium">New Year Folder</span>
+                <div class="flex flex-column align-items-center">
+                    <i class="fa-solid fa-plus text-3xl text-400 mb-2"></i>
+                    <span class="text-600 font-medium">New Year Folder</span>
+                </div>
             </ad-card>
         </div>
 
