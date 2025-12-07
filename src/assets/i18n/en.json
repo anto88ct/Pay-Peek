@@ -16,7 +16,53 @@
     "passkey": {
       "welcomeBack": "Welcome Back, {{name}}",
       "subtitle": "Use your passkey to sign in"
-    }
+    },
+    "terms": {
+      "title": "Terms & Privacy",
+      "subtitle": "Before we start, here is how we handle your data",
+      "privacy": {
+        "title": "Maximum Privacy",
+        "desc": "The app does not use your payslip data in any way. It will not be shared with third parties."
+      },
+      "local": {
+        "title": "Local Management",
+        "desc": "Your files will be managed locally on your device to ensure maximum security."
+      },
+      "security": {
+        "title": "Secured",
+        "desc": "Your data is accessible only to you. No sensitive data leaves your device."
+      },
+      "animationPlaceholder": "Space for future animations...",
+      "agree": "I have read and agreed",
+      "cancel": "Cancel"
+    },
+    "signup": {
+      "title": "Create your Account",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "passwordMismatch": "Passwords do not match",
+      "optional": "Optional Information",
+      "job": "Job",
+      "selectJob": "Select Job",
+      "nationality": "Nationality",
+      "selectNationality": "Select Nationality",
+      "city": "City",
+      "selectCity": "Select City",
+      "country": "Country",
+      "selectCountry": "Select Country",
+      "cancel": "Cancel",
+      "submit": "Sign Up",
+      "passkey": {
+        "title": "Setup Passkey",
+        "question": "Do you want to create your passkey?",
+        "desc": "It's a simpler and faster method to access your app.",
+        "skip": "No, thanks"
+      }
+    },
+    "back": "Back"
   },
   "app": {
     "title": "paypeek"

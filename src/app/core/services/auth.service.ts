@@ -55,8 +55,10 @@ export class AuthService {
           // Store complete user data
           const userDto: UserDto = {
             ...randomUser,
-            email: credentials.email // Override with login email
+            email: credentials.email, // Override with login email
+            passkey: validCredential.passkey || randomUser.passkey // Use credential passkey if available
           };
+
           localStorage.setItem('current_user', JSON.stringify(userDto));
 
           this.authenticatedSubject.next(true);

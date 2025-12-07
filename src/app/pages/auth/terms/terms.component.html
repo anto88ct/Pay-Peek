@@ -1,0 +1,70 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100 wrapper">
+    <div class="mx-auto" style="max-width: 800px; width: 100%;">
+        <ad-card padding="large" shadow="medium" borderRadius="xl" styleClass="login-card">
+
+            <div class="text-center mb-4">
+                <img src="assets/icons/paypeek-logo2.png" alt="PayPeek Logo" style="height: 60px;" class="mb-3">
+                <h2 class="mb-2">{{ 'auth.terms.title' | translate }}</h2>
+                <p class="text-secondary">{{ 'auth.terms.subtitle' | translate }}</p>
+            </div>
+
+            <div class="terms-content mb-4 p-3 custom-scrollbar">
+
+                <div class="feature-block mb-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-user-shield text-primary"></i>
+                        </div>
+                        <div>
+                            <h5>{{ 'auth.terms.privacy.title' | translate }}</h5>
+                            <p class="text-secondary small">{{ 'auth.terms.privacy.desc' | translate }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-block mb-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-server text-success"></i>
+                        </div>
+                        <div>
+                            <h5>{{ 'auth.terms.local.title' | translate }}</h5>
+                            <p class="text-secondary small">{{ 'auth.terms.local.desc' | translate }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-block mb-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-fingerprint text-warning"></i>
+                        </div>
+                        <div>
+                            <h5>{{ 'auth.terms.security.title' | translate }}</h5>
+                            <p class="text-secondary small">{{ 'auth.terms.security.desc' | translate }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placeholder for animations/images -->
+                <div class="animations-placeholder text-center p-4 mb-3">
+                    <div class="placeholder-graphic mb-3">
+                        <i class="fa-solid fa-image fa-3x text-muted opacity-25"></i>
+                    </div>
+                    <p class="small text-muted fst-italic">{{ 'auth.terms.animationPlaceholder' | translate }}</p>
+                </div>
+
+            </div>
+
+            <div class="d-flex flex-column gap-2">
+                <ad-button label="{{ 'auth.terms.agree' | translate }}" styleClass="w-full custom-border-radius"
+                    (onClick)="accept()">
+                </ad-button>
+                <ad-button label="{{ 'auth.terms.cancel' | translate }}" styleClass="w-full" [outlined]="true"
+                    severity="secondary" (onClick)="cancel()">
+                </ad-button>
+            </div>
+
+        </ad-card>
+    </div>
+</div>

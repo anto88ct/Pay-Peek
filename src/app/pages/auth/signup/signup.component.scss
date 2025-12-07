@@ -1,0 +1,18 @@
+.wrapper {
+    background-color: var(--surface-ground);
+}
+
+.signup-card {
+    /* PrimeNG Card overrides if needed */
+}
+
+.selection-card {
+    transition: all 0.2s;
+    width: 120px;
+
+    &:hover {
+        background-color: var(--surface-hover);
+        border-color: var(--primary-color) !important;
+        transform: translateY(-2px);
+    }
+}

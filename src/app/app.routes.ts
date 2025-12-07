@@ -12,6 +12,15 @@ export const routes: Routes = [
         path: 'auth/passkey',
         loadComponent: () => import('./pages/auth/passkey/passkey.component').then(m => m.PasskeyComponent)
     },
+    {
+        path: 'auth/terms',
+        loadComponent: () => import('./pages/auth/terms/terms.component').then(m => m.TermsComponent)
+    },
+    {
+        path: 'auth/signup',
+        loadComponent: () => import('./pages/auth/signup/signup.component').then(m => m.SignupComponent)
+    },
+
 
     {
         path: '',

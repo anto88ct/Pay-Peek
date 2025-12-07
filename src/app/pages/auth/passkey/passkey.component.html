@@ -3,7 +3,7 @@
         <ad-card padding="large" shadow="medium" borderRadius="xl" styleClass="login-card text-center">
 
             <div class="mb-4">
-                <img [src]="userProfile?.profileImageUrl || 'assets/icons/paypeek-logo2.png'"
+                <img [src]="userProfile?.profileImageUrl || 'assets/images/placeholder-avatar.png'"
                     class="mb-3 rounded-circle"
                     style="height: 80px; width: 80px; object-fit: cover; border: 2px solid var(--primary-color);">
                 <h4>{{ 'auth.passkey.welcomeBack' | translate: {name: userProfile?.firstName || 'User'} }}</h4>

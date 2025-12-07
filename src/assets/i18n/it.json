@@ -16,7 +16,53 @@
     "passkey": {
       "welcomeBack": "Bentornato, {{name}}",
       "subtitle": "Usa la tua passkey per accedere"
-    }
+    },
+    "terms": {
+      "title": "Termini e Privacy",
+      "subtitle": "Prima di iniziare, ecco come gestiamo i tuoi dati",
+      "privacy": {
+        "title": "Massima Privacy",
+        "desc": "L'app non utilizza in alcun modo i dati delle tue buste paga. Non saranno condivisi con terzi."
+      },
+      "local": {
+        "title": "Gestione Locale",
+        "desc": "I tuoi file saranno gestiti localmente sul tuo dispositivo per garantire la massima sicurezza."
+      },
+      "security": {
+        "title": "Blindati",
+        "desc": "I tuoi dati sono accessibili solo a te. Nessun dato sensibile lascia il tuo dispositivo."
+      },
+      "animationPlaceholder": "Spazio per animazioni future...",
+      "agree": "Ho letto e preso visione",
+      "cancel": "Annulla"
+    },
+    "signup": {
+      "title": "Crea il tuo Account",
+      "firstName": "Nome",
+      "lastName": "Cognome",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Conferma Password",
+      "passwordMismatch": "Le password non corrispondono",
+      "optional": "Informazioni Opzionali",
+      "job": "Lavoro",
+      "selectJob": "Seleziona Lavoro",
+      "nationality": "Nazionalità",
+      "selectNationality": "Seleziona Nazionalità",
+      "city": "Città",
+      "selectCity": "Seleziona Città",
+      "country": "Paese",
+      "selectCountry": "Seleziona Paese",
+      "cancel": "Annulla",
+      "submit": "Registrati",
+      "passkey": {
+        "title": "Configura Passkey",
+        "question": "Vuoi creare la tua passkey?",
+        "desc": "È un metodo più semplice e veloce per accedere alla tua app.",
+        "skip": "No, grazie"
+      }
+    },
+    "back": "Indietro"
   },
   "app": {
     "title": "paypeek"

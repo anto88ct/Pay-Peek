@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -15,7 +16,12 @@ import { MessageModule } from 'primeng/message';
     styleUrls: ['./passkey.component.scss']
 })
 export class PasskeyComponent implements OnInit, AfterViewInit {
-    mode: 'pin' | 'pattern' = 'pin'; // Default
+    @Input() context: 'login' | 'setup' = 'login';
+    @Input() initialMode: 'pin' | 'pattern' = 'pin';
+    @Output() setupComplete = new EventEmitter<string>();
+
+
+    mode: 'pin' | 'pattern' = 'pin'; // UI Mode
     pinValue: string = '';
     patternPath: number[] = [];
     errorMessage: string = '';
@@ -34,17 +40,19 @@ export class PasskeyComponent implements OnInit, AfterViewInit {
     ) { }
 
     ngOnInit() {
-        // Check if we have a registered user on this device
-        const registeredUser = localStorage.getItem('registered_user');
-        if (!registeredUser) {
-            this.router.navigate(['/auth/login']);
-            return;
+        if (this.context === 'login') {
+            // Check if we have a registered user on this device
+            const registeredUser = localStorage.getItem('registered_user');
+            if (!registeredUser) {
+                this.router.navigate(['/auth/login']);
+                return;
+            }
+            this.userProfile = JSON.parse(registeredUser);
         }
-        this.userProfile = JSON.parse(registeredUser);
 
         // Set mode based on preference if available, else default to pin
-        // For demo, we might want to let user switch
-        this.mode = 'pin';
+        this.mode = this.initialMode;
+
     }
 
     ngAfterViewInit() {
@@ -81,11 +89,18 @@ export class PasskeyComponent implements OnInit, AfterViewInit {
         // Fake validation against stored passkey
         // In real app, we would hash this or send to server
         if (this.pinValue.length >= 4) { // Assuming min 4
-            if (this.pinValue === this.userProfile.passkey) {
-                this.loginSuccess();
-            } else if (this.pinValue.length === 6) {
-                this.errorMessage = 'Passkey non valida';
-                this.pinValue = '';
+            if (this.context === 'setup') {
+                // In setup mode, we just emit the value
+                if (this.pinValue.length === 6) { // Enforce 6 for setup ? Or just 4+
+                    this.setupComplete.emit(this.pinValue);
+                }
+            } else {
+                if (this.pinValue === this.userProfile.passkey) {
+                    this.loginSuccess();
+                } else if (this.pinValue.length === 6) {
+                    this.errorMessage = 'Passkey non valida';
+                    this.pinValue = '';
+                }
             }
         }
     }
@@ -196,14 +211,17 @@ export class PasskeyComponent implements OnInit, AfterViewInit {
     checkPattern() {
         // Fake validation: transform path to string "123..."
         const patternStr = this.patternPath.join('');
-        // For demo, let's assume if user has a numeric passkey, we might map it or just check if it's "1235789" (Z shape) or similar
-        // Or just accept any pattern for now since the fake data only has numeric passkeys.
-        // The prompt says "allows access... determined during registration".
-        // I'll just check if it matches a hardcoded '14789' or if it matches the 'passkey' (if passkey is digit string).
 
-        // If the registered passkey is numeric (like "1234"), pattern matching is hard. 
-        // I'll assume for PATTERN mode, we accept a specific "demo" pattern or check if the user "passkey" can be interpreted as path.
-        // Let's just say if pattern length > 3 => Success for this prototype, or match the "passkey" string.
+        if (this.context === 'setup') {
+            if (this.patternPath.length >= 4) {
+                this.setupComplete.emit(patternStr);
+            } else {
+                this.errorMessage = 'Pattern troppo corto (min 4 punti)';
+                this.patternPath = [];
+                this.draw();
+            }
+            return;
+        }
 
         if (patternStr === this.userProfile.passkey || this.patternPath.length >= 4) {
             this.loginSuccess();
