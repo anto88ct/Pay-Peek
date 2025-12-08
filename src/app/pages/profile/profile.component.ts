@@ -11,6 +11,7 @@ import { AdLabelComponent } from '../../toolbox/ad-label/ad-label.component';
 import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 import { AdDialogComponent } from '../../toolbox/ad-dialog/ad-dialog.component';
 import { ResetPasswordComponent } from '../../shared/components/reset-password/reset-password.component';
+import { PasskeyComponent } from '../auth/passkey/passkey.component';
 
 @Component({
     selector: 'app-profile',
@@ -24,7 +25,8 @@ import { ResetPasswordComponent } from '../../shared/components/reset-password/r
         AdLabelComponent,
         AdCardComponent,
         AdDialogComponent,
-        ResetPasswordComponent
+        ResetPasswordComponent,
+        PasskeyComponent
     ],
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss']
@@ -38,6 +40,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     uploadError = '';
 
     showResetPasswordDialog = false;
+    showResetPasskeyDialog = false;
 
     private destroy$ = new Subject<void>();
 
@@ -268,6 +271,30 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     openResetPassword(): void {
         this.showResetPasswordDialog = true;
+    }
+
+    openResetPasskey(): void {
+        this.showResetPasskeyDialog = true;
+    }
+
+    closeResetPasskeyDialog(): void {
+        this.showResetPasskeyDialog = false;
+    }
+
+    onPasskeyReset(newPasskey: string): void {
+        this.userService.updateProfile({ passkey: newPasskey })
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (updatedUser) => {
+                    this.currentUser = updatedUser;
+                    this.updateFormWithUserData(updatedUser);
+                    this.showResetPasskeyDialog = false;
+                    console.log('Passkey updated successfully');
+                },
+                error: (error: any) => {
+                    console.error('Error updating passkey:', error);
+                }
+            });
     }
 }
 

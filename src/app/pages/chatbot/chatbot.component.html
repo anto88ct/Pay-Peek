@@ -63,8 +63,8 @@
                     <i class="fa-solid fa-microphone-lines fa-beat" *ngIf="isListening"></i>
                 </button>
 
-                <ad-button icon="fa-solid fa-paper-plane" (click)="sendMessage()"
-                    [disabled]="!userMessage.trim()"></ad-button>
+                <ad-button icon="fa-solid fa-paper-plane" (click)="sendMessage()" [disabled]="!userMessage.trim()"
+                    [transparent]="true"></ad-button>
             </div>
         </div>
     </div>

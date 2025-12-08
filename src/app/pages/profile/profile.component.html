@@ -119,10 +119,14 @@
 
                         <!-- Action Buttons -->
                         <div class="action-buttons">
-                            <div *ngIf="!isEditMode" class="d-flex justify-content-end gap-2">
+                            <div *ngIf="!isEditMode" class="d-flex justify-content-end gap-2 flex-wrap">
                                 <ad-button label="Reset Password" icon="fas fa-key"
                                     styleClass="w-full w-md-auto custom-border-radius" severity="warning"
                                     [outlined]="true" (onClick)="openResetPassword()">
+                                </ad-button>
+                                <ad-button label="Reset Passkey" icon="fas fa-fingerprint"
+                                    styleClass="w-full w-md-auto custom-border-radius" severity="warning"
+                                    [outlined]="true" (onClick)="openResetPasskey()">
                                 </ad-button>
                                 <ad-button label="Modifica Profilo" icon="fas fa-edit"
                                     styleClass="w-full w-md-auto custom-border-radius" severity="primary"
@@ -151,5 +155,12 @@
     <ad-dialog [(visible)]="showResetPasswordDialog" header="Reset Password" [modal]="true" [style]="{width: '400px'}">
         <app-reset-password *ngIf="showResetPasswordDialog" (close)="showResetPasswordDialog = false">
         </app-reset-password>
+    </ad-dialog>
+
+    <!-- Reset Passkey Dialog -->
+    <ad-dialog [(visible)]="showResetPasskeyDialog" header="Reset Passkey" [modal]="true" [style]="{width: '400px'}">
+        <app-passkey *ngIf="showResetPasskeyDialog" context="setup" (setupComplete)="onPasskeyReset($event)"
+            (onCancel)="closeResetPasskeyDialog()">
+        </app-passkey>
     </ad-dialog>
 </div>

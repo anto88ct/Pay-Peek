@@ -215,15 +215,15 @@
             border-top: 1px solid var(--color-border);
 
             @media (max-width: 768px) {
-                padding: 0.75rem 0.5rem 0.5rem 0.5rem;
+                padding: 0.55rem 0.2rem 0.2rem 0.2rem;
             }
 
             .suggestions {
                 display: flex;
                 gap: 0.5rem;
                 overflow-x: auto;
-                padding-bottom: 0.8rem;
-                margin-bottom: 0.5rem;
+                padding-bottom: 0.3rem;
+                margin-bottom: 0.3rem;
                 scrollbar-width: none; // Hide scrollbar Firefox
 
                 &::-webkit-scrollbar {

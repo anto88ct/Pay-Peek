@@ -19,6 +19,7 @@ export class PasskeyComponent implements OnInit, AfterViewInit {
     @Input() context: 'login' | 'setup' = 'login';
     @Input() initialMode: 'pin' | 'pattern' = 'pin';
     @Output() setupComplete = new EventEmitter<string>();
+    @Output() onCancel = new EventEmitter<void>();
 
 
     mode: 'pin' | 'pattern' = 'pin'; // UI Mode
@@ -40,6 +41,8 @@ export class PasskeyComponent implements OnInit, AfterViewInit {
     ) { }
 
     ngOnInit() {
+        // If we are in setup mode inside profile, we might no need to check for registered_user
+        // But let's keep it safe. If context is login, we definitely need it.
         if (this.context === 'login') {
             // Check if we have a registered user on this device
             const registeredUser = localStorage.getItem('registered_user');
@@ -48,6 +51,9 @@ export class PasskeyComponent implements OnInit, AfterViewInit {
                 return;
             }
             this.userProfile = JSON.parse(registeredUser);
+        } else {
+            // Context setup: we might want to get user from service if needed,
+            // but for setup we just need to return the new pin/pattern.
         }
 
         // Set mode based on preference if available, else default to pin
@@ -248,6 +254,10 @@ export class PasskeyComponent implements OnInit, AfterViewInit {
     }
 
     cancel() {
-        this.router.navigate(['/auth/login']);
+        if (this.onCancel.observers.length > 0) {
+            this.onCancel.emit();
+        } else {
+            this.router.navigate(['/auth/login']);
+        }
     }
 }

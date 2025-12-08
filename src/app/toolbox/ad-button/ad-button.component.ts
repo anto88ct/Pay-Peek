@@ -20,6 +20,7 @@ export class AdButtonComponent {
   @Input() outlined: boolean = false;
   @Input() size: 'small' | 'large' | undefined = undefined;
   @Input() customSeverity?: 'custom-blue' | 'custom-green' | 'custom-orange';
+  @Input() transparent: boolean = false;
 
   @Output() onClick = new EventEmitter<any>();
 
@@ -31,9 +32,11 @@ export class AdButtonComponent {
 
   getButtonClasses(): string {
     const base = 'w-full custom-border-radius';
-    return this.customSeverity
+    const classes = this.customSeverity
       ? `${base} p-button-${this.customSeverity}`
       : base;
+
+    return this.styleClass ? `${classes} ${this.styleClass}` : classes;
   }
 
 }
