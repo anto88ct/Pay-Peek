@@ -1,4 +1,3 @@
-// Error response DTO interface for API errors
 export interface ErrorResponseDto {
     statusCode: number;
     message: string;

@@ -4,11 +4,11 @@ import { provideHttpClient, withInterceptors, HTTP_INTERCEPTORS } from '@angular
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 
 import { routes } from './app.routes';
+import {authInterceptorFn} from "./core/interceptors/auth-interceptor-fn";
 
 // Factory function for TranslateHttpLoader
 export function createTranslateLoader() {
@@ -18,7 +18,9 @@ export function createTranslateLoader() {
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(
+          withInterceptors([authInterceptorFn])
+        ),
         provideAnimations(),
         provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),

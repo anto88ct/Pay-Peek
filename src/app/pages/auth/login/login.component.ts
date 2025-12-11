@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { LanguageService } from '../../../core/services/language.service';
 import { ThemeService } from '../../../core/services/theme.service';
-import { AuthService } from "../../../core/services/auth.service";
+import {AuthService, LoginResponse} from "../../../core/services/auth.service";
 import { TranslateModule, TranslatePipe } from "@ngx-translate/core";
 import { MessageModule } from "primeng/message";
 import { CheckboxModule } from "primeng/checkbox";
@@ -18,6 +18,7 @@ import { AdCardComponent } from '../../../toolbox/ad-card/ad-card.component';
 import { ClientError } from "../../../core/models/error-response.dto";
 import { ResetPasswordComponent } from '../../../shared/components/reset-password/reset-password.component';
 import { DialogModule } from 'primeng/dialog';
+import {LoginFormDto, LoginMapper} from "../../../core/models/login.dto";
 
 
 @Component({
@@ -42,7 +43,7 @@ import { DialogModule } from 'primeng/dialog';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
+  loginForm!: FormGroup<LoginFormDto>;
   isLoading = false;
   errorMessage = '';
   showResetPasswordDialog = false;
@@ -58,10 +59,10 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      rememberMe: [false]
+    this.loginForm = this.fb.group<LoginFormDto>({
+      email:      this.fb.control<string>('', [Validators.required, Validators.email]),
+      password:   this.fb.control<string>('', [Validators.required, Validators.minLength(8)]),
+      rememberMe: this.fb.control<boolean>(false)
     });
     this.themeService.initTheme();
     this.languageService.initLanguage();
@@ -73,36 +74,35 @@ export class LoginComponent implements OnInit {
   }
 
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      this.errorMessage = ''; // Clear previous errors
-      this.authService.loginFake(this.loginForm.value).subscribe({
-        next: (response) => {
-          this.authService.setToken(response.token, response.refreshToken || '');
-          this.themeService.setTheme(response.user.preferences.theme);
-          this.languageService.setLanguage(response.user.preferences.language);
+      this.errorMessage = '';
 
-          // Store registered user for PassKey feature
+      const loginDto = LoginMapper.toDTO(this.loginForm.controls);
+
+      this.authService.login(loginDto).subscribe({
+        next: (response: LoginResponse) => {
+          this.themeService.setTheme(response.user.preferences?.theme || 'light');
+          this.languageService.setLanguage(response.user.preferences?.language || 'it');
+
           localStorage.setItem('registered_user', JSON.stringify({
             email: response.user.email,
             firstName: response.user.firstName,
             profileImageUrl: response.user.profileImageUrl,
-            passkey: response.user.passkey || '1234', // Fallback or from user payload
-            password: response.user.password // Storing password is insecure but needed for this fake-backend prototype
+            passkey: response.user.passkey || '1234'
           }));
 
           this.router.navigate(['/dashboard']);
-
         },
-        error: (clientError: ClientError) => {
-          // The error is already transformed by the interceptor
-          this.errorMessage = clientError.message || 'Si è verificato un errore durante il login';
+        error: (error) => {
+          this.errorMessage = error.message || 'Si è verificato un errore durante il login';
           this.isLoading = false;
         }
       });
     }
   }
+
 
   openBiometricLogin(): void {
     this.router.navigate(['/auth/passkey']);

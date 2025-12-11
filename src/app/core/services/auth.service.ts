@@ -1,111 +1,112 @@
-// src/app/shared/services/auth.service.ts (aggiunta)
+// src/app/shared/services/auth.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, forkJoin, Observable, of, switchMap, tap, throwError } from 'rxjs';
-import { HttpClient } from "@angular/common/http";
-import { UserDto } from '../models/user.dto';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { map, tap, catchError } from 'rxjs/operators';
+import { BaseService } from './base.service';
+import {UserDto} from "../models/user.dto";
+import {LoginDto} from "../models/login.dto";
+
+export interface LoginResponse {
+  success: boolean;
+  token: string;
+  user: UserDto;
+  role?: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService extends BaseService {
   private authenticatedSubject = new BehaviorSubject<boolean>(false);
+  private currentUserSubject = new BehaviorSubject<UserDto | null>(null);
 
-  constructor(private http: HttpClient) {
-    // Controlla se token JWT è presente e valido in localStorage per settare lo stato iniziale
+  constructor() {
+    super();
+    this.initAuthState();
+  }
+
+  // Inizializza stato auth da localStorage
+  private initAuthState(): void {
     const token = localStorage.getItem('jwt_token');
-    this.authenticatedSubject.next(!!token);
-  }
+    const userStr = localStorage.getItem('current_user');
 
-  // Metodo isAuthenticated usato dal guard
-  isAuthenticated(): Observable<boolean> {
-    // Puoi anche far controlli più sofisticati su validità token o scadenza
-    return this.authenticatedSubject.asObservable();
-  }
-
-  // Metodo login simile a prima che aggiorna authenticatedSubject
-  login(credentials: { email: string; password: string }): Observable<any> {
-    // Esempio: chiamata API e aggiorna stato
-    return this.http.post<any>('/api/auth/login', credentials).pipe(
-      tap(response => {
-        localStorage.setItem('jwt_token', response.token);
-        this.authenticatedSubject.next(true);
-      })
-    );
-  }
-
-  loginFake(credentials: { email: string; password: string }): Observable<any> {
-    return forkJoin({
-      credentials: this.http.get<any>('assets/data/fake-credentials.json'),
-      users: this.http.get<any>('assets/data/user-fake.json')
-    }).pipe(
-      switchMap(({ credentials: credData, users: userData }) => {
-        const validCredential = credData.credentials?.find((u: any) =>
-          u.email === credentials.email && u.password === credentials.password
-        );
-
-        if (validCredential && userData.users && userData.users.length > 0) {
-          // Randomly select a user from user-fake.json
-          const randomIndex = Math.floor(Math.random() * userData.users.length);
-          const randomUser = userData.users[randomIndex];
-
-          const token = `fake-jwt.${validCredential.role}.${Date.now()}`;
-          localStorage.setItem('jwt_token', token);
-          localStorage.setItem('user_role', validCredential.role);
-
-          // Store complete user data
-          const userDto: UserDto = {
-            ...randomUser,
-            email: credentials.email, // Override with login email
-            passkey: validCredential.passkey || randomUser.passkey // Use credential passkey if available
-          };
-
-          localStorage.setItem('current_user', JSON.stringify(userDto));
-
-          this.authenticatedSubject.next(true);
-
-          return of({
-            success: true,
-            token,
-            user: userDto
-          });
+    if (token) {
+      this.authenticatedSubject.next(true);
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr) as UserDto;
+          this.currentUserSubject.next(user);
+        } catch (e) {
+          console.error('Errore parsing user:', e);
         }
-        return throwError(() => new Error('Credenziali non valide'));
+      }
+    }
+  }
+
+
+  login(credentials: LoginDto): Observable<LoginResponse> {
+    return this.post<LoginResponse>('/api/auth/login', credentials).pipe(
+      tap((response: LoginResponse) => {
+        this.saveAuthData(response);
+        this.authenticatedSubject.next(true);
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('Login error:', error);
         return throwError(() => new Error('Credenziali non valide'));
       })
     );
   }
 
-
-  // src/app/shared/services/auth.service.ts (snippet)
-  setToken(token: string, refreshToken: string): void {
-    localStorage.setItem('jwt_token', token);
-    localStorage.setItem('refresh_token', refreshToken);
-    this.authenticatedSubject.next(true);
-    // Puoi anche aggiornare un BehaviorSubject con il token corrente se utile
+  /** Salva token, user e role in localStorage */
+  private saveAuthData(response: LoginResponse): void {
+    localStorage.setItem('jwt_token', response.token);
+    localStorage.setItem('user_role', response.role || 'user');
+    localStorage.setItem('current_user', JSON.stringify(response.user));
+    this.currentUserSubject.next(response.user);
   }
 
+  /** Stato autenticazione per Guards */
+  isAuthenticated(): Observable<boolean> {
+    return this.authenticatedSubject.asObservable();
+  }
 
+  /** Current user observable */
+  getCurrentUser$(): Observable<UserDto | null> {
+    return this.currentUserSubject.asObservable();
+  }
+
+  /** Current user sync */
   getCurrentUser(): UserDto | null {
-    const userStr = localStorage.getItem('current_user');
-    if (userStr) {
-      try {
-        return JSON.parse(userStr) as UserDto;
-      } catch (e) {
-        console.error('Error parsing user data:', e);
-        return null;
-      }
-    }
-    return null;
+    return this.currentUserSubject.value;
   }
 
-  logout() {
+  /** Verifica se utente ha role specifico */
+  hasRole(role: string): boolean {
+    const userRole = localStorage.getItem('user_role');
+    return userRole === role;
+  }
+
+  /** Logout completo */
+  logout(): void {
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('current_user');
     localStorage.removeItem('user_role');
+    localStorage.removeItem('refresh_token');
+
     this.authenticatedSubject.next(false);
-    // eventuale navigazione alla pagina login gestita esternamente al service
+    this.currentUserSubject.next(null);
+  }
+
+  /** Refresh token (se backend lo supporta) */
+  refreshToken(): Observable<LoginResponse> {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (!refreshToken) {
+      this.logout();
+      return throwError(() => new Error('Refresh token mancante'));
+    }
+
+    return this.post<LoginResponse>('/api/auth/refresh', { refreshToken }).pipe(
+      tap(response => this.saveAuthData(response))
+    );
   }
 }
