@@ -10,12 +10,8 @@ import { environment } from "src/enviroments/enviroment";
 export abstract class BaseService {
 
   protected readonly apiUrl = environment.apiUrl;
-  protected http!: HttpClient;
 
-  constructor() {
-    const injector = Injector.create({ providers: [{ provide: HttpClient, useClass: HttpClient }] });
-    this.http = injector.get(HttpClient);
-  }
+  constructor(protected http: HttpClient) {}
 
   protected get<T>(endpoint: string): Observable<T> {
     return this.http.get<T>(`${this.apiUrl}${endpoint}`).pipe(

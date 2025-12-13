@@ -15,10 +15,10 @@ import { AdInputComponent } from '../../../toolbox/ad-input/ad-input.component';
 import { AdButtonComponent } from '../../../toolbox/ad-button/ad-button.component';
 import { AdCheckboxComponent } from '../../../toolbox/ad-checkbox/ad-checkbox.component';
 import { AdCardComponent } from '../../../toolbox/ad-card/ad-card.component';
-import { ClientError } from "../../../core/models/error-response.dto";
+import { ClientError } from "../../../core/dto/error-response.dto";
 import { ResetPasswordComponent } from '../../../shared/components/reset-password/reset-password.component';
 import { DialogModule } from 'primeng/dialog';
-import {LoginFormDto, LoginMapper} from "../../../core/models/login.dto";
+import {LoginFormDto, LoginMapper} from "../../../core/dto/login.dto";
 
 
 @Component({

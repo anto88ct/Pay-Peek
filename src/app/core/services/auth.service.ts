@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
-import {UserDto} from "../models/user.dto";
-import {LoginDto} from "../models/login.dto";
+import { UserDto } from "../dto/user.dto";
+import { LoginDto } from "../dto/login.dto";
+import { HttpClient } from "@angular/common/http";
 
 export interface LoginResponse {
   success: boolean;
@@ -20,8 +21,8 @@ export class AuthService extends BaseService {
   private authenticatedSubject = new BehaviorSubject<boolean>(false);
   private currentUserSubject = new BehaviorSubject<UserDto | null>(null);
 
-  constructor() {
-    super();
+  constructor(http: HttpClient) {
+    super(http);
     this.initAuthState();
   }
 
@@ -45,7 +46,7 @@ export class AuthService extends BaseService {
 
 
   login(credentials: LoginDto): Observable<LoginResponse> {
-    return this.post<LoginResponse>('/api/auth/login', credentials).pipe(
+    return this.post<LoginResponse>('/auth/login', credentials).pipe(
       tap((response: LoginResponse) => {
         this.saveAuthData(response);
         this.authenticatedSubject.next(true);

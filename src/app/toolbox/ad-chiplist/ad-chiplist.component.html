@@ -1,0 +1,6 @@
+<div class="ad-chiplist-container">
+    <p-multiSelect [options]="options" [(ngModel)]="selectedItems" [display]="display" [placeholder]="placeholder"
+        [optionLabel]="optionLabel" [filter]="filter" [showClear]="showClear"
+        (onChange)="onSelectionChange($event.value)" styleClass="w-full">
+    </p-multiSelect>
+</div>

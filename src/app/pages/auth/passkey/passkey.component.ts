@@ -242,15 +242,15 @@ export class PasskeyComponent implements OnInit, AfterViewInit {
         // Re-login logic
         // We need to restore the session.
         // Since we have the "registered_user" object, we can reconstruct the session.
-        this.authService.loginFake({ email: this.userProfile.email, password: this.userProfile.password })
-            .subscribe({
-                next: () => {
-                    this.router.navigate(['/dashboard']);
-                },
-                error: () => {
-                    this.errorMessage = 'Errore durante il login';
-                }
-            });
+        // this.authService.loginFake({ email: this.userProfile.email, password: this.userProfile.password })
+        //     .subscribe({
+        //         next: () => {
+        //             this.router.navigate(['/dashboard']);
+        //         },
+        //         error: () => {
+        //             this.errorMessage = 'Errore durante il login';
+        //         }
+        //     });
     }
 
     cancel() {

@@ -72,7 +72,25 @@
     "WELCOME": "Benvenuto su PayPeek!",
     "SALARY_TREND": "Andamento Stipendio",
     "EXPENSES": "Spese e Trattenute",
-    "HOLIDAYS": "Ferie e Permessi"
+    "HOLIDAYS": "Ferie e Permessi",
+    "CREATE_NEW": "Crea Dashboard",
+    "SELECT_CHART_TYPE": "Seleziona Tipo Grafico",
+    "SELECT_DATA": "Seleziona Dati",
+    "CONFIRM": "Conferma",
+    "CANCEL": "Annulla",
+    "CHART_TYPES": {
+      "BAR": "Grafico a Barre",
+      "LINE": "Grafico a Linee",
+      "PIE": "Grafico a Torta",
+      "DOUGHNUT": "Grafico a Ciambella"
+    },
+    "DATA_ITEMS": {
+      "SALARY": "Stipendio",
+      "HOLIDAYS": "Ferie",
+      "PERMISSIONS": "Permessi",
+      "THIRTEENTH": "13esima",
+      "FOURTEENTH": "14esima"
+    }
   },
   "CHATBOT": {
     "TITLE": "Assistente Virtuale",

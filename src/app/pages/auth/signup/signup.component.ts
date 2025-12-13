@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -15,7 +15,6 @@ import { MessageModule } from 'primeng/message';
 import { AdCardComponent } from '../../../toolbox/ad-card/ad-card.component';
 import { AdButtonComponent } from '../../../toolbox/ad-button/ad-button.component';
 import { AdInputComponent } from '../../../toolbox/ad-input/ad-input.component';
-import { AdDropdownComponent } from '../../../toolbox/ad-dropdown/ad-dropdown.component'; // Ensure exists or use p-dropdown directly? 
 // User said "use library components where possible". I'll use p-dropdown styled consistent if ad-dropdown doesn't exist or is simple.
 // I'll check if ad-dropdown exists first. If not use p-dropdown. 
 // Actually I don't recall seeing ad-dropdown in the file list earlier, but the user mentioned "ad-dropdown" in a previous conversation summary.
@@ -25,6 +24,7 @@ import { AdDropdownComponent } from '../../../toolbox/ad-dropdown/ad-dropdown.co
 
 import { PasskeyComponent } from '../passkey/passkey.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { SignupFormDto, SignupMapper } from '../../../core/dto/signup.dto';
 
 @Component({
     selector: 'app-signup',
@@ -48,7 +48,7 @@ import { AuthService } from '../../../core/services/auth.service';
     styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
-    signupForm!: FormGroup;
+    signupForm!: FormGroup<SignupFormDto>;
     isLoading = false;
     showPasskeyDialog = false;
     passkeyMode: 'pin' | 'pattern' = 'pin';
@@ -94,20 +94,20 @@ export class SignupComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.signupForm = this.fb.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(8)]],
-            confirmPassword: ['', Validators.required],
-            job: [''],
-            nationality: [''],
-            city: [''],
-            country: ['']
+        this.signupForm = this.fb.group<SignupFormDto>({
+            firstName: this.fb.control('', Validators.required),
+            lastName: this.fb.control('', Validators.required),
+            email: this.fb.control('', [Validators.required, Validators.email]),
+            password: this.fb.control('', [Validators.required, Validators.minLength(8)]),
+            confirmPassword: this.fb.control('', Validators.required),
+            job: this.fb.control(''),
+            nationality: this.fb.control(''),
+            city: this.fb.control(''),
+            country: this.fb.control('')
         }, { validators: this.passwordMatchValidator });
     }
 
-    passwordMatchValidator(g: FormGroup) {
+    passwordMatchValidator(g: AbstractControl) {
         return g.get('password')?.value === g.get('confirmPassword')?.value
             ? null : { mismatch: true };
     }
@@ -121,8 +121,9 @@ export class SignupComponent implements OnInit {
                 this.isLoading = false;
 
                 // Save minimal user info to use for passkey creation
+                const signupDto = SignupMapper.toDTO(this.signupForm.controls);
                 this.createdUser = {
-                    ...this.signupForm.value,
+                    ...signupDto,
                     // mock ID
                     id: 'user_' + new Date().getTime(),
                     passkey: null // To be set

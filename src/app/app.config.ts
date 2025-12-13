@@ -8,7 +8,8 @@ import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translat
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 
 import { routes } from './app.routes';
-import {authInterceptorFn} from "./core/interceptors/auth-interceptor-fn";
+import { authInterceptorFn } from "./core/interceptors/auth-interceptor-fn";
+import { loaderInterceptorFn } from "./core/interceptors/loader.interceptor";
 
 // Factory function for TranslateHttpLoader
 export function createTranslateLoader() {
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes),
         provideHttpClient(
-          withInterceptors([authInterceptorFn])
+            withInterceptors([authInterceptorFn, loaderInterceptorFn])
         ),
         provideAnimations(),
         provideServiceWorker('ngsw-worker.js', {

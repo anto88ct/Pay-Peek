@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { ErrorResponseDto, ClientError } from '../models/error-response.dto';
+import { ErrorResponseDto, ClientError } from '../dto/error-response.dto';
 
 /**
  * HTTP Error Interceptor

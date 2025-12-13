@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from '../../core/services/user.service';
-import { UserDto } from '../../core/models/user.dto';
+import { UserDto, ProfileUpdateFormDto, UserMapper } from '../../core/dto/user.dto';
 import { TranslateModule } from '@ngx-translate/core';
 import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
 import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
@@ -32,7 +32,7 @@ import { PasskeyComponent } from '../auth/passkey/passkey.component';
     styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-    profileForm!: FormGroup;
+    profileForm!: FormGroup<ProfileUpdateFormDto>;
     currentUser: UserDto | null = null;
     isEditMode = false;
     profileImageUrl = 'assets/images/placeholder-avatar.png';
@@ -62,17 +62,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     private initForm(): void {
-        this.profileForm = this.fb.group({
-            firstName: [{ value: '', disabled: true }, Validators.required],
-            lastName: [{ value: '', disabled: true }, Validators.required],
-            email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
-            password: [{ value: '', disabled: true }],
-            passkey: [{ value: '', disabled: true }],
-            jobType: [{ value: '', disabled: true }],
-            nationality: [{ value: '', disabled: true }],
-            city: [{ value: '', disabled: true }],
-            country: [{ value: '', disabled: true }],
-            uploadedDocumentsCount: [{ value: 0, disabled: true }]
+        this.profileForm = this.fb.group<ProfileUpdateFormDto>({
+            firstName: this.fb.control({ value: '', disabled: true }, Validators.required),
+            lastName: this.fb.control({ value: '', disabled: true }, Validators.required),
+            email: this.fb.control({ value: '', disabled: true }, [Validators.required, Validators.email]),
+            password: this.fb.control({ value: '', disabled: true }),
+            passkey: this.fb.control({ value: '', disabled: true }),
+            jobType: this.fb.control({ value: '', disabled: true }),
+            nationality: this.fb.control({ value: '', disabled: true }),
+            city: this.fb.control({ value: '', disabled: true }),
+            country: this.fb.control({ value: '', disabled: true }),
+            uploadedDocumentsCount: this.fb.control({ value: 0, disabled: true })
         });
     }
 
@@ -168,18 +168,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
      */
     saveProfile(): void {
         if (this.profileForm.valid) {
-            const formValue = this.profileForm.getRawValue();
-
             // Don't send obfuscated passwords - in real app, handle password changes separately
-            const updates = {
-                firstName: formValue.firstName,
-                lastName: formValue.lastName,
-                email: formValue.email,
-                jobType: formValue.jobType,
-                nationality: formValue.nationality,
-                city: formValue.city,
-                country: formValue.country
-            };
+            const updates = UserMapper.toProfileUpdateDto(this.profileForm.controls);
 
             this.userService.updateProfile(updates)
                 .pipe(takeUntil(this.destroy$))

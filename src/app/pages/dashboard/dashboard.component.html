@@ -5,9 +5,15 @@
             <p class="text-500 m-0">{{ 'DASHBOARD.WELCOME' | translate }}</p>
         </div>
 
-        <div class="filter-section">
-            <ad-dropdown [options]="years" [(ngModel)]="selectedYear" optionLabel="label" placeholder="Select Year">
-            </ad-dropdown>
+        <div class="flex align-items-center gap-3">
+            <div class="action-section">
+                <ad-button icon="fa-solid fa-plus" [label]="'DASHBOARD.CREATE_NEW' | translate"
+                    (onClick)="openNewDashboardDialog()"></ad-button>
+            </div>
+            <div class="filter-section">
+                <ad-dropdown [options]="years" [(ngModel)]="selectedYear" optionLabel="label" placeholder="Select Year">
+                </ad-dropdown>
+            </div>
         </div>
     </div>
 
@@ -34,3 +40,56 @@
         </div>
     </div>
 </div>
+
+<ad-dialog [(visible)]="isNewDashboardDialogVisible" [header]="'DASHBOARD.CREATE_NEW' | translate"
+    [style]="{width: '90vw', maxWidth: '600px'}" [modal]="true" [draggable]="false" [resizable]="false">
+
+    <!-- Step 1: Select Chart Type -->
+    <div *ngIf="dashboardCreationStep === 1" class="chart-selection fade-in">
+        <h3 class="text-center text-xl font-semibold mb-4">{{ 'DASHBOARD.SELECT_CHART_TYPE' | translate }}</h3>
+        <div class="grid">
+            <div class="col-6 sm:col-6" *ngFor="let type of chartTypes">
+                <div class="chart-type-card p-3 surface-card border-1 surface-border hover:surface-hover cursor-pointer border-round transition-all flex flex-column align-items-center h-full"
+                    (click)="selectChartType(type)">
+                    <div class="image-placeholder mb-3 border-round bg-light w-full"
+                        style="height: 100px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                        <!-- Placeholder/Icon if image fails -->
+                        <i class="fa-solid fa-chart-simple text-4xl text-500"></i>
+                    </div>
+                    <div class="text-center font-bold">{{ type.labelKey | translate }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2: Select Data -->
+    <div *ngIf="dashboardCreationStep === 2" class="data-selection fade-in">
+        <h3 class="text-center text-xl font-semibold mb-4">{{ 'DASHBOARD.SELECT_DATA' | translate }}</h3>
+
+        <div class="mb-4 flex flex-column align-items-center">
+            <div class="image-placeholder mb-3 border-round bg-light"
+                style="width: 150px; height: 100px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-chart-simple text-4xl text-500"></i>
+            </div>
+            <div class="font-bold text-lg">{{ selectedChartType.labelKey | translate }}</div>
+        </div>
+
+        <div class="mb-4 w-full">
+            <label class="block mb-2 font-medium">{{ 'DASHBOARD.SELECT_DATA' | translate }}</label>
+            <ad-chiplist [options]="dataItems" [(selectedItems)]="selectedDataItems"
+                [placeholder]="'DASHBOARD.SELECT_DATA' | translate">
+            </ad-chiplist>
+        </div>
+
+        <div class="flex justify-content-end gap-2 mt-5">
+            <div class="w-6">
+                <ad-button [label]="'DASHBOARD.CANCEL' | translate" severity="secondary" [outlined]="true"
+                    (onClick)="cancelCreation()"></ad-button>
+            </div>
+            <div class="w-6">
+                <ad-button [label]="'DASHBOARD.CONFIRM' | translate" (onClick)="confirmCreation()"
+                    [disabled]="selectedDataItems.length === 0"></ad-button>
+            </div>
+        </div>
+    </div>
+</ad-dialog>

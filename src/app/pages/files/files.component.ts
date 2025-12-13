@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FileService } from '../../core/services/file.service';
 
 // Toolbox Components
 import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
@@ -14,7 +14,7 @@ import { AdFileUploaderComponent } from '../../toolbox/ad-fileuploader/ad-fileup
 import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 
 // Models
-import { YearFolder, MonthFolder, FileItem } from '../../core/models/file-system.dto';
+import { YearFolder, MonthFolder, FileItem } from '../../core/dto/file-system.dto';
 
 @Component({
     selector: 'app-files',
@@ -22,7 +22,7 @@ import { YearFolder, MonthFolder, FileItem } from '../../core/models/file-system
     imports: [
         CommonModule,
         FormsModule,
-        HttpClientModule,
+
         AdInputComponent,
         AdDialogComponent,
         AdButtonComponent,
@@ -66,17 +66,20 @@ export class FilesComponent implements OnInit {
     // Payslip Upload State
     payslipFiles: File[] = [];
 
-    constructor(private http: HttpClient) { }
+    constructor(private fileService: FileService) { }
 
     ngOnInit() {
         this.loadData();
     }
 
     loadData() {
-        this.http.get<YearFolder[]>('assets/data/fake-folder-and-files.json')
-            .subscribe(data => {
-                this.folders = data;
-                this.filterFolders();
+        this.fileService.getFiles()
+            .subscribe({
+                next: (data) => {
+                    this.folders = data;
+                    this.filterFolders();
+                },
+                error: (err) => console.error('Error loading files', err)
             });
     }
 
@@ -145,16 +148,15 @@ export class FilesComponent implements OnInit {
             return;
         }
 
-        const newFolder: YearFolder = {
-            id: `year-${this.newYearData.year}`,
-            year: this.newYearData.year,
-            color: this.newYearData.color,
-            months: []
-        };
-
-        this.folders.push(newFolder);
-        this.showYearDialog = false;
-        this.filterFolders();
+        this.fileService.createYearFolder(this.newYearData.year, this.newYearData.color)
+            .subscribe({
+                next: (newFolder) => {
+                    this.folders.push(newFolder);
+                    this.showYearDialog = false;
+                    this.filterFolders();
+                },
+                error: (err) => alert('Error creating year folder')
+            });
     }
 
     // Creation - Month
@@ -174,20 +176,17 @@ export class FilesComponent implements OnInit {
             return;
         }
 
-        const monthName = new Date(2000, this.newMonthData.month - 1).toLocaleString('default', { month: 'long' });
-
-        const newMonth: MonthFolder = {
-            id: `month-${this.selectedYearFolder.year}-${this.newMonthData.month}`,
-            month: this.newMonthData.month,
-            name: monthName,
-            files: []
-        };
-
-        this.selectedYearFolder.months.push(newMonth);
-        // Sort months
-        this.selectedYearFolder.months.sort((a, b) => a.month - b.month);
-
-        this.showMonthDialog = false;
+        this.fileService.createMonthFolder(this.selectedYearFolder.id, this.newMonthData.month)
+            .subscribe({
+                next: (newMonth) => {
+                    if (this.selectedYearFolder) {
+                        this.selectedYearFolder.months.push(newMonth);
+                        this.selectedYearFolder.months.sort((a, b) => a.month - b.month);
+                    }
+                    this.showMonthDialog = false;
+                },
+                error: (err) => alert('Error creating month folder')
+            });
     }
 
     // File Upload Handlers
@@ -223,8 +222,13 @@ export class FilesComponent implements OnInit {
 
     uploadPayslips() {
         console.log('Uploading files:', this.payslipFiles);
-        // TODO: Implement actual upload logic here
-        this.payslipFiles = [];
+        this.fileService.uploadPayslips(this.payslipFiles).subscribe({
+            next: () => {
+                this.payslipFiles = [];
+                alert('Payslips uploaded successfully');
+            },
+            error: (err) => console.error('Upload failed', err)
+        });
     }
 
     cancelPayslipUpload() {

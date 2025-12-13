@@ -72,7 +72,25 @@
     "WELCOME": "Welcome to PayPeek!",
     "SALARY_TREND": "Salary Trend",
     "EXPENSES": "Expenses & Deductions",
-    "HOLIDAYS": "Holidays & Leave"
+    "HOLIDAYS": "Holidays & Leave",
+    "CREATE_NEW": "Create Dashboard",
+    "SELECT_CHART_TYPE": "Select Chart Type",
+    "SELECT_DATA": "Select Data",
+    "CONFIRM": "Confirm",
+    "CANCEL": "Cancel",
+    "CHART_TYPES": {
+      "BAR": "Bar Chart",
+      "LINE": "Line Chart",
+      "PIE": "Pie Chart",
+      "DOUGHNUT": "Doughnut Chart"
+    },
+    "DATA_ITEMS": {
+      "SALARY": "Salary",
+      "HOLIDAYS": "Holidays",
+      "PERMISSIONS": "Permissions",
+      "THIRTEENTH": "13th Salary",
+      "FOURTEENTH": "14th Salary"
+    }
   },
   "CHATBOT": {
     "TITLE": "Virtual Assistant",

@@ -1,0 +1,17 @@
+
+:host {
+    display: block;
+    width: 100%;
+}
+
+::ng-deep .p-multiselect {
+    width: 100%;
+    
+    .p-multiselect-label {
+        padding: 0.75rem 0.75rem;
+    }
+    
+    .p-multiselect-token {
+        margin-right: 0.5rem;
+    }
+}
