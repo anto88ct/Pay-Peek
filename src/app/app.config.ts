@@ -1,6 +1,6 @@
 import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -8,7 +8,7 @@ import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translat
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 
 import { routes } from './app.routes';
-import { authInterceptorFn } from "./core/interceptors/auth-interceptor-fn";
+import { tokenInterceptor } from "./core/interceptors/token.interceptor";
 import { loaderInterceptorFn } from "./core/interceptors/loader.interceptor";
 
 // Factory function for TranslateHttpLoader
@@ -20,7 +20,8 @@ export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes),
         provideHttpClient(
-            withInterceptors([authInterceptorFn, loaderInterceptorFn])
+            withInterceptors([tokenInterceptor, loaderInterceptorFn]),
+            withInterceptorsFromDi()
         ),
         provideAnimations(),
         provideServiceWorker('ngsw-worker.js', {
