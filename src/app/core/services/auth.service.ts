@@ -5,6 +5,7 @@ import { map, tap, catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { UserDto } from "../dto/user.dto";
 import { LoginDto } from "../dto/login.dto";
+import { SignupDto } from "../dto/signup.dto";
 import { HttpClient } from "@angular/common/http";
 
 export interface LoginResponse {
@@ -54,6 +55,20 @@ export class AuthService extends BaseService {
       catchError(error => {
         console.error('Login error:', error);
         return throwError(() => new Error('Credenziali non valide'));
+      })
+    );
+  }
+
+  register(data: SignupDto): Observable<LoginResponse> {
+    console.log(data);
+    return this.post<LoginResponse>('/auth/register', data).pipe(
+      tap((response: LoginResponse) => {
+        this.saveAuthData(response);
+        this.authenticatedSubject.next(true);
+      }),
+      catchError(error => {
+        console.error('Register error:', error);
+        return throwError(() => error);
       })
     );
   }

@@ -20,6 +20,14 @@ export class AdDialogComponent {
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() onHide = new EventEmitter<any>();
 
+  get isMobile(): boolean {
+    return window.innerWidth <= 768;
+  }
+
+  get computedResizable(): boolean {
+    return this.resizable && !this.isMobile;
+  }
+
   onHideHandler(event: any) {
     this.visibleChange.emit(false);
     this.onHide.emit(event);

@@ -47,24 +47,28 @@
                     <div class="col-md-6">
                         <label class="d-block mb-1 small">{{ 'auth.signup.job' | translate }}</label>
                         <p-dropdown [options]="jobs" formControlName="job" [filter]="true" filterBy="label"
-                            placeholder="{{ 'auth.signup.selectJob' | translate }}" styleClass="w-100"></p-dropdown>
+                            optionValue="value" placeholder="{{ 'auth.signup.selectJob' | translate }}"
+                            styleClass="w-100"></p-dropdown>
                     </div>
                     <div class="col-md-6">
                         <label class="d-block mb-1 small">{{ 'auth.signup.nationality' | translate }}</label>
                         <p-dropdown [options]="nationalities" formControlName="nationality" [filter]="true"
-                            filterBy="label" placeholder="{{ 'auth.signup.selectNationality' | translate }}"
+                            optionValue="value" filterBy="label"
+                            placeholder="{{ 'auth.signup.selectNationality' | translate }}"
                             styleClass="w-100"></p-dropdown>
                     </div>
 
                     <div class="col-md-6">
                         <label class="d-block mb-1 small">{{ 'auth.signup.city' | translate }}</label>
                         <p-dropdown [options]="cities" formControlName="city" [filter]="true" filterBy="label"
-                            placeholder="{{ 'auth.signup.selectCity' | translate }}" styleClass="w-100"></p-dropdown>
+                            optionValue="value" placeholder="{{ 'auth.signup.selectCity' | translate }}"
+                            styleClass="w-100"></p-dropdown>
                     </div>
                     <div class="col-md-6">
                         <label class="d-block mb-1 small">{{ 'auth.signup.country' | translate }}</label>
                         <p-dropdown [options]="countries" formControlName="country" [filter]="true" filterBy="label"
-                            placeholder="{{ 'auth.signup.selectCountry' | translate }}" styleClass="w-100"></p-dropdown>
+                            optionValue="value" placeholder="{{ 'auth.signup.selectCountry' | translate }}"
+                            styleClass="w-100"></p-dropdown>
                     </div>
 
                 </div>
@@ -81,65 +85,5 @@
         </ad-card>
     </div>
 
-    <!-- Passkey Dialog -->
-    <p-dialog header="{{ 'auth.signup.passkey.title' | translate }}" [(visible)]="showPasskeyDialog" [modal]="true"
-        [style]="{width: '500px'}" [closable]="false" [draggable]="false">
-
-        <div *ngIf="!passkeyMode; else creation" class="text-center py-4">
-            <h4 class="mb-3">{{ 'auth.signup.passkey.question' | translate }}</h4>
-            <p class="text-secondary mb-4">{{ 'auth.signup.passkey.desc' | translate }}</p>
-
-            <div class="d-flex justify-content-center gap-4">
-                <div class="selection-card p-3 border rounded cursor-pointer" (click)="passkeyMode = 'pin'">
-                    <i class="fa-solid fa-th fa-2x mb-2 text-primary"></i>
-                    <div>PIN</div>
-                </div>
-                <div class="selection-card p-3 border rounded cursor-pointer" (click)="passkeyMode = 'pattern'">
-                    <i class="fa-solid fa-draw-polygon fa-2x mb-2 text-primary"></i>
-                    <div>Pattern</div>
-                </div>
-            </div>
-
-            <div class="mt-4">
-                <ad-button label="{{ 'auth.signup.passkey.skip' | translate }}" [outlined]="true" size="small"
-                    (onClick)="skipPasskey()"></ad-button>
-            </div>
-        </div>
-
-        <ng-template #creation>
-            <div class="text-center mb-3">
-                <ad-button label="{{ 'auth.back' | translate }}" icon="fa-solid fa-arrow-left"
-                    styleClass="p-button-link text-decoration-none pl-0"
-                    (onClick)="passkeyMode = 'pin'; showPasskeyDialog = false; showPasskeyDialog = true; passkeyMode = null!"></ad-button>
-                <!-- Hacky reset to go back to selection: setting passkeyMode to null (typesafe workaround needed really but for now null cast) -->
-                <!-- Cleaner: add a back button logic. I will just rely on the component inputs -->
-            </div>
-
-            <!-- Reuse Passkey Component in Setup Mode -->
-            <!-- We need to force update the mode (pin/pattern) inside the component or pass it as input? -->
-            <!-- Our PasskeyComponent manages its own mode switcher, but here we selected it in the dialog first. -->
-            <!-- ACTUALLY PasskeyComponent has "mode" property 'pin'|'pattern'. I should pass it as input if I want to pre-select, 
-                 but currently it defaults to 'pin' and has UI to switch. 
-                 The "Selection" previous screen is nice but maybe redundant if the component allows switching. 
-                 Let's just use the component directly and let user switch there, but the user request said:
-                 "mostra 2 riquadri con immagine: 1- pin 2- disegno. se clicca su PIN mostra pin... se clicco disegno mostra i puntini"
-                 So the logic I put in ng-template #creation needs to show the PasskeyComponent but hide its internal switcher if I want to control it from outside OR just let PasskeyComponent handle it.
-                 
-                 I'll let PasskeyComponent handle the switching internally as it already does, 
-                 but for the prompt requirement "dialog shows 2 boxes", I will implement that selection 
-                 and then mount the PasskeyComponent.
-                 
-                 However, PasskeyComponent currently resets to 'pin' on init.
-                 I should probably just let the user use the PasskeyComponent's own switcher or 
-                 modify PasskeyComponent to accept initial mode.
-                 
-                 I'll add @Input() initialMode to PasskeyComponent.
-            -->
-
-            <app-passkey context="setup" [initialMode]="passkeyMode"
-                (setupComplete)="onPasskeySetupComplete($event)"></app-passkey>
-        </ng-template>
-
-    </p-dialog>
 
 </div>

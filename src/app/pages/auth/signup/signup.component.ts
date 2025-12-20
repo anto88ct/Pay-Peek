@@ -22,9 +22,11 @@ import { AdInputComponent } from '../../../toolbox/ad-input/ad-input.component';
 // I'll stick to standard PrimeNG Dropdown for now wrapped in a div or check. 
 // Better: use direct PrimeNG modules for standard form elements if ad- wrapper is complex, but I'll use ad-input.
 
-import { PasskeyComponent } from '../passkey/passkey.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { SignupFormDto, SignupMapper } from '../../../core/dto/signup.dto';
+import { ThemeService } from '../../../core/services/theme.service';
+import { LanguageService } from '../../../core/services/language.service';
+import { LoginResponse } from '../../../core/services/auth.service';
 
 @Component({
     selector: 'app-signup',
@@ -41,8 +43,7 @@ import { SignupFormDto, SignupMapper } from '../../../core/dto/signup.dto';
         MessageModule,
         AdCardComponent,
         AdButtonComponent,
-        AdInputComponent,
-        PasskeyComponent
+        AdInputComponent
     ],
     templateUrl: './signup.component.html',
     styleUrls: ['./signup.component.scss']
@@ -50,9 +51,6 @@ import { SignupFormDto, SignupMapper } from '../../../core/dto/signup.dto';
 export class SignupComponent implements OnInit {
     signupForm!: FormGroup<SignupFormDto>;
     isLoading = false;
-    showPasskeyDialog = false;
-    passkeyMode: 'pin' | 'pattern' = 'pin';
-    createdUser: any = null;
 
     // Mock Data
     jobs = [
@@ -90,7 +88,9 @@ export class SignupComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private themeService: ThemeService,
+        private languageService: LanguageService
     ) { }
 
     ngOnInit() {
@@ -116,50 +116,31 @@ export class SignupComponent implements OnInit {
         if (this.signupForm.valid) {
             this.isLoading = true;
 
-            // Simulate API call
-            setTimeout(() => {
-                this.isLoading = false;
+            const signupDto = SignupMapper.toDTO(this.signupForm.controls);
 
-                // Save minimal user info to use for passkey creation
-                const signupDto = SignupMapper.toDTO(this.signupForm.controls);
-                this.createdUser = {
-                    ...signupDto,
-                    // mock ID
-                    id: 'user_' + new Date().getTime(),
-                    passkey: null // To be set
-                };
+            this.authService.register(signupDto).subscribe({
+                next: (response: LoginResponse) => {
+                    this.themeService.setTheme(response.user.preferences?.theme || 'light');
+                    this.languageService.setLanguage(response.user.preferences?.language || 'it');
 
-                // Ask for passkey
-                this.showPasskeyDialog = true;
-            }, 1000);
+                    localStorage.setItem('registered_user', JSON.stringify({
+                        email: response.user.email,
+                        firstName: response.user.firstName,
+                        profileImageUrl: response.user.profileImageUrl,
+                        // passkey: response.user.passkey || '1234' // Removed as per request
+                    }));
+
+                    this.router.navigate(['/dashboard']);
+                },
+                error: (error) => {
+                    console.error('Registration error', error);
+                    // Handle error (show message) - assuming a toast or local error variable could be used, 
+                    // but for now just logging and stopping loading as per previous implementation style or simple error handling.
+                    // The user provided login example had this.errorMessage. Signup doesn't have it yet.
+                    // I will just turn off loading.
+                    this.isLoading = false;
+                }
+            });
         }
-    }
-
-    onPasskeySetupComplete(passkey: string) {
-        // Save final user with passkey
-        this.createdUser.passkey = passkey;
-        this.createdUser.passKeyEnabled = true;
-
-        // Persist to local storage to simulate registration
-        localStorage.setItem('registered_user', JSON.stringify(this.createdUser));
-
-        // Also log them in (fake)
-        localStorage.setItem('jwt_token', 'fake.jwt.token');
-        localStorage.setItem('current_user', JSON.stringify(this.createdUser));
-
-        this.showPasskeyDialog = false;
-        this.router.navigate(['/dashboard']);
-    }
-
-    skipPasskey() {
-        // Save user without passkey
-        this.createdUser.passKeyEnabled = false;
-        localStorage.setItem('registered_user', JSON.stringify(this.createdUser));
-
-        localStorage.setItem('jwt_token', 'fake.jwt.token');
-        localStorage.setItem('current_user', JSON.stringify(this.createdUser));
-
-        this.showPasskeyDialog = false;
-        this.router.navigate(['/dashboard']);
     }
 }

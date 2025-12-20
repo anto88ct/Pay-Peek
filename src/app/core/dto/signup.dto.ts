@@ -5,7 +5,7 @@ export interface SignupDto {
     lastName: string;
     email: string;
     password: string;
-    confirmPassword?: string;
+    confirmPassword: string;
     job?: string;
     nationality?: string;
     city?: string;
@@ -31,6 +31,7 @@ export class SignupMapper {
             lastName: form.lastName.value || '',
             email: form.email.value || '',
             password: form.password.value || '',
+            confirmPassword: form.confirmPassword.value || '',
             job: form.job.value || undefined,
             nationality: form.nationality.value || undefined,
             city: form.city.value || undefined,
