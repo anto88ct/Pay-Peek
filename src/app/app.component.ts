@@ -4,11 +4,12 @@ import { RouterOutlet } from '@angular/router';
 import { LanguageService } from "./core/services/language.service";
 import { ThemeService } from "./core/services/theme.service";
 import { LoaderComponent } from './shared/components/loader/loader.component';
+import { AdToastComponent } from './toolbox/ad-toast/ad-toast.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, LoaderComponent],
+  imports: [CommonModule, RouterOutlet, LoaderComponent, AdToastComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

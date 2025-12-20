@@ -1,4 +1,4 @@
-import {Injectable, Injector} from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -11,7 +11,7 @@ export abstract class BaseService {
 
   protected readonly apiUrl = environment.apiUrl;
 
-  constructor(protected http: HttpClient) {}
+  constructor(protected http: HttpClient) { }
 
   protected get<T>(endpoint: string): Observable<T> {
     return this.http.get<T>(`${this.apiUrl}${endpoint}`).pipe(
@@ -38,8 +38,6 @@ export abstract class BaseService {
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error(`Errore API [${error.status}]:`, error.message);
-    // Qui puoi aggiungere toast notification o logging service
-    return throwError(() => new Error(`Errore: ${error.message}`));
+    return throwError(() => new Error(`Errore: ${error?.message}`));
   }
 }

@@ -27,6 +27,7 @@ import { SignupFormDto, SignupMapper } from '../../../core/dto/signup.dto';
 import { ThemeService } from '../../../core/services/theme.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { LoginResponse } from '../../../core/services/auth.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
     selector: 'app-signup',
@@ -90,7 +91,8 @@ export class SignupComponent implements OnInit {
         private router: Router,
         private authService: AuthService,
         private themeService: ThemeService,
-        private languageService: LanguageService
+        private languageService: LanguageService,
+        private notificationService: NotificationService
     ) { }
 
     ngOnInit() {
@@ -133,12 +135,8 @@ export class SignupComponent implements OnInit {
                     this.router.navigate(['/dashboard']);
                 },
                 error: (error) => {
-                    console.error('Registration error', error);
-                    // Handle error (show message) - assuming a toast or local error variable could be used, 
-                    // but for now just logging and stopping loading as per previous implementation style or simple error handling.
-                    // The user provided login example had this.errorMessage. Signup doesn't have it yet.
-                    // I will just turn off loading.
                     this.isLoading = false;
+                    this.notificationService.showError(error);
                 }
             });
         }

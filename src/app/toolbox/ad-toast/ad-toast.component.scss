@@ -1,0 +1,9 @@
+/* ad-toast styles */
+// Mobile optimization
+@media screen and (max-width: 768px) {
+    .p-toast {
+        width: 90% !important;
+        left: 5% !important;
+        right: 5% !important;
+    }
+}

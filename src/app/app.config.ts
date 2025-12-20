@@ -1,4 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -49,6 +50,7 @@ export const appConfig: ApplicationConfig = {
             provide: HTTP_INTERCEPTORS,
             useClass: ErrorInterceptor,
             multi: true
-        }
+        },
+        MessageService
     ]
 };
