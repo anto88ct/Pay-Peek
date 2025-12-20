@@ -11,7 +11,9 @@
       "rememberMe": "Ricordami",
       "forgotPassword": "Password dimenticata?",
       "noAccount": "Non hai un account?",
-      "signUp": "Registrati"
+      "signUp": "Registrati",
+      "biometric": "Accedi con Face ID/Impronta",
+      "biometricHint": "Usa il riconoscimento biometrico del tuo dispositivo"
     },
     "passkey": {
       "welcomeBack": "Bentornato, {{name}}",

@@ -49,9 +49,11 @@
             </ad-button>
           </div>
 
-          <div class="d-flex flex-column gap-2 mb-3 w-100" *ngIf="hasRegisteredUser">
-            <ad-button type="button" label="PassKey" styleClass="w-full custom-border-radius p-button-custom-green"
-              [outlined]="true" size="small" (onClick)="openBiometricLogin()">
+          <!-- BIOMETRIC LOGIN BUTTON -->
+          <div class="d-flex flex-column gap-2 mb-3 w-100" *ngIf="isBiometricAvailable && hasRegisteredUser">
+            <ad-button type="button" label="{{ 'auth.login.biometric' | translate }}" icon="pi pi-fingerprint"
+              styleClass="w-full custom-border-radius p-button-custom-success" [outlined]="true" size="small"
+              (onClick)="onBiometricLogin()" [loading]="isBiometricLoading" [disabled]="isBiometricLoading">
             </ad-button>
           </div>
 

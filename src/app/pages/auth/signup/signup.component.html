@@ -85,5 +85,23 @@
         </ad-card>
     </div>
 
+    <!-- BIOMETRIC PROMPT DIALOG -->
+    <p-dialog header="{{ 'auth.biometric.title' | translate }}" [(visible)]="showBiometricPrompt" [modal]="true"
+        [style]="{width: '400px'}" [closable]="false" [draggable]="false" [resizable]="false">
+
+        <div class="text-center">
+            <i class="pi pi-fingerprint text-primary mb-3" style="font-size: 3rem;"></i>
+            <p class="mb-4">{{ 'auth.biometric.enablePrompt' | translate }}</p>
+
+            <div class="d-flex flex-column gap-2">
+                <ad-button type="button" label="{{ 'auth.biometric.enable' | translate }}" (onClick)="enableBiometric()"
+                    [loading]="isBiometricLoading"></ad-button>
+
+                <ad-button type="button" label="{{ 'auth.biometric.skip' | translate }}" [outlined]="true"
+                    severity="secondary" (onClick)="skipBiometric()"></ad-button>
+            </div>
+        </div>
+    </p-dialog>
+
 
 </div>

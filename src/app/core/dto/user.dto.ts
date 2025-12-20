@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 export interface Preferences {
     language: 'it' | 'en';
     theme: 'light' | 'dark' | 'system';
+    biometric?: boolean;
     emailNotifications: boolean;
 }
 
@@ -50,7 +51,6 @@ export type ProfileUpdateFormDto = {
     lastName: FormControl<string | null>;
     email: FormControl<string | null>;
     password: FormControl<string | null>;
-    passkey: FormControl<string | null>;
     jobType: FormControl<string | null>;
     nationality: FormControl<string | null>;
     city: FormControl<string | null>;
@@ -65,7 +65,6 @@ export class UserMapper {
             lastName: form.lastName.value || undefined,
             email: form.email.value || undefined,
             password: form.password.value || undefined,
-            passkey: form.passkey.value || undefined,
             jobType: form.jobType.value || undefined,
             city: form.city.value || undefined,
             country: form.country.value || undefined,

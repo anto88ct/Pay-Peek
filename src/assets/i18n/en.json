@@ -10,6 +10,8 @@
       "password.invalid": "Invalid password",
       "rememberMe": "Remember me",
       "forgotPassword": "Forgot password?",
+      "biometric": "Sign in with Face ID/Fingerprint",
+      "biometricHint": "Use your device's biometric recognition",
       "noAccount": "Don't have an account?",
       "signUp": "Sign Up"
     },

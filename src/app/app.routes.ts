@@ -8,10 +8,7 @@ export const routes: Routes = [
         path: 'login',
         loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent)
     },
-    {
-        path: 'auth/passkey',
-        loadComponent: () => import('./pages/auth/passkey/passkey.component').then(m => m.PasskeyComponent)
-    },
+
     {
         path: 'auth/terms',
         loadComponent: () => import('./pages/auth/terms/terms.component').then(m => m.TermsComponent)

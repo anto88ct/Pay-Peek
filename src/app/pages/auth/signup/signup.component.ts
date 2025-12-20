@@ -52,6 +52,8 @@ import { NotificationService } from '../../../core/services/notification.service
 export class SignupComponent implements OnInit {
     signupForm!: FormGroup<SignupFormDto>;
     isLoading = false;
+    showBiometricPrompt = false;
+    isBiometricLoading = false;
 
     // Mock Data
     jobs = [
@@ -114,14 +116,14 @@ export class SignupComponent implements OnInit {
             ? null : { mismatch: true };
     }
 
-    onSubmit() {
+    async onSubmit() {
         if (this.signupForm.valid) {
             this.isLoading = true;
 
             const signupDto = SignupMapper.toDTO(this.signupForm.controls);
 
             this.authService.register(signupDto).subscribe({
-                next: (response: LoginResponse) => {
+                next: async (response: LoginResponse) => {
                     this.themeService.setTheme(response.user.preferences?.theme || 'light');
                     this.languageService.setLanguage(response.user.preferences?.language || 'it');
 
@@ -129,10 +131,16 @@ export class SignupComponent implements OnInit {
                         email: response.user.email,
                         firstName: response.user.firstName,
                         profileImageUrl: response.user.profileImageUrl,
-                        // passkey: response.user.passkey || '1234' // Removed as per request
                     }));
 
-                    this.router.navigate(['/dashboard']);
+                    // Check if biometric is available
+                    const bioAvailable = await this.authService.isBiometricAvailable();
+                    if (bioAvailable) {
+                        this.showBiometricPrompt = true;
+                        this.isLoading = false;
+                    } else {
+                        this.router.navigate(['/dashboard']);
+                    }
                 },
                 error: (error) => {
                     this.isLoading = false;
@@ -140,5 +148,35 @@ export class SignupComponent implements OnInit {
                 }
             });
         }
+    }
+
+    async enableBiometric() {
+        this.isBiometricLoading = true;
+        const email = this.signupForm.get('email')?.value;
+        if (!email) {
+            this.notificationService.showError('Email non valida');
+            this.router.navigate(['/dashboard']);
+            return;
+        }
+
+        try {
+            await this.authService.registerBiometric(email);
+            this.notificationService.showSuccess('Biometria abilitata con successo');
+            this.router.navigate(['/dashboard']);
+        } catch (error: any) {
+            this.notificationService.showError(error.message || 'Errore abilitazione biometria');
+            // Navigate anyway? Or let them try again? Let's navigate to dashboard on error to not block user, but maybe better to let them retry or skip.
+            // For now, if error, we stay on dialog or just close it? 
+            // Let's close and go to dashboard to avoid frustration loop.
+            this.router.navigate(['/dashboard']);
+        } finally {
+            this.isBiometricLoading = false;
+            this.showBiometricPrompt = false;
+        }
+    }
+
+    skipBiometric() {
+        this.showBiometricPrompt = false;
+        this.router.navigate(['/dashboard']);
     }
 }

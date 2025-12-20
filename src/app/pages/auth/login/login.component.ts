@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { LanguageService } from '../../../core/services/language.service';
 import { ThemeService } from '../../../core/services/theme.service';
-import {AuthService, LoginResponse} from "../../../core/services/auth.service";
+import { AuthService, LoginResponse } from "../../../core/services/auth.service";
 import { TranslateModule, TranslatePipe } from "@ngx-translate/core";
 import { MessageModule } from "primeng/message";
 import { CheckboxModule } from "primeng/checkbox";
@@ -18,7 +18,7 @@ import { AdCardComponent } from '../../../toolbox/ad-card/ad-card.component';
 import { ClientError } from "../../../core/dto/error-response.dto";
 import { ResetPasswordComponent } from '../../../shared/components/reset-password/reset-password.component';
 import { DialogModule } from 'primeng/dialog';
-import {LoginFormDto, LoginMapper} from "../../../core/dto/login.dto";
+import { LoginFormDto, LoginMapper } from "../../../core/dto/login.dto";
 
 
 @Component({
@@ -48,6 +48,8 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   showResetPasswordDialog = false;
   hasRegisteredUser = false;
+  isBiometricLoading: boolean = false;
+  isBiometricAvailable: boolean = false;
 
 
   constructor(
@@ -60,8 +62,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.fb.group<LoginFormDto>({
-      email:      this.fb.control<string>('', [Validators.required, Validators.email]),
-      password:   this.fb.control<string>('', [Validators.required, Validators.minLength(8)]),
+      email: this.fb.control<string>('', [Validators.required, Validators.email]),
+      password: this.fb.control<string>('', [Validators.required, Validators.minLength(8)]),
       rememberMe: this.fb.control<boolean>(false)
     });
     this.themeService.initTheme();
@@ -103,10 +105,82 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
-  openBiometricLogin(): void {
-    this.router.navigate(['/auth/passkey']);
+  /**
+ * Controlla se biometria è disponibile sul dispositivo
+ */
+  async checkBiometricAvailability(): Promise<void> {
+    this.isBiometricAvailable = await this.authService.isBiometricAvailable();
   }
+
+
+  /**
+   * Login con biometria (Face ID/Impronta)
+   */
+  async onBiometricLogin(): Promise<void> {
+    try {
+      this.isBiometricLoading = true;
+      this.errorMessage = '';
+
+
+      // ✅ Validazione email
+      const email = this.loginForm.get('email')?.value;
+      if (!email || !this.isValidEmail(email)) {
+        this.errorMessage = 'Inserisci un email valida per continuare';
+        this.isBiometricLoading = false;
+        return;
+      }
+
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Timeout biometria (30s)')), 30000)
+      );
+
+      // ✅ Verifica disponibilità biometria
+      const available = await this.authService.isBiometricAvailable();
+      if (!available) {
+        this.errorMessage = 'Biometria non disponibile su questo dispositivo';
+        this.isBiometricLoading = false;
+        return;
+      }
+
+      // ✅ Login biometrico
+      const response = await this.authService.loginBiometric(email);
+
+      // ✅ Salva preferenze user
+      this.themeService.setTheme(response.user.preferences?.theme || 'light');
+      this.languageService.setLanguage(response.user.preferences?.language || 'it');
+
+      localStorage.setItem('registered_user', JSON.stringify({
+        email: response.user.email,
+        firstName: response.user.firstName,
+        profileImageUrl: response.user.profileImageUrl
+      }));
+
+      // ✅ Naviga a dashboard
+      this.router.navigate(['/dashboard']);
+
+    } catch (error: any) {
+      if (error.message.includes('rifiutata')) {
+        this.errorMessage = 'Autenticazione biometrica annullata';
+      } else if (error.message.includes('Timeout')) {
+        this.errorMessage = 'Operazione biometrica scaduta, riprova';
+      } else {
+        this.errorMessage = error.message || 'Autenticazione fallita';
+      }
+    } finally {
+      this.isBiometricLoading = false;
+    }
+  }
+
+  /**
+   * Validazione email semplice
+   */
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+
+
 
 
 }

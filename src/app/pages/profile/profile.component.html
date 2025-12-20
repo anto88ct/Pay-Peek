@@ -67,12 +67,7 @@
                                 </ad-input>
                             </div>
 
-                            <!-- Passkey -->
-                            <div class="col-12 col-md-6">
-                                <ad-label icon="fas fa-key" label="Passkey"></ad-label>
-                                <ad-input formControlName="passkey" [readonly]="true" placeholder="••••">
-                                </ad-input>
-                            </div>
+
 
                             <!-- Job Type -->
                             <div class="col-12 col-md-6">
@@ -124,10 +119,7 @@
                                     styleClass="w-full w-md-auto custom-border-radius" severity="warning"
                                     [outlined]="true" (onClick)="openResetPassword()">
                                 </ad-button>
-                                <ad-button label="Reset Passkey" icon="fas fa-fingerprint"
-                                    styleClass="w-full w-md-auto custom-border-radius" severity="warning"
-                                    [outlined]="true" (onClick)="openResetPasskey()">
-                                </ad-button>
+
                                 <ad-button label="Modifica Profilo" icon="fas fa-edit"
                                     styleClass="w-full w-md-auto custom-border-radius" severity="primary"
                                     (onClick)="toggleEditMode()">
@@ -157,10 +149,5 @@
         </app-reset-password>
     </ad-dialog>
 
-    <!-- Reset Passkey Dialog -->
-    <ad-dialog [(visible)]="showResetPasskeyDialog" header="Reset Passkey" [modal]="true" [style]="{width: '400px'}">
-        <app-passkey *ngIf="showResetPasskeyDialog" context="setup" (setupComplete)="onPasskeyReset($event)"
-            (onCancel)="closeResetPasskeyDialog()">
-        </app-passkey>
-    </ad-dialog>
+
 </div>

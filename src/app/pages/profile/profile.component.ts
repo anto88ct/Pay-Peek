@@ -11,8 +11,6 @@ import { AdLabelComponent } from '../../toolbox/ad-label/ad-label.component';
 import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 import { AdDialogComponent } from '../../toolbox/ad-dialog/ad-dialog.component';
 import { ResetPasswordComponent } from '../../shared/components/reset-password/reset-password.component';
-import { PasskeyComponent } from '../auth/passkey/passkey.component';
-
 @Component({
     selector: 'app-profile',
     standalone: true,
@@ -25,8 +23,7 @@ import { PasskeyComponent } from '../auth/passkey/passkey.component';
         AdLabelComponent,
         AdCardComponent,
         AdDialogComponent,
-        ResetPasswordComponent,
-        PasskeyComponent
+        ResetPasswordComponent
     ],
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss']
@@ -40,7 +37,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     uploadError = '';
 
     showResetPasswordDialog = false;
-    showResetPasskeyDialog = false;
 
     private destroy$ = new Subject<void>();
 
@@ -67,7 +63,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
             lastName: this.fb.control({ value: '', disabled: true }, Validators.required),
             email: this.fb.control({ value: '', disabled: true }, [Validators.required, Validators.email]),
             password: this.fb.control({ value: '', disabled: true }),
-            passkey: this.fb.control({ value: '', disabled: true }),
             jobType: this.fb.control({ value: '', disabled: true }),
             nationality: this.fb.control({ value: '', disabled: true }),
             city: this.fb.control({ value: '', disabled: true }),
@@ -100,7 +95,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
             lastName: user.lastName || '',
             email: user.email || '',
             password: this.obfuscatePassword(user.password),
-            passkey: this.obfuscatePasskey(user.passkey),
             jobType: user.jobType || '',
             nationality: user.nationality || '',
             city: user.city || '',
@@ -115,14 +109,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private obfuscatePassword(password?: string): string {
         if (!password) return '';
         return '•'.repeat(password.length);
-    }
-
-    /**
-     * Obfuscate passkey with asterisks
-     */
-    private obfuscatePasskey(passkey?: string): string {
-        if (!passkey) return '';
-        return '•'.repeat(passkey.length);
     }
 
     /**
@@ -263,28 +249,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.showResetPasswordDialog = true;
     }
 
-    openResetPasskey(): void {
-        this.showResetPasskeyDialog = true;
-    }
-
-    closeResetPasskeyDialog(): void {
-        this.showResetPasskeyDialog = false;
-    }
-
-    onPasskeyReset(newPasskey: string): void {
-        this.userService.updateProfile({ passkey: newPasskey })
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: (updatedUser) => {
-                    this.currentUser = updatedUser;
-                    this.updateFormWithUserData(updatedUser);
-                    this.showResetPasskeyDialog = false;
-                    console.log('Passkey updated successfully');
-                },
-                error: (error: any) => {
-                    console.error('Error updating passkey:', error);
-                }
-            });
-    }
 }
 
