@@ -1,0 +1,15 @@
+<div class="ad-autocomplete-wrapper">
+    <ad-label *ngIf="label" [label]="label"></ad-label>
+    <p-autoComplete [(ngModel)]="value" [suggestions]="filteredSuggestions" (completeMethod)="filter($event)"
+        [field]="optionLabel" [dataKey]="optionValue || optionLabel" [dropdown]="true" [forceSelection]="forceSelection"
+        [placeholder]="placeholder" [styleClass]="'w-100 ' + styleClass" [inputStyleClass]="'w-100'" [delay]="300"
+        [disabled]="disabled" (onSelect)="onSelect($event)" (onClear)="onClear()" [showEmptyMessage]="true"
+        emptyMessage="Nessun risultato trovato">
+        <ng-template let-item pTemplate="item">
+            <div class="d-flex align-items-center">
+                <span *ngIf="item.codice" class="badge bg-secondary me-2">{{item.codice}}</span>
+                <span>{{ item[optionLabel] }}</span>
+            </div>
+        </ng-template>
+    </p-autoComplete>
+</div>

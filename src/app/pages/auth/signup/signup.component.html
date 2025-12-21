@@ -43,32 +43,23 @@
                         <p class="text-secondary small mb-3">{{ 'auth.signup.optional' | translate }}</p>
                     </div>
 
-                    <!-- Optional Dropdowns -->
+                    <!-- Optional Fields -->
                     <div class="col-md-6">
-                        <label class="d-block mb-1 small">{{ 'auth.signup.job' | translate }}</label>
-                        <p-dropdown [options]="jobs" formControlName="job" [filter]="true" filterBy="label"
-                            optionValue="value" placeholder="{{ 'auth.signup.selectJob' | translate }}"
-                            styleClass="w-100"></p-dropdown>
+                        <ad-autocomplete formControlName="job" [suggestions]="jobs" optionLabel="descrizione"
+                            optionValue="descrizione" label="{{ 'auth.signup.job' | translate }}"
+                            placeholder="{{ 'auth.signup.selectJob' | translate }}"></ad-autocomplete>
                     </div>
                     <div class="col-md-6">
-                        <label class="d-block mb-1 small">{{ 'auth.signup.nationality' | translate }}</label>
-                        <p-dropdown [options]="nationalities" formControlName="nationality" [filter]="true"
-                            optionValue="value" filterBy="label"
-                            placeholder="{{ 'auth.signup.selectNationality' | translate }}"
-                            styleClass="w-100"></p-dropdown>
+                        <ad-autocomplete formControlName="nationality" [suggestions]="nationalities"
+                            optionLabel="descrizione" optionValue="codice"
+                            label="{{ 'auth.signup.nationality' | translate }}"
+                            placeholder="{{ 'auth.signup.selectNationality' | translate }}"></ad-autocomplete>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="d-block mb-1 small">{{ 'auth.signup.city' | translate }}</label>
-                        <p-dropdown [options]="cities" formControlName="city" [filter]="true" filterBy="label"
-                            optionValue="value" placeholder="{{ 'auth.signup.selectCity' | translate }}"
-                            styleClass="w-100"></p-dropdown>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="d-block mb-1 small">{{ 'auth.signup.country' | translate }}</label>
-                        <p-dropdown [options]="countries" formControlName="country" [filter]="true" filterBy="label"
-                            optionValue="value" placeholder="{{ 'auth.signup.selectCountry' | translate }}"
-                            styleClass="w-100"></p-dropdown>
+                        <ad-autocomplete formControlName="city" [suggestions]="cities" optionLabel="descrizione"
+                            optionValue="codice" label="{{ 'auth.signup.city' | translate }}"
+                            placeholder="{{ 'auth.signup.selectCity' | translate }}"></ad-autocomplete>
                     </div>
 
                 </div>

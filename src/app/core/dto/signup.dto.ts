@@ -9,7 +9,6 @@ export interface SignupDto {
     job?: string;
     nationality?: string;
     city?: string;
-    country?: string;
 }
 
 export type SignupFormDto = {
@@ -21,7 +20,6 @@ export type SignupFormDto = {
     job: FormControl<string | null>;
     nationality: FormControl<string | null>;
     city: FormControl<string | null>;
-    country: FormControl<string | null>;
 };
 
 export class SignupMapper {
@@ -35,7 +33,6 @@ export class SignupMapper {
             job: form.job.value || undefined,
             nationality: form.nationality.value || undefined,
             city: form.city.value || undefined,
-            country: form.country.value || undefined
         };
     }
 }

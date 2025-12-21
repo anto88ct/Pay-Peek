@@ -79,30 +79,24 @@
                             <!-- Job Type -->
                             <div class="col-12 col-md-6">
                                 <ad-label icon="fas fa-briefcase" label="Lavoro" placeholder="Lavoro"></ad-label>
-                                <ad-input formControlName="jobType" [readonly]="!isEditMode" placeholder="Lavoro">
-                                </ad-input>
+                                <ad-autocomplete formControlName="jobType" [suggestions]="jobs"
+                                    optionLabel="descrizione" optionValue="descrizione"
+                                    placeholder="Lavoro"></ad-autocomplete>
                             </div>
 
                             <!-- Nationality -->
                             <div class="col-12 col-md-6">
                                 <ad-label icon="fas fa-flag" label="Nazionalità" placeholder="Nazionalità"></ad-label>
-                                <ad-input formControlName="nationality" [readonly]="!isEditMode"
-                                    placeholder="Nazionalità">
-                                </ad-input>
+                                <ad-autocomplete formControlName="nationality" [suggestions]="nationalities"
+                                    optionLabel="descrizione" optionValue="codice"
+                                    placeholder="Nazionalità"></ad-autocomplete>
                             </div>
 
                             <!-- City -->
                             <div class="col-12 col-md-6">
                                 <ad-label icon="fas fa-city" label="Città" placeholder="Città"></ad-label>
-                                <ad-input formControlName="city" [readonly]="!isEditMode" placeholder="Città">
-                                </ad-input>
-                            </div>
-
-                            <!-- Country -->
-                            <div class="col-12 col-md-6">
-                                <ad-label icon="fas fa-globe" label="Paese" placeholder="Paese"></ad-label>
-                                <ad-input formControlName="country" [readonly]="!isEditMode" placeholder="Paese">
-                                </ad-input>
+                                <ad-autocomplete formControlName="city" [suggestions]="cities" optionLabel="descrizione"
+                                    optionValue="codice" placeholder="Città"></ad-autocomplete>
                             </div>
 
                             <!-- Uploaded Documents Count -->

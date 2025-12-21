@@ -7,7 +7,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 // PrimeNG
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
 import { MessageModule } from 'primeng/message';
 
@@ -15,6 +14,7 @@ import { MessageModule } from 'primeng/message';
 import { AdCardComponent } from '../../../toolbox/ad-card/ad-card.component';
 import { AdButtonComponent } from '../../../toolbox/ad-button/ad-button.component';
 import { AdInputComponent } from '../../../toolbox/ad-input/ad-input.component';
+import { AdAutocompleteComponent } from '../../../toolbox/ad-autocomplete/ad-autocomplete.component';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { SignupFormDto, SignupMapper } from '../../../core/dto/signup.dto';
@@ -22,7 +22,11 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { LoginResponse } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { LookupService } from '../../../core/services/lookup.service';
 import { Subject, takeUntil, timeout } from 'rxjs';
+import { Job } from 'src/app/core/dto/job.dto';
+import { Nationality } from 'src/app/core/dto/nationality.dto';
+import { City } from 'src/app/core/dto/city.dto';
 
 @Component({
     selector: 'app-signup',
@@ -34,12 +38,12 @@ import { Subject, takeUntil, timeout } from 'rxjs';
         TranslateModule,
         InputTextModule,
         PasswordModule,
-        DropdownModule,
         DialogModule,
         MessageModule,
         AdCardComponent,
         AdButtonComponent,
-        AdInputComponent
+        AdInputComponent,
+        AdAutocompleteComponent
     ],
     templateUrl: './signup.component.html',
     styleUrls: ['./signup.component.scss']
@@ -52,38 +56,9 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     private destroy$ = new Subject<void>();
 
-    // Mock Data
-    jobs = [
-        { label: 'Sviluppatore', value: 'developer' },
-        { label: 'Designer', value: 'designer' },
-        { label: 'Project Manager', value: 'pm' },
-        { label: 'Studente', value: 'student' },
-        { label: 'Altro', value: 'other' }
-    ];
-
-    nationalities = [
-        { label: 'Italiana', value: 'IT' },
-        { label: 'Francese', value: 'FR' },
-        { label: 'Tedesca', value: 'DE' },
-        { label: 'Inglese', value: 'UK' },
-        { label: 'Spagnola', value: 'ES' }
-    ];
-
-    cities = [
-        { label: 'Roma', value: 'roma' },
-        { label: 'Milano', value: 'milano' },
-        { label: 'Napoli', value: 'napoli' },
-        { label: 'Torino', value: 'torino' },
-        { label: 'Firenze', value: 'firenze' }
-    ];
-
-    countries = [
-        { label: 'Italia', value: 'IT' },
-        { label: 'Francia', value: 'FR' },
-        { label: 'Germania', value: 'DE' },
-        { label: 'Regno Unito', value: 'UK' },
-        { label: 'Spagna', value: 'ES' }
-    ];
+    jobs: Job[] = [];
+    nationalities: Nationality[] = [];
+    cities: City[] = [];
 
     constructor(
         private fb: FormBuilder,
@@ -91,7 +66,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private themeService: ThemeService,
         private languageService: LanguageService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private lookupService: LookupService
     ) { }
 
     ngOnInit() {
@@ -104,8 +80,24 @@ export class SignupComponent implements OnInit, OnDestroy {
             job: this.fb.control(''),
             nationality: this.fb.control(''),
             city: this.fb.control(''),
-            country: this.fb.control('')
         }, { validators: this.passwordMatchValidator });
+
+        this.loadLookups();
+    }
+
+    private loadLookups() {
+        this.lookupService.getJobs()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(data => this.jobs = data);
+
+        this.lookupService.getNationalities()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(data => this.nationalities = data);
+
+        this.lookupService.getCities()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(data => this.cities = data);
+
     }
 
     ngOnDestroy() {

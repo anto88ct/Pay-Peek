@@ -1,0 +1,119 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+::ng-deep .p-autocomplete-items {
+    padding: 0 !important;
+}
+
+.ad-autocomplete-wrapper {
+    position: relative;
+    width: 100%;
+
+    ::ng-deep .p-autocomplete {
+        width: 100%;
+        display: flex; // Ensure flex layout for input + button
+        position: relative; // For absolute positioning of button
+    }
+
+    // Style the Input (matching ad-input .form-control)
+    ::ng-deep .p-inputtext {
+        width: 100%;
+        border: 2px solid var(--color-border);
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        padding-right: 2.5rem; // Space for the icon
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: var(--color-bg-input);
+        color: var(--color-text-primary);
+        box-shadow: none !important; // Override PrimeNG default shadow
+
+        &:enabled:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 0.2rem var(--color-bg-profile-hover) !important;
+            background: var(--color-bg-input);
+        }
+
+        &:disabled {
+            background: var(--color-bg-input);
+            cursor: not-allowed;
+            color: var(--color-text-muted);
+            opacity: 1; // PrimeNG adds opacity
+        }
+
+        &::placeholder {
+            color: var(--text-color-secondary);
+            opacity: 1;
+        }
+    }
+
+    // Style the Dropdown Button (Icon only inside input)
+    ::ng-deep .p-autocomplete-dropdown {
+        position: absolute;
+        right: 0.5rem; // Position inside the input
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2rem;
+        height: 2rem;
+        background: transparent;
+        border: none;
+        color: var(--color-primary);
+        transition: color 0.2s;
+
+        // Icon styles
+        .p-button-icon {
+            font-size: 1rem;
+        }
+
+        &:enabled:hover {
+            background: transparent;
+            color: var(--color-primary-hover);
+        }
+
+        &:enabled:active {
+            background: transparent;
+            color: var(--color-primary);
+        }
+
+        &:disabled {
+            background: transparent;
+            color: var(--color-text-muted);
+        }
+
+        // Remove PrimeNG button default styles
+        box-shadow: none !important;
+    }
+
+    // Panel Styling (Optional: to match theme better)
+    ::ng-deep .p-autocomplete-panel {
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+        .p-autocomplete-items {
+            .p-autocomplete-item {
+                color: var(--color-text-primary);
+                padding: 0.75rem 1rem;
+
+                &:hover {
+                    background: var(--color-bg-profile-hover);
+                    color: var(--color-text-primary);
+                }
+
+                &.p-highlight {
+                    background: var(--color-primary);
+                    color: #fff;
+                }
+            }
+
+            // Empty message
+            .p-autocomplete-empty-message {
+                color: var(--color-text-primary);
+                padding: 0.75rem 1rem;
+            }
+        }
+    }
+}

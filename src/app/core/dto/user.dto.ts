@@ -14,7 +14,6 @@ export interface User {
     lastName: string | null;
     jobType?: string;
     city?: string;
-    country?: string;
     profileImageUrl?: string;
     preferences: Preferences;
     emailVerified: boolean;
@@ -41,7 +40,6 @@ export interface ProfileUpdateDto {
     passkey?: string;
     jobType?: string;
     city?: string;
-    country?: string;
     nationality?: string;
     profileImageBase64?: string;
     uploadedDocumentsCount?: number;
@@ -55,7 +53,6 @@ export type ProfileUpdateFormDto = {
     jobType: FormControl<string | null>;
     nationality: FormControl<string | null>;
     city: FormControl<string | null>;
-    country: FormControl<string | null>;
     uploadedDocumentsCount: FormControl<number | null>;
 };
 
@@ -72,7 +69,6 @@ export class UserMapper {
             password: form.password.value || undefined,
             jobType: form.jobType.value || undefined,
             city: form.city.value || undefined,
-            country: form.country.value || undefined,
             nationality: form.nationality.value || undefined,
             uploadedDocumentsCount: form.uploadedDocumentsCount.value || undefined
         };

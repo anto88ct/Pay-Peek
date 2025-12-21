@@ -10,8 +10,14 @@ import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
 import { AdLabelComponent } from '../../toolbox/ad-label/ad-label.component';
 import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 import { AdDialogComponent } from '../../toolbox/ad-dialog/ad-dialog.component';
+import { AdAutocompleteComponent } from '../../toolbox/ad-autocomplete/ad-autocomplete.component';
 import { ResetPasswordComponent } from '../../shared/components/reset-password/reset-password.component';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { LookupService } from '../../core/services/lookup.service';
+import { Job } from 'src/app/core/dto/job.dto';
+import { Nationality } from 'src/app/core/dto/nationality.dto';
+import { City } from 'src/app/core/dto/city.dto';
+
 @Component({
     selector: 'app-profile',
     standalone: true,
@@ -24,6 +30,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
         AdLabelComponent,
         AdCardComponent,
         AdDialogComponent,
+        AdAutocompleteComponent,
         ResetPasswordComponent
     ],
     templateUrl: './profile.component.html',
@@ -42,15 +49,35 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
     hasUserValidEmail: boolean = false;
 
+    jobs: Job[] = [];
+    nationalities: Nationality[] = [];
+    cities: City[] = [];
+
     constructor(
         private fb: FormBuilder,
         private notificationService: NotificationService,
-        private userService: UserService
+        private userService: UserService,
+        private lookupService: LookupService
     ) { }
 
     ngOnInit(): void {
         this.initForm();
         this.loadUserData();
+        this.loadLookups();
+    }
+
+    private loadLookups() {
+        this.lookupService.getJobs()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(data => this.jobs = data);
+
+        this.lookupService.getNationalities()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(data => this.nationalities = data);
+
+        this.lookupService.getCities()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(data => this.cities = data);
     }
 
     ngOnDestroy(): void {
@@ -67,7 +94,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
             jobType: this.fb.control({ value: '', disabled: true }),
             nationality: this.fb.control({ value: '', disabled: true }),
             city: this.fb.control({ value: '', disabled: true }),
-            country: this.fb.control({ value: '', disabled: true }),
             uploadedDocumentsCount: this.fb.control({ value: 0, disabled: true })
         });
     }
@@ -103,7 +129,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
             jobType: user.jobType || '',
             nationality: user.nationality || '',
             city: user.city || '',
-            country: user.country || '',
             uploadedDocumentsCount: user.uploadedDocumentsCount || 0
         });
     }
@@ -128,7 +153,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     private enableForm(): void {
         Object.keys(this.profileForm.controls).forEach(key => {
-            if (key !== 'uploadedDocumentsCount') {
+            if (key !== 'uploadedDocumentsCount' && key !== 'email' && key !== 'password') {
                 this.profileForm.get(key)?.enable();
             }
         });
