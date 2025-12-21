@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -15,12 +15,6 @@ import { MessageModule } from 'primeng/message';
 import { AdCardComponent } from '../../../toolbox/ad-card/ad-card.component';
 import { AdButtonComponent } from '../../../toolbox/ad-button/ad-button.component';
 import { AdInputComponent } from '../../../toolbox/ad-input/ad-input.component';
-// User said "use library components where possible". I'll use p-dropdown styled consistent if ad-dropdown doesn't exist or is simple.
-// I'll check if ad-dropdown exists first. If not use p-dropdown. 
-// Actually I don't recall seeing ad-dropdown in the file list earlier, but the user mentioned "ad-dropdown" in a previous conversation summary.
-// Let's assume standard PrimeNG for dropdowns if I can't find it, but wait, the summary "Navbar and Dropdown Enhancements" mentioned creating ad-dropdown.
-// I'll stick to standard PrimeNG Dropdown for now wrapped in a div or check. 
-// Better: use direct PrimeNG modules for standard form elements if ad- wrapper is complex, but I'll use ad-input.
 
 import { AuthService } from '../../../core/services/auth.service';
 import { SignupFormDto, SignupMapper } from '../../../core/dto/signup.dto';
@@ -28,6 +22,7 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { LoginResponse } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { Subject, takeUntil, timeout } from 'rxjs';
 
 @Component({
     selector: 'app-signup',
@@ -49,11 +44,13 @@ import { NotificationService } from '../../../core/services/notification.service
     templateUrl: './signup.component.html',
     styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
     signupForm!: FormGroup<SignupFormDto>;
     isLoading = false;
     showBiometricPrompt = false;
     isBiometricLoading = false;
+
+    private destroy$ = new Subject<void>();
 
     // Mock Data
     jobs = [
@@ -111,68 +108,98 @@ export class SignupComponent implements OnInit {
         }, { validators: this.passwordMatchValidator });
     }
 
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
     passwordMatchValidator(g: AbstractControl) {
         return g.get('password')?.value === g.get('confirmPassword')?.value
             ? null : { mismatch: true };
     }
 
-    async onSubmit() {
+    onSubmit() {
         if (this.signupForm.valid) {
             this.isLoading = true;
 
             const signupDto = SignupMapper.toDTO(this.signupForm.controls);
 
-            this.authService.register(signupDto).subscribe({
-                next: async (response: LoginResponse) => {
-                    this.themeService.setTheme(response.user.preferences?.theme || 'light');
-                    this.languageService.setLanguage(response.user.preferences?.language || 'it');
+            this.authService.register(signupDto)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: (response: LoginResponse) => {
+                        this.themeService.setTheme(response.user.preferences?.theme || 'light');
+                        this.languageService.setLanguage(response.user.preferences?.language || 'it');
 
-                    localStorage.setItem('registered_user', JSON.stringify({
-                        email: response.user.email,
-                        firstName: response.user.firstName,
-                        profileImageUrl: response.user.profileImageUrl,
-                    }));
+                        localStorage.setItem('registered_user', JSON.stringify({
+                            email: response.user.email,
+                            firstName: response.user.firstName,
+                            profileImageUrl: response.user.profileImageUrl,
+                        }));
 
-                    // Check if biometric is available
-                    const bioAvailable = await this.authService.isBiometricAvailable();
-                    if (bioAvailable) {
-                        this.showBiometricPrompt = true;
+                        this.authService.isBiometricAvailable$()
+                            .pipe(takeUntil(this.destroy$))
+                            .subscribe({
+                                next: (bioAvailable) => {
+                                    if (bioAvailable) {
+                                        this.showBiometricPrompt = true;
+                                    } else {
+                                        this.router.navigate(['/dashboard']);
+                                    }
+                                    this.isLoading = false;
+                                },
+                                error: (error) => {
+                                    console.error('Biometric availability check failed:', error);
+                                    this.router.navigate(['/dashboard']);
+                                    this.isLoading = false;
+                                }
+                            });
+                    },
+                    error: (error) => {
                         this.isLoading = false;
-                    } else {
-                        this.router.navigate(['/dashboard']);
+                        this.notificationService.showError(error?.error?.message || 'Registrazione fallita');
                     }
-                },
-                error: (error) => {
-                    this.isLoading = false;
-                    this.notificationService.showError(error);
-                }
-            });
+                });
         }
     }
 
-    async enableBiometric() {
+    enableBiometric() {
         this.isBiometricLoading = true;
         const email = this.signupForm.get('email')?.value;
+
         if (!email) {
             this.notificationService.showError('Email non valida');
             this.router.navigate(['/dashboard']);
             return;
         }
 
-        try {
-            await this.authService.registerBiometric(email);
-            this.notificationService.showSuccess('Biometria abilitata con successo');
-            this.router.navigate(['/dashboard']);
-        } catch (error: any) {
-            this.notificationService.showError(error.message || 'Errore abilitazione biometria');
-            // Navigate anyway? Or let them try again? Let's navigate to dashboard on error to not block user, but maybe better to let them retry or skip.
-            // For now, if error, we stay on dialog or just close it? 
-            // Let's close and go to dashboard to avoid frustration loop.
-            this.router.navigate(['/dashboard']);
-        } finally {
-            this.isBiometricLoading = false;
-            this.showBiometricPrompt = false;
-        }
+        this.authService.registerBiometric$(email)
+            .pipe(
+                timeout(30000), // 30 secondi timeout
+                takeUntil(this.destroy$)
+            )
+            .subscribe({
+                next: () => {
+                    this.notificationService.showSuccess('Biometria abilitata con successo');
+                    this.router.navigate(['/dashboard']);
+                },
+                error: (error: any) => {
+                    console.error('Biometric registration failed:', error);
+
+                    if (error.name === 'TimeoutError') {
+                        this.notificationService.showError('Operazione biometrica scaduta (30s)');
+                    } else {
+                        this.notificationService.showError(error?.message || 'Errore abilitazione biometria');
+                    }
+
+                    // Navigate anyway per non bloccare l'utente
+                    this.router.navigate(['/dashboard']);
+                },
+                complete: () => {
+                    this.isBiometricLoading = false;
+                    this.showBiometricPrompt = false;
+                }
+            });
     }
 
     skipBiometric() {

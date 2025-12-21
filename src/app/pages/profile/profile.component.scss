@@ -1,7 +1,6 @@
 .profile-container {
     min-height: 100vh;
     background-color: var(--color-bg-secondary);
-    // Remove bottom padding as it's handled by layout-content-mobile
     padding-bottom: 0;
 }
 
@@ -17,17 +16,22 @@
     }
 }
 
-.profile-card {
+::ng-deep ad-card {
+    height: 88% !important;
+}
+
+::ng-deep .profile-card {
     background: var(--color-bg-secondary);
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     padding: 2.5rem;
     margin-top: 1.5rem;
-    margin-bottom: 1.5rem; // Add bottom margin
+    margin-bottom: 1.5rem;
     border: 1px solid var(--color-border);
+    height: 100%;
 
     @media (max-width: 768px) {
-        padding: 1.25rem; // Reduce padding further
+        padding: 1.25rem;
         border-radius: 15px;
         margin-top: 1rem;
         margin-bottom: 1rem;
@@ -113,7 +117,7 @@
         font-size: 0.95rem;
 
         i {
-            color: var(--color-primary); // Updated to use primary color for better visibility
+            color: var(--color-primary);
             width: 20px;
         }
     }
@@ -136,8 +140,8 @@
         &:disabled {
             background: var(--color-bg-input);
             cursor: not-allowed;
-            color: var(--color-text-primary); // Made text color same as primary for readability
-            opacity: 0.7; // Reduced opacity slightly to indicate disabled state but keep readable
+            color: var(--color-text-primary);
+            opacity: 0.7;
         }
 
         &[readonly] {
@@ -164,6 +168,51 @@
         }
     }
 }
+
+.warning-badge {
+    width: 100%;
+    margin-bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #ffc107 0%, #ffed4e 100%);
+    color: #856404 !important;
+    border: 1px solid rgba(255, 193, 7, 0.5);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.warning-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.warning-badge:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+    background: linear-gradient(135deg, #ffb300 0%, #ffed4e 100%);
+}
+
+.warning-badge:hover::before {
+    left: 100%;
+}
+
+.warning-badge:active {
+    transform: translateY(0) scale(0.98);
+}
+
 
 .action-buttons {
     margin-top: 2rem;

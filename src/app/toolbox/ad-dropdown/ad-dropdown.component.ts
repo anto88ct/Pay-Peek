@@ -73,7 +73,6 @@ export class AdDropdownComponent implements ControlValueAccessor, OnChanges {
   }
 
   toggleMenu(): void {
-    console.log('AdDropdown toggleMenu clicked. Disabled:', this.disabled, 'Current Visibility:', this.menuVisible);
     if (!this.disabled) {
       this.menuVisible = !this.menuVisible;
     }
@@ -89,7 +88,6 @@ export class AdDropdownComponent implements ControlValueAccessor, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['menuItems']) {
-      console.log('AdDropdown menuItems changed:', changes['menuItems'].currentValue);
     }
   }
 

@@ -47,7 +47,6 @@ export class ResetPasswordComponent {
             // Simulate API call
             setTimeout(() => {
                 this.loading = false;
-                console.log('Password updated', this.form.value);
                 this.close.emit();
             }, 1500);
         }

@@ -4,6 +4,13 @@
             <div class="col-12 col-lg-10 col-xl-8">
                 <!-- Profile Header -->
                 <div class="profile-header mb-4">
+                    <a href="https://mail.google.com/" target="_blank">
+                        <span class="warning-badge" *ngIf="!hasUserValidEmail" role="alert"
+                            [attr.aria-label]="'Email non verificata'">
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            Verifica la tua Email! Controlla la tua casella di posta elettronica
+                        </span>
+                    </a>
                     <h2 class="mb-1">
                         <i class="fas fa-user-circle me-2"></i>
                         Il Mio Profilo
@@ -71,32 +78,30 @@
 
                             <!-- Job Type -->
                             <div class="col-12 col-md-6">
-                                <ad-label icon="fas fa-briefcase" label="Lavoro"
-                                    placeholder="Es. Informatico, Notaio..."></ad-label>
-                                <ad-input formControlName="jobType" [readonly]="!isEditMode"
-                                    placeholder="Es. Informatico, Notaio...">
+                                <ad-label icon="fas fa-briefcase" label="Lavoro" placeholder="Lavoro"></ad-label>
+                                <ad-input formControlName="jobType" [readonly]="!isEditMode" placeholder="Lavoro">
                                 </ad-input>
                             </div>
 
                             <!-- Nationality -->
                             <div class="col-12 col-md-6">
-                                <ad-label icon="fas fa-flag" label="Nazionalità" placeholder="Es. Italiana"></ad-label>
+                                <ad-label icon="fas fa-flag" label="Nazionalità" placeholder="Nazionalità"></ad-label>
                                 <ad-input formControlName="nationality" [readonly]="!isEditMode"
-                                    placeholder="Es. Italiana">
+                                    placeholder="Nazionalità">
                                 </ad-input>
                             </div>
 
                             <!-- City -->
                             <div class="col-12 col-md-6">
-                                <ad-label icon="fas fa-city" label="Città" placeholder="Es. Milano"></ad-label>
-                                <ad-input formControlName="city" [readonly]="!isEditMode" placeholder="Es. Milano">
+                                <ad-label icon="fas fa-city" label="Città" placeholder="Città"></ad-label>
+                                <ad-input formControlName="city" [readonly]="!isEditMode" placeholder="Città">
                                 </ad-input>
                             </div>
 
                             <!-- Country -->
                             <div class="col-12 col-md-6">
-                                <ad-label icon="fas fa-globe" label="Paese" placeholder="Es. Italia"></ad-label>
-                                <ad-input formControlName="country" [readonly]="!isEditMode" placeholder="Es. Italia">
+                                <ad-label icon="fas fa-globe" label="Paese" placeholder="Paese"></ad-label>
+                                <ad-input formControlName="country" [readonly]="!isEditMode" placeholder="Paese">
                                 </ad-input>
                             </div>
 

@@ -41,7 +41,7 @@ export class UserService extends BaseService {
     }
 
     updateProfile(updates: ProfileUpdateDto): Observable<UserDto> {
-        return this.put<UserDto>('/users/profile', updates).pipe(
+        return this.put<UserDto>('/users/update/profile', updates).pipe(
             tap(updatedUser => {
                 this.updateLocalUser(updatedUser);
             })

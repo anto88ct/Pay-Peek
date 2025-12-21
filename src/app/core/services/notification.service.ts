@@ -42,7 +42,6 @@ export class NotificationService {
      * @param title Title of the toast (optional)
      */
     showError(error: any, title: string = 'Errore') {
-        console.log(error);
         const message = error?.message || 'Si è verificato un errore sconosciuto';
         this.messageService.add({ severity: 'error', summary: title, detail: message, life: 5000 });
     }

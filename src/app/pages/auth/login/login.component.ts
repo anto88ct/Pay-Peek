@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LanguageService } from '../../../core/services/language.service';
@@ -19,30 +19,28 @@ import { ClientError } from "../../../core/dto/error-response.dto";
 import { ResetPasswordComponent } from '../../../shared/components/reset-password/reset-password.component';
 import { DialogModule } from 'primeng/dialog';
 import { LoginFormDto, LoginMapper } from "../../../core/dto/login.dto";
-
+import { Subject, takeUntil, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
   imports: [
-    CommonModule,           // ← PER *ngIf, ngClass, ecc.
+    CommonModule,
     ReactiveFormsModule,
-    TranslateModule,        // ← CORRETTO
+    TranslateModule,
     MessageModule,
     AdInputComponent,
     AdButtonComponent,
-    AdCheckboxComponent,
     AdCheckboxComponent,
     AdCardComponent,
     RouterModule,
     ResetPasswordComponent,
     DialogModule
   ],
-
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup<LoginFormDto>;
   isLoading = false;
   errorMessage = '';
@@ -51,6 +49,7 @@ export class LoginComponent implements OnInit {
   isBiometricLoading: boolean = false;
   isBiometricAvailable: boolean = false;
 
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -69,12 +68,29 @@ export class LoginComponent implements OnInit {
     this.themeService.initTheme();
     this.languageService.initLanguage();
     this.checkUserRegistration();
+
+    // ✅ Observable - Check biometria disponibile
+    this.authService.isBiometricAvailable$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (available) => {
+          this.isBiometricAvailable = available;
+        },
+        error: (error) => {
+          console.error('Biometric availability check failed:', error);
+          this.isBiometricAvailable = false;
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   checkUserRegistration() {
     this.hasRegisteredUser = !!localStorage.getItem('registered_user');
   }
-
 
   onSubmit(): void {
     if (this.loginForm.valid) {
@@ -83,46 +99,35 @@ export class LoginComponent implements OnInit {
 
       const loginDto = LoginMapper.toDTO(this.loginForm.controls);
 
-      this.authService.login(loginDto).subscribe({
-        next: (response: LoginResponse) => {
-          this.themeService.setTheme(response.user.preferences?.theme || 'light');
-          this.languageService.setLanguage(response.user.preferences?.language || 'it');
+      this.authService.login(loginDto)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response: LoginResponse) => {
+            this.themeService.setTheme(response.user.preferences?.theme || 'light');
+            this.languageService.setLanguage(response.user.preferences?.language || 'it');
 
-          localStorage.setItem('registered_user', JSON.stringify({
-            email: response.user.email,
-            firstName: response.user.firstName,
-            profileImageUrl: response.user.profileImageUrl,
-            passkey: response.user.passkey || '1234'
-          }));
+            localStorage.setItem('registered_user', JSON.stringify({
+              email: response.user.email,
+              firstName: response.user.firstName,
+              profileImageUrl: response.user.profileImageUrl,
+              passkey: response.user.passkey || '1234'
+            }));
 
-          this.router.navigate(['/dashboard']);
-        },
-        error: (error) => {
-          this.errorMessage = error.message || 'Si è verificato un errore durante il login';
-          this.isLoading = false;
-        }
-      });
+            this.router.navigate(['/dashboard']);
+          },
+          error: (error) => {
+            this.errorMessage = error.message || 'Si è verificato un errore durante il login';
+            this.isLoading = false;
+          }
+        });
     }
   }
 
-  /**
- * Controlla se biometria è disponibile sul dispositivo
- */
-  async checkBiometricAvailability(): Promise<void> {
-    this.isBiometricAvailable = await this.authService.isBiometricAvailable();
-  }
-
-
-  /**
-   * Login con biometria (Face ID/Impronta)
-   */
-  async onBiometricLogin(): Promise<void> {
+  onBiometricLogin(): void {
     try {
       this.isBiometricLoading = true;
       this.errorMessage = '';
 
-
-      // ✅ Validazione email
       const email = this.loginForm.get('email')?.value;
       if (!email || !this.isValidEmail(email)) {
         this.errorMessage = 'Inserisci un email valida per continuare';
@@ -130,57 +135,50 @@ export class LoginComponent implements OnInit {
         return;
       }
 
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Timeout biometria (30s)')), 30000)
-      );
+      this.authService.loginBiometric$(email)
+        .pipe(
+          timeout(30000), // 30 secondi timeout
+          takeUntil(this.destroy$)
+        )
+        .subscribe({
+          next: (response: any) => {
+            this.themeService.setTheme(response.user.preferences?.theme || 'light');
+            this.languageService.setLanguage(response.user.preferences?.language || 'it');
 
-      // ✅ Verifica disponibilità biometria
-      const available = await this.authService.isBiometricAvailable();
-      if (!available) {
-        this.errorMessage = 'Biometria non disponibile su questo dispositivo';
-        this.isBiometricLoading = false;
-        return;
-      }
+            localStorage.setItem('registered_user', JSON.stringify({
+              email: response.user.email,
+              firstName: response.user.firstName,
+              profileImageUrl: response.user.profileImageUrl
+            }));
 
-      // ✅ Login biometrico
-      const response = await this.authService.loginBiometric(email);
-
-      // ✅ Salva preferenze user
-      this.themeService.setTheme(response.user.preferences?.theme || 'light');
-      this.languageService.setLanguage(response.user.preferences?.language || 'it');
-
-      localStorage.setItem('registered_user', JSON.stringify({
-        email: response.user.email,
-        firstName: response.user.firstName,
-        profileImageUrl: response.user.profileImageUrl
-      }));
-
-      // ✅ Naviga a dashboard
-      this.router.navigate(['/dashboard']);
-
+            this.router.navigate(['/dashboard']);
+          },
+          error: (error: any) => {
+            if (error.code === 'USER_CANCELLED') {
+              this.errorMessage = 'Autenticazione biometrica annullata';
+            } else if (error.code === 'CHALLENGE_FAILED') {
+              this.errorMessage = 'Errore nella comunicazione con il server';
+            } else if (error.code === 'NOT_AVAILABLE') {
+              this.errorMessage = 'Biometria non disponibile su questo dispositivo';
+            } else if (error.name === 'TimeoutError') {
+              this.errorMessage = 'Operazione biometrica scaduta (30s), riprova';
+            } else {
+              this.errorMessage = error.message || 'Autenticazione biometrica fallita';
+            }
+            console.error('Biometric login error:', error);
+          },
+          complete: () => {
+            this.isBiometricLoading = false;
+          }
+        });
     } catch (error: any) {
-      if (error.message.includes('rifiutata')) {
-        this.errorMessage = 'Autenticazione biometrica annullata';
-      } else if (error.message.includes('Timeout')) {
-        this.errorMessage = 'Operazione biometrica scaduta, riprova';
-      } else {
-        this.errorMessage = error.message || 'Autenticazione fallita';
-      }
-    } finally {
+      this.errorMessage = error.message || 'Errore durante autenticazione biometrica';
       this.isBiometricLoading = false;
     }
   }
 
-  /**
-   * Validazione email semplice
-   */
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
-
-
-
-
-
 }

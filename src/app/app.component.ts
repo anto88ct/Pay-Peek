@@ -22,7 +22,7 @@ export class AppComponent {
     private themeService: ThemeService // Inject to initialize theme
   ) {
     this.languageService.currentLanguage$.subscribe(lang => {
-      console.log('Lingua attiva:', lang); // 'it' o 'en'
+
     });
 
     // Cambia lingua

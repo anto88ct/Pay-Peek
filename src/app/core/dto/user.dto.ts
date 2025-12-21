@@ -33,6 +33,7 @@ export interface UserDto extends User {
 }
 
 export interface ProfileUpdateDto {
+    userId: string;
     firstName?: string;
     lastName?: string;
     email?: string;
@@ -59,8 +60,12 @@ export type ProfileUpdateFormDto = {
 };
 
 export class UserMapper {
-    static toProfileUpdateDto(form: ProfileUpdateFormDto): ProfileUpdateDto {
+    static toProfileUpdateDto(form: ProfileUpdateFormDto, id: string): ProfileUpdateDto {
+        if (!id) {
+            throw new Error('User ID is required');
+        }
         return {
+            userId: id,
             firstName: form.firstName.value || undefined,
             lastName: form.lastName.value || undefined,
             email: form.email.value || undefined,

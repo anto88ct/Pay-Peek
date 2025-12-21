@@ -112,10 +112,6 @@ export class DashboardComponent implements OnInit {
 
     confirmCreation() {
         // Logic to create the new chart would go here
-        console.log('Creating dashboard:', {
-            type: this.selectedChartType,
-            data: this.selectedDataItems
-        });
         this.isNewDashboardDialogVisible = false;
     }
 

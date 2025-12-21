@@ -108,9 +108,6 @@ export class SettingsComponent implements OnInit {
     }
 
     sendSupportEmail(): void {
-        // In a real application, this would send an email with attachments
-        console.log('Support message:', this.supportMessage);
-        console.log('Attachments:', this.attachments);
 
         let valid = true;
         if (!this.supportMessage && this.attachments.length === 0) {

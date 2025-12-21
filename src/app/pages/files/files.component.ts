@@ -221,7 +221,6 @@ export class FilesComponent implements OnInit {
     }
 
     uploadPayslips() {
-        console.log('Uploading files:', this.payslipFiles);
         this.fileService.uploadPayslips(this.payslipFiles).subscribe({
             next: () => {
                 this.payslipFiles = [];

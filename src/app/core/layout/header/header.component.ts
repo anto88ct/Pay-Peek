@@ -89,7 +89,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   openNotifications() {
-    console.log('Notifications clicked');
   }
 
   onThemeChange(isDark: boolean): void {
@@ -101,7 +100,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   updateProfileMenuItems(): void {
-    console.log('Header updateProfileMenuItems called');
+    ('Header updateProfileMenuItems called');
     const currentLang = this.languageService.getCurrentLanguage();
     const currentUser = this.userService.getCurrentUserSync();
     const email = currentUser?.email || 'user@example.com';
@@ -133,7 +132,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         command: () => this.onLogoutClick()
       }
     ];
-    console.log('Header profileMenuItems:', this.profileMenuItems);
   }
 
   confirmResetCache(): void {
@@ -154,12 +152,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onProfileClick(): void {
-    console.log('Profile clicked');
     this.router.navigate(['/profile']);
   }
 
   onLogoutClick(): void {
-    console.log('Logout clicked');
     this.authService.logout();
     this.router.navigate(['/login']);
   }

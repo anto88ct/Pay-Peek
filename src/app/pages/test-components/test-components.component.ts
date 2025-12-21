@@ -46,10 +46,8 @@ export class TestComponentsComponent {
   }
 
   onButtonClick() {
-    console.log('Button clicked');
   }
 
   onUpload(event: any) {
-    console.log('Upload', event);
   }
 }

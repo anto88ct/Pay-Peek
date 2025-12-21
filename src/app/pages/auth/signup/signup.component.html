@@ -86,7 +86,7 @@
     </div>
 
     <!-- BIOMETRIC PROMPT DIALOG -->
-    <p-dialog header="{{ 'auth.biometric.title' | translate }}" [(visible)]="showBiometricPrompt" [modal]="true"
+    <p-dialog [header]="'auth.biometric.title' | translate" [(visible)]="showBiometricPrompt" [modal]="true"
         [style]="{width: '400px'}" [closable]="false" [draggable]="false" [resizable]="false">
 
         <div class="text-center">
@@ -102,6 +102,5 @@
             </div>
         </div>
     </p-dialog>
-
 
 </div>

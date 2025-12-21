@@ -1,7 +1,7 @@
-// src/app/shared/services/auth.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, firstValueFrom, Observable, of, throwError } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { map, tap, catchError, switchMap } from 'rxjs/operators';
+import { from as rxFrom } from 'rxjs';
 import { BaseService } from './base.service';
 import { UserDto } from "../dto/user.dto";
 import { LoginDto } from "../dto/login.dto";
@@ -73,7 +73,6 @@ export class AuthService extends BaseService {
   }
 
   register(data: SignupDto): Observable<LoginResponse> {
-    console.log(data);
     return this.post<LoginResponse>('/auth/register', data).pipe(
       tap((response: LoginResponse) => {
         this.saveAuthData(response);
@@ -139,23 +138,36 @@ export class AuthService extends BaseService {
     );
   }
 
-  //=============================================================================
-  // BIOMETRIC
-  //=============================================================================
+  //=========================================================================================================================================================================
+  //                                                                         BIOMETRIC
+  //=========================================================================================================================================================================
 
-  async isBiometricAvailable(): Promise<boolean> {
-    try {
-      if (!window.PublicKeyCredential || !('credentials' in navigator)) {
-        return false;
-      }
-      if (PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
-        return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-      }
-      return true;
-    } catch (error) {
-      console.warn('Biometria check fallito:', error);
-      return false;
-    }
+
+
+  /**
+ * ✅ Observable - Check disponibilità biometria
+ */
+  isBiometricAvailable$(): Observable<boolean> {
+    return of(null).pipe(
+      switchMap(() => {
+        try {
+          if (!window.PublicKeyCredential || !('credentials' in navigator)) {
+            return of(false);
+          }
+          if (PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+            return rxFrom(PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable());
+          }
+          return of(true);
+        } catch (error) {
+          console.warn('Biometria check fallito:', error);
+          return of(false);
+        }
+      }),
+      catchError(error => {
+        console.warn('Biometria availability check error:', error);
+        return of(false);
+      })
+    );
   }
 
   isBiometricEnabled(): boolean {
@@ -163,111 +175,120 @@ export class AuthService extends BaseService {
     return user?.preferences?.biometric ?? false;
   }
 
-  async registerBiometric(email: string): Promise<BiometricResponse> {
-    try {
-      const available = await this.isBiometricAvailable();
-      if (!available) throw new Error('Biometria non supportata dal dispositivo');
-
-      const options = await firstValueFrom(
-        this.get<PublicKeyCredentialCreationOptionsJSON>(
+  registerBiometric$(email: string): Observable<BiometricResponse> {
+    return this.isBiometricAvailable$().pipe(
+      switchMap(available => {
+        if (!available) {
+          return throwError(() => new Error('Biometria non supportata dal dispositivo'));
+        }
+        return this.get<PublicKeyCredentialCreationOptionsJSON>(
           `/auth/biometric/register-challenge/${email}`
-        )
-      );
-      if (!options) throw new Error('Challenge non ricevuto dal server');
-
-      const publicKey = this.preprocessCredentialCreation(options);
-      const credential = await navigator.credentials.create({ publicKey }) as PublicKeyCredential | null;
-      if (!credential) throw new Error('Credential creation fallita');
-
-      const request: BiometricRegisterRequest = {
-        email,
-        credential: this.credentialToJSON(credential)
-      };
-
-      const response = await firstValueFrom(
-        this.post<BiometricResponse>('/auth/biometric/register', request)
-      );
-
-      this.saveBiometricPreference(true);
-      return response;
-    } catch (error: any) {
-      console.error('Registrazione biometria fallita:', error);
-      throw new Error(error.message || 'Registrazione biometria fallita');
-    }
+        );
+      }),
+      switchMap(options => {
+        if (!options) {
+          return throwError(() => new Error('Challenge non ricevuto dal server'));
+        }
+        const publicKey = this.preprocessCredentialCreation(options);
+        return rxFrom(navigator.credentials.create({ publicKey })).pipe(
+          switchMap((credential: any) => {
+            if (!credential) {
+              return throwError(() => new Error('Credential creation fallita'));
+            }
+            const request: BiometricRegisterRequest = {
+              email,
+              credential: this.credentialToJSON(credential)
+            };
+            return this.post<BiometricResponse>('/auth/biometric/register', request);
+          })
+        );
+      }),
+      tap(response => {
+        this.saveAuthData(response);
+        this.saveBiometricPreference(true);
+      }),
+      catchError(error => {
+        console.error('Registrazione biometria fallita:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async loginBiometric(email: string): Promise<BiometricResponse> {
-    try {
-      const available = await this.isBiometricAvailable();
-      if (!available) {
-        throw { code: 'NOT_AVAILABLE', message: 'Biometria non disponibile su questo dispositivo' };
-      }
-
-      // Challenge
-      const options = await firstValueFrom(
-        this.get<PublicKeyCredentialRequestOptionsJSON>(
+  loginBiometric$(email: string): Observable<BiometricResponse> {
+    return this.isBiometricAvailable$().pipe(
+      switchMap(available => {
+        if (!available) {
+          return throwError(() => ({
+            code: 'NOT_AVAILABLE',
+            message: 'Biometria non disponibile su questo dispositivo'
+          }));
+        }
+        return this.get<PublicKeyCredentialRequestOptionsJSON>(
           `/auth/biometric/login-challenge/${email}`
         ).pipe(
           catchError(err => throwError(() => ({
             code: 'CHALLENGE_FAILED',
             message: 'Server non ha generato la challenge'
           })))
-        )
-      );
-
-      if (!options) {
-        throw { code: 'INVALID_OPTIONS', message: 'Opzioni credential non valide' };
-      }
-
-      // ✅ Gestione specifica se l'utente cancella il prompt
-      const publicKey = this.preprocessCredentialRequest(options);
-      const assertion = await navigator.credentials.get({ publicKey }) as PublicKeyCredential | null;
-
-      if (!assertion) {
-        throw { code: 'USER_CANCELLED', message: 'Autenticazione biometrica annullata' };
-      }
-
-      // Rest del flow...
-      const request: BiometricLoginRequest = {
-        email,
-        assertion: this.credentialToJSON(assertion)
-      };
-
-      const response = await firstValueFrom(
-        this.post<BiometricResponse>('/auth/biometric/login', request).pipe(
-          catchError(err => {
-            const serverError = err.error?.message || 'Errore server durante autenticazione';
-            return throwError(() => ({
-              code: 'SERVER_ERROR',
-              message: serverError
-            }));
+        );
+      }),
+      switchMap(options => {
+        if (!options) {
+          return throwError(() => ({
+            code: 'INVALID_OPTIONS',
+            message: 'Opzioni credential non valide'
+          }));
+        }
+        const publicKey = this.preprocessCredentialRequest(options);
+        return rxFrom(navigator.credentials.get({ publicKey })).pipe(
+          switchMap((assertion: any) => {
+            if (!assertion) {
+              return throwError(() => ({
+                code: 'USER_CANCELLED',
+                message: 'Autenticazione biometrica annullata'
+              }));
+            }
+            const request: BiometricLoginRequest = {
+              email,
+              assertion: this.credentialToJSON(assertion)
+            };
+            return this.post<BiometricResponse>('/auth/biometric/login', request).pipe(
+              catchError(err => throwError(() => ({
+                code: 'SERVER_ERROR',
+                message: err.error?.message || 'Errore server durante autenticazione'
+              })))
+            );
           })
-        )
-      );
-
-      this.saveAuthData(response);
-      this.authenticatedSubject.next(true);
-      return response;
-
-    } catch (error: any) {
-      console.error('Login biometrico fallito:', error);
-      throw error;
-    }
-  }
-
-
-  async setBiometricEnabled(enabled: boolean): Promise<void> {
-    const user = this.getCurrentUser();
-    if (!user) throw new Error('Utente non trovato');
-
-    await firstValueFrom(
-      this.put<void>('/settings/preferences', {
-        ...user.preferences,
-        biometric: enabled
+        );
+      }),
+      tap(response => {
+        this.saveAuthData(response);
+        this.authenticatedSubject.next(true);
+      }),
+      catchError(error => {
+        console.error('Login biometrico fallito:', error);
+        return throwError(() => error);
       })
     );
+  }
 
-    this.saveBiometricPreference(enabled);
+  setBiometricEnabled$(enabled: boolean): Observable<void> {
+    const user = this.getCurrentUser();
+    if (!user) {
+      return throwError(() => new Error('Utente non trovato'));
+    }
+    return this.put<void>(
+      '/settings/preferences',
+      { ...user.preferences, biometric: enabled }
+    ).pipe(
+      tap(() => {
+        this.saveBiometricPreference(enabled);
+      }),
+      catchError(error => {
+        console.error('Error setting biometric preference:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   private saveBiometricPreference(enabled: boolean): void {
@@ -280,10 +301,11 @@ export class AuthService extends BaseService {
   }
 
 
-  /**
-   * Converte PublicKeyCredentialCreationOptionsJSON → PublicKeyCredentialCreationOptions
-   */
-  private preprocessCredentialCreation(options: PublicKeyCredentialCreationOptionsJSON): PublicKeyCredentialCreationOptions {
+  // ============= HELPER METHODS
+
+  private preprocessCredentialCreation(
+    options: PublicKeyCredentialCreationOptionsJSON
+  ): PublicKeyCredentialCreationOptions {
     const publicKey: PublicKeyCredentialCreationOptions = {
       challenge: this.base64urlToBuffer(options.challenge),
       rp: options.rp,
@@ -295,10 +317,12 @@ export class AuthService extends BaseService {
       pubKeyCredParams: options.pubKeyCredParams,
     };
 
-    if (options.timeout !== undefined) publicKey.timeout = options.timeout;
+    if (options.timeout !== undefined) {
+      publicKey.timeout = options.timeout;
+    }
 
     if (options.excludeCredentials?.length) {
-      publicKey.excludeCredentials = options.excludeCredentials?.map((cred: any) => ({
+      publicKey.excludeCredentials = options.excludeCredentials.map((cred: any) => ({
         id: this.base64urlToBuffer(cred.id),
         type: 'public-key' as const,
         transports: cred.transports ? this.mapTransports(cred.transports) : undefined,
@@ -397,11 +421,4 @@ export class AuthService extends BaseService {
       .map(t => transportMap[t.toLowerCase()])
       .filter((t): t is AuthenticatorTransport => t !== undefined);
   }
-
-
-
-
-
-
-
 }

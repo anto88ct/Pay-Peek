@@ -28,20 +28,16 @@ export class LayoutComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
-    console.log('🔍 LayoutComponent ngOnInit');  // ← AGGIUNGI
 
     this.isMobile$ = this.breakpointObserver.observe(Breakpoints.Handset)
       .pipe(
         map(result => {
-          console.log('📱 isMobile:', result.matches, 'width:', window.innerWidth);  // ← AGGIUNGI
           return result.matches;
         }),
         shareReplay(1)
       );
 
-    // SUBSCRIBE per vedere il valore reale
     this.isMobile$.subscribe(isMobile => {
-      console.log('🎯 isMobile$ valore FINALE:', isMobile);
     });
   }
 }

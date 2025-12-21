@@ -11,6 +11,7 @@ import { AdLabelComponent } from '../../toolbox/ad-label/ad-label.component';
 import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 import { AdDialogComponent } from '../../toolbox/ad-dialog/ad-dialog.component';
 import { ResetPasswordComponent } from '../../shared/components/reset-password/reset-password.component';
+import { NotificationService } from 'src/app/core/services/notification.service';
 @Component({
     selector: 'app-profile',
     standalone: true,
@@ -39,16 +40,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
     showResetPasswordDialog = false;
 
     private destroy$ = new Subject<void>();
+    hasUserValidEmail: boolean = false;
 
     constructor(
         private fb: FormBuilder,
+        private notificationService: NotificationService,
         private userService: UserService
     ) { }
 
     ngOnInit(): void {
-        console.log('ProfileComponent ngOnInit - prima initForm');
         this.initForm();
-        console.log('ProfileComponent - prima loadUserData');
         this.loadUserData();
     }
 
@@ -72,21 +73,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     private loadUserData(): void {
-        console.log('loadUserData chiamato');
-        this.userService.getProfile()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: (user) => {
-                    console.log('Dati ricevuti:', user);  // ← AGGIUNGI QUESTO
-                    if (user) {
-                        this.currentUser = user;
-                        this.updateFormWithUserData(user);
-                    }
-                },
-                error: (error) => {
-                    console.error('Error loading user profile:', error);
-                }
-            });
+        this.currentUser = localStorage.getItem('current_user') ? JSON.parse(localStorage.getItem('current_user') || '{}') : null;
+        if (!this.currentUser) {
+            this.userService.getProfile()
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: (user) => {
+                        if (user) {
+                            this.currentUser = user;
+                            this.updateFormWithUserData(user);
+                            this.hasUserValidEmail = user.emailVerified;
+                        }
+                    },
+                    error: (error) => this.notificationService.showError(error?.error?.message || 'Errore durante il caricamento del profilo')
+                });
+        } else {
+            this.updateFormWithUserData(this.currentUser);
+            this.hasUserValidEmail = this.currentUser?.emailVerified;
+        }
+
     }
 
     private updateFormWithUserData(user: UserDto): void {
@@ -103,17 +108,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Obfuscate password with asterisks
-     */
     private obfuscatePassword(password?: string): string {
         if (!password) return '';
         return '•'.repeat(password.length);
     }
 
-    /**
-     * Toggle edit mode
-     */
     toggleEditMode(): void {
         this.isEditMode = !this.isEditMode;
 
@@ -121,41 +120,30 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.enableForm();
         } else {
             this.disableForm();
-            // Reset form to original values
             if (this.currentUser) {
                 this.updateFormWithUserData(this.currentUser);
             }
         }
     }
 
-    /**
-     * Enable form fields for editing
-     */
     private enableForm(): void {
         Object.keys(this.profileForm.controls).forEach(key => {
-            // Don't enable uploadedDocumentsCount as it's read-only
             if (key !== 'uploadedDocumentsCount') {
                 this.profileForm.get(key)?.enable();
             }
         });
     }
 
-    /**
-     * Disable form fields
-     */
     private disableForm(): void {
         Object.keys(this.profileForm.controls).forEach(key => {
             this.profileForm.get(key)?.disable();
         });
     }
 
-    /**
-     * Save profile changes
-     */
     saveProfile(): void {
-        if (this.profileForm.valid) {
-            // Don't send obfuscated passwords - in real app, handle password changes separately
-            const updates = UserMapper.toProfileUpdateDto(this.profileForm.controls);
+        const currentUserId = this.currentUser?.id;
+        if (this.profileForm.valid && currentUserId) {
+            const updates = UserMapper.toProfileUpdateDto(this.profileForm.controls, currentUserId);
 
             this.userService.updateProfile(updates)
                 .pipe(takeUntil(this.destroy$))
@@ -164,18 +152,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
                         this.currentUser = updatedUser;
                         this.isEditMode = false;
                         this.disableForm();
-                        console.log('Profile updated successfully');
+                        this.notificationService.showSuccess('Profile updated successfully');
                     },
-                    error: (error) => {
-                        console.error('Error updating profile:', error);
-                    }
+                    error: (error) => this.notificationService.showError(error?.error?.message || 'Errore durante l\'aggiornamento del profilo')
                 });
         }
     }
 
-    /**
-     * Cancel editing
-     */
     cancelEdit(): void {
         this.isEditMode = false;
         this.disableForm();
@@ -184,9 +167,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Trigger file input click
-     */
     triggerFileInput(): void {
         const fileInput = document.getElementById('profileImageInput') as HTMLInputElement;
         if (fileInput) {
@@ -194,9 +174,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Handle file selection
-     */
     onFileSelected(event: any): void {
         const file = event.target.files[0];
         if (file) {
@@ -221,9 +198,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Upload profile image
-     */
     private uploadProfileImage(): void {
         if (!this.selectedFile) return;
 
@@ -236,12 +210,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                         this.profileImageUrl = updatedUser.profileImageBase64;
                     }
                     this.selectedFile = null;
-                    console.log('Profile image uploaded successfully');
+                    this.notificationService.showSuccess('Immagine del profilo caricata con successo');
                 },
-                error: (error) => {
-                    this.uploadError = error.message || 'Errore nel caricamento dell\'immagine';
-                    console.error('Error uploading image:', error);
-                }
+                error: (error) => this.notificationService.showError(error?.error?.message || 'Errore nel caricamento dell\'immagine')
             });
     }
 
