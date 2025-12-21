@@ -69,15 +69,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private loadLookups() {
         this.lookupService.getJobs()
             .pipe(takeUntil(this.destroy$))
-            .subscribe(data => this.jobs = data);
+            .subscribe({
+                next: (data) => this.jobs = data,
+                error: (error) => this.notificationService.showError(error)
+            });
 
         this.lookupService.getNationalities()
             .pipe(takeUntil(this.destroy$))
-            .subscribe(data => this.nationalities = data);
+            .subscribe({
+                next: (data) => this.nationalities = data,
+                error: (error) => this.notificationService.showError(error)
+            });
 
         this.lookupService.getCities()
             .pipe(takeUntil(this.destroy$))
-            .subscribe(data => this.cities = data);
+            .subscribe({
+                next: (data) => this.cities = data,
+                error: (error) => this.notificationService.showError(error)
+            });
     }
 
     ngOnDestroy(): void {
@@ -100,12 +109,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     private loadUserData(): void {
         this.currentUser = localStorage.getItem('current_user') ? JSON.parse(localStorage.getItem('current_user') || '{}') : null;
-        if (!this.currentUser) {
-            this.userService.getProfile()
+        if (this.currentUser != null && this.currentUser.id != null) {
+            this.userService.getProfile(this.currentUser.id)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: (user) => {
                         if (user) {
+                            console.log(user);
                             this.currentUser = user;
                             this.updateFormWithUserData(user);
                             this.hasUserValidEmail = user.emailVerified;
@@ -114,13 +124,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     error: (error) => this.notificationService.showError(error?.error?.message || 'Errore durante il caricamento del profilo')
                 });
         } else {
-            this.updateFormWithUserData(this.currentUser);
-            this.hasUserValidEmail = this.currentUser?.emailVerified;
+            this.notificationService.showError('Errore durante il recupero del profilo');
+            return;
         }
 
     }
 
     private updateFormWithUserData(user: UserDto): void {
+        console.log(user);
+
         this.profileForm.patchValue({
             firstName: user.firstName || '',
             lastName: user.lastName || '',
@@ -131,6 +143,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
             city: user.city || '',
             uploadedDocumentsCount: user.uploadedDocumentsCount || 0
         });
+
+        if (user.profileImageUrl) {
+            this.profileImageUrl = user.profileImageUrl;
+        }
     }
 
     private obfuscatePassword(password?: string): string {
@@ -225,14 +241,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     private uploadProfileImage(): void {
         if (!this.selectedFile) return;
+        if (!this.currentUser?.id) return;
 
-        this.userService.uploadProfileImage(this.selectedFile)
+        this.userService.uploadProfileImage(this.selectedFile, this.currentUser.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (updatedUser) => {
                     this.currentUser = updatedUser;
-                    if (updatedUser.profileImageBase64) {
-                        this.profileImageUrl = updatedUser.profileImageBase64;
+                    if (updatedUser.profileImageUrl) {
+                        this.profileImageUrl = updatedUser.profileImageUrl; // URL MinIO
                     }
                     this.selectedFile = null;
                     this.notificationService.showSuccess('Immagine del profilo caricata con successo');

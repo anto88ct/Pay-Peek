@@ -32,12 +32,6 @@
           </div>
         </div>
 
-        <div class="mb-4">
-          <ad-checkbox formControlName="rememberMe" inputId="rememberMe" [binary]="true"
-            label="{{ 'auth.login.rememberMe' | translate }}">
-          </ad-checkbox>
-        </div>
-
         <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage | translate" class="mb-3"
           styleClass="w-100 mb-3"></p-message>
 

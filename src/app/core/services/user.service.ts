@@ -28,13 +28,14 @@ export class UserService extends BaseService {
         }
     }
 
-    getProfile(): Observable<UserDto> {
-        return this.get<UserDto>('/users/profile').pipe(
+    getProfile(userId: string): Observable<UserDto> {
+        return this.get<UserDto>(`/users/profile/${userId}`).pipe(
             tap(user => {
                 this.updateLocalUser(user);
             })
         );
     }
+
 
     getCurrentUserSync(): UserDto | null {
         return this.currentUserSubject.value;
@@ -48,9 +49,10 @@ export class UserService extends BaseService {
         );
     }
 
-    uploadProfileImage(file: File): Observable<UserDto> {
+    uploadProfileImage(file: File, userId: string): Observable<UserDto> {
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('userId', userId || '');
         return this.post<UserDto>('/users/profile/image', formData).pipe(
             tap(updatedUser => {
                 this.updateLocalUser(updatedUser);

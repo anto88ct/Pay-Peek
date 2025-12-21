@@ -7,12 +7,10 @@
 
         <div class="flex align-items-center gap-3">
             <div class="action-section">
-                <ad-button icon="fa-solid fa-plus" [label]="'DASHBOARD.CREATE_NEW' | translate"
-                    (onClick)="openNewDashboardDialog()"></ad-button>
+                <ad-button icon="fa-solid fa-plus" [size]="'small'" (onClick)="openNewDashboardDialog()"></ad-button>
             </div>
             <div class="filter-section">
-                <ad-dropdown [options]="years" [(ngModel)]="selectedYear" optionLabel="label" placeholder="Select Year">
-                </ad-dropdown>
+                <ad-button icon="fa-solid fa-filter" [size]="'small'"></ad-button>
             </div>
         </div>
     </div>
