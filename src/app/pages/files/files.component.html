@@ -32,10 +32,7 @@
     <!-- Root View: Year Folders Grid -->
     <div *ngIf="currentView === 'root' && (filteredFolders.length > 0 || searchQuery)" class="grid">
         <!-- Add / Upload Card (Combined) -->
-        <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngIf="payslipFiles.length === 0">
-            <input type="file" id="payslipInput" multiple accept=".pdf" style="display: none"
-                (change)="onPayslipsSelected($event)">
-
+        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
             <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="true"
                 styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed hover:surface-50 text-center"
                 (onClick)="openCreateChoiceDialog()">
@@ -47,32 +44,7 @@
         </div>
 
         <!-- Pending Uploads Card -->
-        <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngIf="payslipFiles.length > 0">
-            <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="false"
-                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed surface-0">
 
-                <div class="w-full">
-                    <div class="flex flex-wrap gap-2 mb-3 justify-content-center"
-                        style="max-height: 150px; overflow-y: auto;">
-                        <div *ngFor="let file of payslipFiles"
-                            class="flex flex-column align-items-center p-2 surface-100 border-round"
-                            style="width: 80px;" title="{{file.name}}">
-                            <i class="fa-solid fa-file-pdf text-2xl text-red-500 mb-1"></i>
-                            <span
-                                class="text-xs text-700 white-space-nowrap overflow-hidden text-overflow-ellipsis w-full text-center">
-                                {{ file.name }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-2 justify-content-center w-full">
-                        <ad-button label="Annulla" severity="secondary" size="small"
-                            (onClick)="cancelPayslipUpload()"></ad-button>
-                        <ad-button label="Carica" size="small" (onClick)="uploadPayslips()"></ad-button>
-                    </div>
-                </div>
-            </ad-card>
-        </div>
 
         <!-- Year Folders -->
         <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngFor="let folder of filteredFolders">
@@ -197,6 +169,10 @@
 
 <!-- Upload Documents Dialog -->
 <ad-dialog [(visible)]="showUploadDialog" header="Carica Documenti" [style]="{width: '500px'}">
+    <!-- Hidden Input inside dialog -->
+    <input type="file" id="payslipInput" multiple accept=".pdf" style="display: none"
+        (change)="onPayslipsSelected($event)">
+
     <div class="flex flex-column gap-3">
         <div class="upload-drop-zone border-2 border-dashed border-300 border-round-xl surface-50 p-5 flex flex-column align-items-center justify-content-center cursor-pointer hover:surface-100 transition-colors"
             (click)="triggerPayslipInput()" (drop)="onFileDrop($event)" (dragover)="onDragOver($event)">
@@ -207,8 +183,22 @@
             <span class="text-xs text-400">Solo file PDF</span>
         </div>
 
-        <div class="flex justify-content-end">
-            <ad-button label="Annulla" severity="secondary" (onClick)="showUploadDialog = false"></ad-button>
+        <!-- Preview List -->
+        <div *ngIf="payslipFiles.length > 0" class="flex flex-column gap-2 max-h-15rem overflow-y-auto">
+            <div *ngFor="let file of payslipFiles; let i = index"
+                class="flex align-items-center justify-content-between p-2 surface-100 border-round">
+                <div class="flex align-items-center gap-2 overflow-hidden">
+                    <i class="fa-solid fa-file-pdf text-red-500"></i>
+                    <span class="text-sm text-700 white-space-nowrap overflow-hidden text-overflow-ellipsis">{{
+                        file.name }}</span>
+                </div>
+                <i class="fa-solid fa-times text-500 hover:text-red-500 cursor-pointer" (click)="removeFile(i)"></i>
+            </div>
+        </div>
+
+        <div class="flex justify-content-end gap-2">
+            <ad-button label="Annulla" severity="secondary" (onClick)="cancelPayslipUpload()"></ad-button>
+            <ad-button label="Conferma" [disabled]="payslipFiles.length === 0" (onClick)="confirmUpload()"></ad-button>
         </div>
     </div>
 </ad-dialog>

@@ -104,7 +104,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const currentUser = this.userService.getCurrentUserSync();
     const email = currentUser?.email || 'user@example.com';
 
-    if(currentUser != null){
+    if (currentUser != null) {
       this.userName = currentUser.firstName + ' ' + currentUser.lastName;
       this.profileImageUrl = currentUser?.profileImageUrl ?? 'assets/images/placeholder-avatar.png';
     }

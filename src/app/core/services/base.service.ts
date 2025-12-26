@@ -37,6 +37,12 @@ export abstract class BaseService {
     );
   }
 
+  protected patch<T>(endpoint: string, body: any): Observable<T> {
+    return this.http.patch<T>(`${this.apiUrl}${endpoint}`, body).pipe(
+      catchError(this.handleError.bind(this))
+    );
+  }
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     return throwError(() => new Error(`Errore: ${error?.message}`));
   }

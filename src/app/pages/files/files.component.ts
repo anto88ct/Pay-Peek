@@ -237,6 +237,7 @@ export class FilesComponent implements OnInit {
         event.preventDefault();
         event.stopPropagation();
         const files = event.dataTransfer?.files;
+
         if (files && files.length > 0) {
             this.processFiles(files);
         }
@@ -253,25 +254,30 @@ export class FilesComponent implements OnInit {
                 this.payslipFiles.push(files[i]);
             }
         }
-        // Close dialogs if open
-        this.showUploadDialog = false;
+        // Do not close dialog immediately to allow preview
     }
 
-    uploadPayslips() {
-        this.fileService.uploadPayslips(this.payslipFiles).subscribe({
-            next: (response) => {
-                // Response should be List<FileItemDto> with structure
+    removeFile(index: number) {
+        this.payslipFiles.splice(index, 1);
+    }
+
+    confirmUpload() {
+        if (this.payslipFiles.length === 0) return;
+
+        this.fileService.massUpload(this.payslipFiles).subscribe({
+            next: (response: any) => {
                 this.payslipFiles = [];
-                // alert('Payslips uploaded successfully');
+                this.showUploadDialog = false;
                 this.notificationService.showSuccess('Payslips uploaded successfully');
-                this.loadData(); // Refresh to show new files in folders
+                this.loadData();
             },
-            error: (err) => this.notificationService.showError(err)
+            error: (err: any) => this.notificationService.showError(err)
         });
     }
 
     cancelPayslipUpload() {
         this.payslipFiles = [];
+        this.showUploadDialog = false;
     }
 
     // Helpers

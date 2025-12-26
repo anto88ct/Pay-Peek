@@ -1,6 +1,7 @@
-import {Injectable} from "@angular/core";
-import {BehaviorSubject} from "rxjs";
-import {PrimeNGConfig} from "primeng/api";
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, filter, take } from "rxjs";
+import { PrimeNGConfig } from "primeng/api";
+import { UserService } from "./user.service";
 
 export type Theme = 'light' | 'dark' | 'system';
 
@@ -9,11 +10,19 @@ export class ThemeService {
   private themeSubject = new BehaviorSubject<Theme>('light');
   public theme$ = this.themeSubject.asObservable();
 
-  constructor(private primeNGConfig: PrimeNGConfig) {
+  constructor(
+    private primeNGConfig: PrimeNGConfig,
+    private userService: UserService
+  ) {
     this.initTheme();
   }
 
-  setTheme(theme: Theme): void {
+  /**
+   * Imposta il tema localmente e lo sincronizza con il backend
+   * @param theme Il tema scelto ('light', 'dark', 'system')
+   * @param updateBackend Se true, invia la chiamata API (default: true)
+   */
+  setTheme(theme: Theme, updateBackend: boolean = true): void {
     const effectiveTheme = theme === 'system'
       ? window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
       : theme;
@@ -21,25 +30,30 @@ export class ThemeService {
     document.documentElement.setAttribute('data-color-scheme', effectiveTheme);
     localStorage.setItem('pay-peek-theme', theme);
     this.themeSubject.next(theme);
-  }
 
-  initTheme(): void {
-    // Legge il tema salvato in localStorage (se presente)
-    const savedTheme = localStorage.getItem('pay-peek-theme') as Theme | null;
+    console.log(this.userService.getCurrentUserSync());
 
-    // Se non c'è tema salvato, usa 'system' come default
-    const themeToApply: Theme = savedTheme ?? 'system';
 
-    // Imposta il tema usando il metodo setTheme già definito
-    this.setTheme(themeToApply);
-
-    // Ascolta i cambiamenti della preferenza sistema (solo se theme = system)
-    if (themeToApply === 'system') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      mediaQuery.addEventListener('change', e => {
-        this.setTheme('system');
-      });
+    if (updateBackend && this.userService.getCurrentUserSync()) {
+      // Conversione obbligatoria in UPPERCASE per il BE
+      const themeEnum = theme.toUpperCase();
+      this.userService.updateTheme(themeEnum).subscribe();
     }
   }
 
+  public initTheme(): void {
+    // 1. Priorità al DB se l'utente è loggato
+    this.userService.currentUser$.subscribe(user => {
+      if (user?.preferences?.theme) {
+        const userTheme = user.preferences.theme.toLowerCase() as Theme;
+        if (this.themeSubject.value !== userTheme) {
+          this.setTheme(userTheme, false);
+        }
+      }
+    });
+
+    // 2. Fallback su LocalStorage
+    const savedTheme = localStorage.getItem('pay-peek-theme') as Theme | null;
+    this.setTheme(savedTheme ?? 'system', false);
+  }
 }

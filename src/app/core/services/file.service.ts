@@ -31,7 +31,7 @@ export class FileService extends BaseService {
         return this.post(`/files/folders/${folderId}/upload`, formData);
     }
 
-    uploadPayslips(files: File[]): Observable<any> {
+    massUpload(files: File[]): Observable<any> {
         const formData = new FormData();
         files.forEach(file => formData.append('files', file));
         return this.post('/files/payslips/upload', formData);

@@ -73,6 +73,28 @@ export class UserService extends BaseService {
         localStorage.removeItem('current_user');
     }
 
+    updateTheme(theme: string): Observable<UserDto> {
+        const userId = this.getCurrentUserSync()?.id;
+        const url = `/users/preferences/${userId}/theme?theme=${theme}`;
+
+        return this.patch<UserDto>(url, {}).pipe(
+            tap(updatedUser => {
+                this.updateLocalUser(updatedUser);
+            })
+        );
+    }
+
+    updateLanguage(language: string): Observable<UserDto> {
+        const userId = this.getCurrentUserSync()?.id;
+        const url = `/users/preferences/${userId}/language?language=${language}`;
+
+        return this.patch<UserDto>(url, {}).pipe(
+            tap(updatedUser => {
+                this.updateLocalUser(updatedUser);
+            })
+        );
+    }
+
     private updateLocalUser(user: UserDto): void {
         localStorage.setItem('current_user', JSON.stringify(user));
         this.currentUserSubject.next(user);
