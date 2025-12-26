@@ -51,6 +51,8 @@ export class FilesComponent implements OnInit {
     // Dialogs State
     showYearDialog: boolean = false;
     showMonthDialog: boolean = false;
+    showChoiceDialog: boolean = false;
+    showUploadDialog: boolean = false;
 
     // Forms Data
     newYearData = {
@@ -133,6 +135,21 @@ export class FilesComponent implements OnInit {
         );
     }
 
+    // Choice Dialog
+    openCreateChoiceDialog() {
+        this.showChoiceDialog = true;
+    }
+
+    selectCreateFolder() {
+        this.showChoiceDialog = false;
+        this.openCreateYearDialog();
+    }
+
+    selectUploadDocuments() {
+        this.showChoiceDialog = false;
+        this.showUploadDialog = true;
+    }
+
     // Creation - Year
     openCreateYearDialog() {
         this.newYearData = {
@@ -211,21 +228,43 @@ export class FilesComponent implements OnInit {
     onPayslipsSelected(event: any) {
         const files = event.target.files;
         if (files) {
-            for (let i = 0; i < files.length; i++) {
-                if (files[i].type === 'application/pdf') {
-                    this.payslipFiles.push(files[i]);
-                }
+            this.processFiles(files);
+        }
+        event.target.value = '';
+    }
+
+    onFileDrop(event: DragEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+        const files = event.dataTransfer?.files;
+        if (files && files.length > 0) {
+            this.processFiles(files);
+        }
+    }
+
+    onDragOver(event: DragEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    processFiles(files: FileList) {
+        for (let i = 0; i < files.length; i++) {
+            if (files[i].type === 'application/pdf') {
+                this.payslipFiles.push(files[i]);
             }
         }
-        // Reset input value to allow selecting same files again if needed
-        event.target.value = '';
+        // Close dialogs if open
+        this.showUploadDialog = false;
     }
 
     uploadPayslips() {
         this.fileService.uploadPayslips(this.payslipFiles).subscribe({
-            next: () => {
+            next: (response) => {
+                // Response should be List<FileItemDto> with structure
                 this.payslipFiles = [];
-                alert('Payslips uploaded successfully');
+                // alert('Payslips uploaded successfully');
+                this.notificationService.showSuccess('Payslips uploaded successfully');
+                this.loadData(); // Refresh to show new files in folders
             },
             error: (err) => this.notificationService.showError(err)
         });

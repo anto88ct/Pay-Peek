@@ -20,34 +20,38 @@
     <!-- Empty State (Root) -->
     <div *ngIf="currentView === 'root' && filteredFolders.length === 0 && !searchQuery"
         class="empty-state flex flex-column align-items-center justify-content-center h-20rem border-2 border-dashed border-300 border-round-xl bg-white-alpha-50 cursor-pointer hover:bg-white-alpha-80 transition-all"
-        (click)="openCreateYearDialog()">
+        (click)="openCreateChoiceDialog()">
         <div
             class="icon-circle bg-primary-50 text-primary border-circle w-4rem h-4rem flex align-items-center justify-content-center mb-3">
             <i class="fa-solid fa-plus text-2xl"></i>
         </div>
         <h3 class="m-0 text-700">No Pay Slips Yet</h3>
-        <p class="text-500 mt-2">Click to create your first Year Folder</p>
+        <p class="text-500 mt-2">Click to add your first content</p>
     </div>
 
     <!-- Root View: Year Folders Grid -->
     <div *ngIf="currentView === 'root' && (filteredFolders.length > 0 || searchQuery)" class="grid">
-        <!-- Add Payslips Card -->
-        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+        <!-- Add / Upload Card (Combined) -->
+        <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngIf="payslipFiles.length === 0">
             <input type="file" id="payslipInput" multiple accept=".pdf" style="display: none"
                 (change)="onPayslipsSelected($event)">
 
-            <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="payslipFiles.length === 0"
-                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed hover:surface-50 transition-all"
-                (onClick)="payslipFiles.length === 0 ? triggerPayslipInput() : null">
-
-                <!-- Empty State -->
-                <div *ngIf="payslipFiles.length === 0" class="flex flex-column align-items-center">
-                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-400 mb-2"></i>
-                    <span class="text-600 font-medium text-center">Aggiungi le tue buste paga</span>
+            <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="true"
+                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed hover:surface-50 text-center"
+                (onClick)="openCreateChoiceDialog()">
+                <div class="flex flex-column align-items-center">
+                    <i class="fa-solid fa-plus text-3xl text-400 mb-2"></i>
+                    <span class="text-600 font-medium">Add New</span>
                 </div>
+            </ad-card>
+        </div>
 
-                <!-- Selected State -->
-                <div *ngIf="payslipFiles.length > 0" class="w-full">
+        <!-- Pending Uploads Card -->
+        <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngIf="payslipFiles.length > 0">
+            <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="false"
+                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed surface-0">
+
+                <div class="w-full">
                     <div class="flex flex-wrap gap-2 mb-3 justify-content-center"
                         style="max-height: 150px; overflow-y: auto;">
                         <div *ngFor="let file of payslipFiles"
@@ -66,18 +70,6 @@
                             (onClick)="cancelPayslipUpload()"></ad-button>
                         <ad-button label="Carica" size="small" (onClick)="uploadPayslips()"></ad-button>
                     </div>
-                </div>
-            </ad-card>
-        </div>
-
-        <!-- Add New Year Card -->
-        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
-            <ad-card padding="large" borderRadius="xl" [border]="true" [clickable]="true"
-                styleClass="folder-card create-card h-full flex flex-column align-items-center justify-content-center border-dashed hover:surface-50 text-center"
-                (onClick)="openCreateYearDialog()">
-                <div class="flex flex-column align-items-center">
-                    <i class="fa-solid fa-plus text-3xl text-400 mb-2"></i>
-                    <span class="text-600 font-medium">New Year Folder</span>
                 </div>
             </ad-card>
         </div>
@@ -157,6 +149,35 @@
     </div>
 </ad-dialog>
 
+<!-- Choice Dialog -->
+<ad-dialog [(visible)]="showChoiceDialog" header="Crea o Carica" [style]="{width: '400px'}">
+    <div class="flex flex-column gap-3">
+        <div class="p-4 border-1 border-200 border-round cursor-pointer hover:surface-50 transition-colors flex align-items-center gap-3"
+            (click)="selectCreateFolder()">
+            <div
+                class="bg-primary-50 text-primary border-circle w-3rem h-3rem flex align-items-center justify-content-center">
+                <i class="fa-solid fa-folder-plus text-xl"></i>
+            </div>
+            <div class="flex flex-column">
+                <span class="font-bold text-700">Crea una cartella</span>
+                <span class="text-sm text-500">Crea manualmente una nuova cartella anno</span>
+            </div>
+        </div>
+
+        <div class="p-4 border-1 border-200 border-round cursor-pointer hover:surface-50 transition-colors flex align-items-center gap-3"
+            (click)="selectUploadDocuments()">
+            <div
+                class="bg-green-50 text-green-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center">
+                <i class="fa-solid fa-file-arrow-up text-xl"></i>
+            </div>
+            <div class="flex flex-column">
+                <span class="font-bold text-700">Carica i tuoi documenti</span>
+                <span class="text-sm text-500">Carica le tue buste paga PDF</span>
+            </div>
+        </div>
+    </div>
+</ad-dialog>
+
 <!-- Create Month Dialog -->
 <ad-dialog [(visible)]="showMonthDialog" header="Create Month Folder" [style]="{width: '400px'}">
 
@@ -170,6 +191,24 @@
         <div class="flex justify-content-end gap-2 mt-2">
             <ad-button label="Cancel" severity="secondary" (onClick)="showMonthDialog = false"></ad-button>
             <ad-button label="Create" (onClick)="createMonth()"></ad-button>
+        </div>
+    </div>
+</ad-dialog>
+
+<!-- Upload Documents Dialog -->
+<ad-dialog [(visible)]="showUploadDialog" header="Carica Documenti" [style]="{width: '500px'}">
+    <div class="flex flex-column gap-3">
+        <div class="upload-drop-zone border-2 border-dashed border-300 border-round-xl surface-50 p-5 flex flex-column align-items-center justify-content-center cursor-pointer hover:surface-100 transition-colors"
+            (click)="triggerPayslipInput()" (drop)="onFileDrop($event)" (dragover)="onDragOver($event)">
+
+            <i class="fa-solid fa-cloud-arrow-up text-5xl text-400 mb-3"></i>
+            <h3 class="m-0 text-700">Trascina qui i tuoi file</h3>
+            <p class="text-500 mb-3">o clicca per selezionarli</p>
+            <span class="text-xs text-400">Solo file PDF</span>
+        </div>
+
+        <div class="flex justify-content-end">
+            <ad-button label="Annulla" severity="secondary" (onClick)="showUploadDialog = false"></ad-button>
         </div>
     </div>
 </ad-dialog>

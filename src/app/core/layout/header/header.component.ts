@@ -33,8 +33,8 @@ import { UserService } from '../../../core/services/user.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   notificationCount = 3;
-  profileImageUrl = 'assets/images/placeholder-avatar.png';
-  userName = 'Mario Rossi';
+  profileImageUrl = '';
+  userName = '';
   isDarkTheme = false;
   isItalian = true; // Track current language (true = IT, false = EN)
 
@@ -100,10 +100,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   updateProfileMenuItems(): void {
-    ('Header updateProfileMenuItems called');
     const currentLang = this.languageService.getCurrentLanguage();
     const currentUser = this.userService.getCurrentUserSync();
     const email = currentUser?.email || 'user@example.com';
+
+    if(currentUser != null){
+      this.userName = currentUser.firstName + ' ' + currentUser.lastName;
+      this.profileImageUrl = currentUser?.profileImageUrl ?? 'assets/images/placeholder-avatar.png';
+    }
 
     this.profileMenuItems = [
       {
@@ -144,7 +148,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Redirect to login
     this.router.navigate(['/login']);
     // Force reload to clear memory state if needed, or just navigate
-    // window.location.reload(); 
+    // window.location.reload();
   }
 
   openResetPassword(): void {
