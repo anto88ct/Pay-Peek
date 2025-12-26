@@ -15,6 +15,7 @@ import { AdCardComponent } from '../../toolbox/ad-card/ad-card.component';
 
 // Models
 import { YearFolder, MonthFolder, FileItem } from '../../core/dto/file-system.dto';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
     selector: 'app-files',
@@ -66,7 +67,7 @@ export class FilesComponent implements OnInit {
     // Payslip Upload State
     payslipFiles: File[] = [];
 
-    constructor(private fileService: FileService) { }
+    constructor(private fileService: FileService, private notificationService: NotificationService,) { }
 
     ngOnInit() {
         this.loadData();
@@ -155,7 +156,7 @@ export class FilesComponent implements OnInit {
                     this.showYearDialog = false;
                     this.filterFolders();
                 },
-                error: (err) => alert('Error creating year folder')
+                error: (err) => this.notificationService.showError(err)
             });
     }
 
@@ -185,7 +186,7 @@ export class FilesComponent implements OnInit {
                     }
                     this.showMonthDialog = false;
                 },
-                error: (err) => alert('Error creating month folder')
+                error: (err) => this.notificationService.showError(err)
             });
     }
 
@@ -226,7 +227,7 @@ export class FilesComponent implements OnInit {
                 this.payslipFiles = [];
                 alert('Payslips uploaded successfully');
             },
-            error: (err) => console.error('Upload failed', err)
+            error: (err) => this.notificationService.showError(err)
         });
     }
 
