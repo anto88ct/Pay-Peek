@@ -26,6 +26,7 @@ export class AdAutocompleteComponent implements ControlValueAccessor, OnInit {
     @Input() placeholder: string = '';
     @Input() forceSelection: boolean = true;
     @Input() styleClass: string = '';
+    @Input() labelIcon: string = '';
     @Input() disabled: boolean = false;
 
     filteredSuggestions: any[] = [];

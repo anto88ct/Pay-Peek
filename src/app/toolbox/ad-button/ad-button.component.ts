@@ -19,7 +19,7 @@ export class AdButtonComponent {
   @Input() severity: string = 'primary';
   @Input() outlined: boolean = false;
   @Input() size: 'small' | 'large' | undefined = undefined;
-  @Input() customSeverity?: 'custom-blue' | 'custom-green' | 'custom-orange';
+  @Input() customSeverity?: 'custom-blue' | 'custom-green' | 'custom-orange' | 'custom-red' | 'custom-yellow' | 'custom-purple';
   @Input() transparent: boolean = false;
 
   @Output() onClick = new EventEmitter<any>();
@@ -32,9 +32,15 @@ export class AdButtonComponent {
 
   getButtonClasses(): string {
     const base = 'w-full custom-border-radius';
-    const classes = this.customSeverity
-      ? `${base} p-button-${this.customSeverity}`
-      : base;
+    let severityClass = '';
+
+    if (this.customSeverity) {
+      severityClass = `p-button-${this.customSeverity}`;
+    } else if (this.severity && this.severity !== 'primary') {
+      severityClass = `p-button-${this.severity}`;
+    }
+
+    const classes = severityClass ? `${base} ${severityClass}` : base;
 
     return this.styleClass ? `${classes} ${this.styleClass}` : classes;
   }

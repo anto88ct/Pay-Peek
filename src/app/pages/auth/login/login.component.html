@@ -35,22 +35,18 @@
         <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage | translate" class="mb-3"
           styleClass="w-100 mb-3"></p-message>
 
-        <div class="d-flex flex-column gap-2 mb-3 w-100">
-          <div class="d-flex flex-column gap-2 mb-3 w-100">
-            <ad-button type="submit" size="small"
-              [label]="isLoading ? ('auth.login.signingIn' | translate) : ('auth.login.signIn' | translate)"
-              [disabled]="isLoading" [loading]="isLoading">
-            </ad-button>
-          </div>
+        <div class="position-relative w-100 mb-3">
+          <ad-button type="submit" size="small" style="width: 100%;"
+            [label]="isLoading ? ('auth.login.signingIn' | translate) : ('auth.login.signIn' | translate)"
+            [disabled]="isLoading" [loading]="isLoading">
+          </ad-button>
 
-          <!-- BIOMETRIC LOGIN BUTTON -->
-          <div class="d-flex flex-column gap-2 mb-3 w-100" *ngIf="isBiometricAvailable && hasRegisteredUser">
-            <ad-button type="button" label="{{ 'auth.login.biometric' | translate }}" icon="pi pi-fingerprint"
-              styleClass="w-full custom-border-radius p-button-custom-success" [outlined]="true" size="small"
+          <div class="biometric-overlay" *ngIf="isBiometricAvailable && hasRegisteredUser">
+            <ad-button type="button" label="" icon="fa-solid fa-fingerprint"
+              styleClass="custom-border-radius p-button-custom-success btn-biometric" [outlined]="true" size="small"
               (onClick)="onBiometricLogin()" [loading]="isBiometricLoading" [disabled]="isBiometricLoading">
             </ad-button>
           </div>
-
         </div>
       </form>
 

@@ -1,5 +1,5 @@
 <div class="ad-autocomplete-wrapper">
-    <ad-label *ngIf="label" [label]="label"></ad-label>
+    <ad-label *ngIf="label" [label]="label" [icon]="labelIcon"></ad-label>
     <p-autoComplete [(ngModel)]="value" [suggestions]="filteredSuggestions" (completeMethod)="filter($event)"
         [field]="optionLabel" [dataKey]="optionValue || optionLabel" [dropdown]="true" [forceSelection]="forceSelection"
         [placeholder]="placeholder" [styleClass]="'w-100 ' + styleClass" [inputStyleClass]="'w-100'" [delay]="300"

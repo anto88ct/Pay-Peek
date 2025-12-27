@@ -12,3 +12,54 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
+@mixin custom-button-severity($name, $color, $hover-color) {
+    :host ::ng-deep .p-button-#{$name} {
+        background: $color !important;
+        border-color: $color !important;
+        color: #ffffff !important;
+
+        &:enabled:hover {
+            background: $hover-color !important;
+            border-color: $hover-color !important;
+        }
+
+        &:enabled:active,
+        &:enabled:focus {
+            background: darken($hover-color, 5%) !important;
+            border-color: darken($hover-color, 5%) !important;
+            box-shadow: 0 0 0 2px rgba($color, 0.2) !important;
+        }
+
+        &.p-button-outlined {
+            background-color: transparent !important;
+            color: $color !important;
+            border: 1px solid $color !important;
+
+            &:enabled:hover {
+                background: rgba($color, 0.04) !important;
+                color: $color !important;
+                border: 1px solid $color !important;
+            }
+        }
+
+        &.p-button-text {
+            background-color: transparent !important;
+            color: $color !important;
+            border-color: transparent !important;
+
+            &:enabled:hover {
+                background: rgba($color, 0.04) !important;
+                border-color: transparent !important;
+                color: $color !important;
+            }
+        }
+    }
+}
+
+@include custom-button-severity('custom-blue', #3B82F6, #2563EB);
+@include custom-button-severity('custom-green', #10B981, #059669);
+@include custom-button-severity('custom-orange', #F97316, #EA580C);
+@include custom-button-severity('custom-red', #EF4444, #DC2626);
+@include custom-button-severity('custom-yellow', #F59E0B, #D97706);
+@include custom-button-severity('custom-purple', #8B5CF6, #7C3AED);

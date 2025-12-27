@@ -12,7 +12,6 @@
       "forgotPassword": "Password dimenticata?",
       "noAccount": "Non hai un account?",
       "signUp": "Registrati",
-      "biometric": "Accedi con Face ID/Impronta",
       "biometricHint": "Usa il riconoscimento biometrico del tuo dispositivo"
     },
     "passkey": {

@@ -3,7 +3,7 @@
         <ad-card padding="large" shadow="medium" borderRadius="xl" styleClass="signup-card">
 
             <div class="header text-center mb-4">
-                <img src="assets/icons/paypeek-logo2.png" alt="PayPeek" height="50" class="mb-2">
+                <img src="assets/icons/transparent_only_logo.svg" alt="PayPeek" height="50" class="mb-2">
                 <h3>{{ 'auth.signup.title' | translate }}</h3>
             </div>
 
@@ -13,25 +13,28 @@
                     <!-- Required Fields -->
                     <div class="col-md-6">
                         <ad-input formControlName="firstName" label="{{ 'auth.signup.firstName' | translate }}"
+                            [labelIcon]="'fa-solid fa-user'"
                             placeholder="{{ 'auth.signup.firstName' | translate }}"></ad-input>
                     </div>
                     <div class="col-md-6">
                         <ad-input formControlName="lastName" label="{{ 'auth.signup.lastName' | translate }}"
+                            [labelIcon]="'fa-solid fa-user'"
                             placeholder="{{ 'auth.signup.lastName' | translate }}"></ad-input>
                     </div>
 
                     <div class="col-12">
                         <ad-input formControlName="email" type="email" label="{{ 'auth.signup.email' | translate }}"
+                            [labelIcon]="'fa-solid fa-envelope'"
                             placeholder="{{ 'auth.signup.email' | translate }}"></ad-input>
                     </div>
 
                     <div class="col-md-6">
-                        <ad-input formControlName="password" type="password"
+                        <ad-input formControlName="password" type="password" [labelIcon]="'fa-solid fa-lock'"
                             label="{{ 'auth.signup.password' | translate }}"
                             placeholder="{{ 'auth.signup.password' | translate }}"></ad-input>
                     </div>
                     <div class="col-md-6">
-                        <ad-input formControlName="confirmPassword" type="password"
+                        <ad-input formControlName="confirmPassword" type="password" [labelIcon]="'fa-solid fa-lock'"
                             label="{{ 'auth.signup.confirmPassword' | translate }}"
                             placeholder="{{ 'auth.signup.confirmPassword' | translate }}"></ad-input>
                         <small *ngIf="signupForm.errors?.['mismatch'] && (signupForm.get('confirmPassword')?.touched)"
@@ -46,19 +49,21 @@
                     <!-- Optional Fields -->
                     <div class="col-md-6">
                         <ad-autocomplete formControlName="job" [suggestions]="jobs" optionLabel="descrizione"
-                            optionValue="descrizione" label="{{ 'auth.signup.job' | translate }}"
+                            [labelIcon]="'fa-solid fa-briefcase'" optionValue="descrizione"
+                            label="{{ 'auth.signup.job' | translate }}"
                             placeholder="{{ 'auth.signup.selectJob' | translate }}"></ad-autocomplete>
                     </div>
                     <div class="col-md-6">
                         <ad-autocomplete formControlName="nationality" [suggestions]="nationalities"
-                            optionLabel="descrizione" optionValue="codice"
+                            [labelIcon]="'fa-solid fa-globe'" optionLabel="descrizione" optionValue="codice"
                             label="{{ 'auth.signup.nationality' | translate }}"
                             placeholder="{{ 'auth.signup.selectNationality' | translate }}"></ad-autocomplete>
                     </div>
 
                     <div class="col-md-6">
                         <ad-autocomplete formControlName="city" [suggestions]="cities" optionLabel="descrizione"
-                            optionValue="codice" label="{{ 'auth.signup.city' | translate }}"
+                            [labelIcon]="'fa-solid fa-city'" optionValue="codice"
+                            label="{{ 'auth.signup.city' | translate }}"
                             placeholder="{{ 'auth.signup.selectCity' | translate }}"></ad-autocomplete>
                     </div>
 
@@ -66,7 +71,7 @@
 
                 <div class="d-flex justify-content-end gap-2 mt-4">
                     <ad-button type="button" label="{{ 'auth.signup.cancel' | translate }}" [outlined]="true"
-                        severity="secondary" routerLink="/auth/login"></ad-button>
+                        severity="custom-red" routerLink="/auth/login"></ad-button>
                     <ad-button type="submit" label="{{ 'auth.signup.submit' | translate }}" [loading]="isLoading"
                         [disabled]="signupForm.invalid"></ad-button>
                 </div>
