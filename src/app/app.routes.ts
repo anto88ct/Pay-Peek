@@ -17,6 +17,10 @@ export const routes: Routes = [
         path: 'auth/signup',
         loadComponent: () => import('./pages/auth/signup/signup.component').then(m => m.SignupComponent)
     },
+    {
+        path: 'auth/reset-password',
+        loadComponent: () => import('./shared/components/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+    },
 
 
     {

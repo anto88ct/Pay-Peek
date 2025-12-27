@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { UserDto, ProfileUpdateDto } from '../dto/user.dto';
+import { UserDto, ProfileUpdateDto, PasswordResetDto } from '../dto/user.dto';
 import { BaseService } from './base.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService extends BaseService {
+
     private currentUserSubject = new BehaviorSubject<UserDto | null>(null);
     public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -93,6 +94,14 @@ export class UserService extends BaseService {
                 this.updateLocalUser(updatedUser);
             })
         );
+    }
+
+    requestPasswordReset(email: string): Observable<void> {
+        return this.post<void>('/users/password-reset-request', { email });
+    }
+
+    completePasswordReset(dto: PasswordResetDto): Observable<void> {
+        return this.post<void>('/users/password-reset-complete', dto);
     }
 
     private updateLocalUser(user: UserDto): void {

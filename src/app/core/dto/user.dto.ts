@@ -78,9 +78,26 @@ export class UserMapper {
 export interface PasswordResetDto {
     newPassword: string;
     confirmPassword: string;
+    email?: string;
+    token?: string;
 }
 
 export type PasswordResetFormDto = {
     newPassword: FormControl<string | null>;
     confirmPassword: FormControl<string | null>;
+    email: FormControl<string | null>;
 };
+
+export class PasswordResetMapper {
+    static toPasswordResetDto(
+        value: PasswordResetFormDto,
+        token: string | null = null
+    ): PasswordResetDto {
+        return {
+            newPassword: value.newPassword.value ?? '',
+            confirmPassword: value.confirmPassword.value ?? '',
+            email: value.email.value ?? '',
+            token: token ?? undefined
+        };
+    }
+}
