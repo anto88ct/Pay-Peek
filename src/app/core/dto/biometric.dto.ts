@@ -56,10 +56,11 @@ export interface PublicKeyCredentialJson {
     type: 'public-key';
     response: {
         clientDataJSON: string;
+        attestationObject?: string;
         authenticatorData?: string;
         signature?: string;
         userHandle?: string;
-    };
+    }
 }
 
 export interface BiometricResponse {

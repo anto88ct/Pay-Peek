@@ -303,10 +303,8 @@ export class AuthService extends BaseService {
 
   // ============= HELPER METHODS
 
-  private preprocessCredentialCreation(
-    options: PublicKeyCredentialCreationOptionsJSON
-  ): PublicKeyCredentialCreationOptions {
-    const publicKey: PublicKeyCredentialCreationOptions = {
+  private preprocessCredentialCreation(options: any): any {
+    return {
       challenge: this.base64urlToBuffer(options.challenge),
       rp: options.rp,
       user: {
@@ -314,56 +312,62 @@ export class AuthService extends BaseService {
         name: options.user.name,
         displayName: options.user.displayName,
       },
-      pubKeyCredParams: options.pubKeyCredParams,
-    };
+      // FORZA l'algoritmo a -7 (ES256) se il server lo manda come stringa o oggetto
+      pubKeyCredParams: options.pubKeyCredParams?.map((p: any) => ({
+        type: 'public-key',
+        alg: p.alg === 'ES256' || !p.alg ? -7 : Number(p.alg)
+      })) || [{ type: 'public-key', alg: -7 }],
 
-    if (options.timeout !== undefined) {
-      publicKey.timeout = options.timeout;
-    }
+      authenticatorSelection: options.authenticatorSelection ? {
+        authenticatorAttachment: options.authenticatorSelection.authenticatorAttachment,
+        userVerification: options.authenticatorSelection.userVerification,
+        // CORREZIONE: residentKey deve essere una stringa ('required', 'preferred', 'discouraged')
+        residentKey: options.authenticatorSelection.requireResidentKey ? 'required' : 'preferred'
+      } : undefined,
 
-    if (options.excludeCredentials?.length) {
-      publicKey.excludeCredentials = options.excludeCredentials.map((cred: any) => ({
+      attestation: options.attestation || 'none',
+      timeout: 60000, // Forza 60 secondi
+      excludeCredentials: options.excludeCredentials?.map((cred: any) => ({
         id: this.base64urlToBuffer(cred.id),
-        type: 'public-key' as const,
-        transports: cred.transports ? this.mapTransports(cred.transports) : undefined,
-      }));
-    }
-
-    if (options.authenticatorSelection) {
-      publicKey.authenticatorSelection = options.authenticatorSelection as AuthenticatorSelectionCriteria;
-    }
-
-    if (options.attestation) {
-      publicKey.attestation = options.attestation as AttestationConveyancePreference;
-    }
-
-    return publicKey;
+        type: 'public-key'
+      })) || []
+    };
   }
 
-  private preprocessCredentialRequest(options: PublicKeyCredentialRequestOptionsJSON): PublicKeyCredentialRequestOptions {
-
-    const publicKey: PublicKeyCredentialRequestOptions = {
+  private preprocessCredentialRequest(options: any): any {
+    return {
       challenge: this.base64urlToBuffer(options.challenge),
-      timeout: options.timeout,
-      userVerification: options.userVerification as UserVerificationRequirement,
-    };
-
-    if (options.allowCredentials?.length) {
-      publicKey.allowCredentials = options.allowCredentials?.map((cred: any) => ({
+      timeout: 60000,
+      rpId: window.location.hostname,
+      userVerification: options.userVerification || 'preferred',
+      allowCredentials: options.allowCredentials?.map((cred: any) => ({
         id: this.base64urlToBuffer(cred.id),
-        type: 'public-key' as const,
-        transports: cred.transports ? this.mapTransports(cred.transports) : undefined,
-      }));
-    }
-
-    return publicKey;
+        type: 'public-key'
+      })) || []
+    };
   }
 
-  private base64urlToBuffer(base64url: string): ArrayBuffer {
-    const padding = '='.repeat((4 - base64url.length % 4) % 4);
-    const base64 = (base64url + padding).replace(/-/g, '+').replace(/_/g, '/');
-    const raw = atob(base64);
-    return Uint8Array.from(raw, c => c.charCodeAt(0)).buffer;
+  private base64urlToBuffer(data: any): ArrayBuffer {
+    if (!data) return new Uint8Array(0).buffer;
+
+    // Se ricevi l'oggetto { value: "..." }, estrai la stringa
+    let base64url = typeof data === 'object' && data.value ? data.value : data;
+
+    if (typeof base64url !== 'string') {
+      console.error("Dato non convertibile in stringa:", data);
+      return new Uint8Array(0).buffer;
+    }
+
+    // Pulizia e conversione
+    let str = base64url.replace(/-/g, '+').replace(/_/g, '/');
+    while (str.length % 4 !== 0) str += '=';
+
+    const raw = window.atob(str);
+    const result = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) {
+      result[i] = raw.charCodeAt(i);
+    }
+    return result.buffer;
   }
 
   private bufferToBase64url(buf: ArrayBuffer): string {
@@ -377,35 +381,32 @@ export class AuthService extends BaseService {
   /**
    * Converte PublicKeyCredential → JSON serializzabile
    */
-  private credentialToJSON(credential: PublicKeyCredential): PublicKeyCredentialJson {
+  private credentialToJSON(credential: any): any {
     const response = credential.response;
-    const isAssertion = response instanceof AuthenticatorAssertionResponse;
-    const assertionResponse = response as AuthenticatorAssertionResponse;
-
-    const resultResponse: any = {
-      clientDataJSON: this.bufferToBase64url(response.clientDataJSON),
+    const result: any = {
+      id: credential.id,
+      rawId: this.bufferToBase64url(credential.rawId),
+      type: credential.type,
+      response: {
+        clientDataJSON: this.bufferToBase64url(response.clientDataJSON),
+      }
     };
 
-    if (isAssertion) {
-      resultResponse.authenticatorData = this.bufferToBase64url(
-        assertionResponse.authenticatorData
-      );
-      resultResponse.signature = this.bufferToBase64url(
-        assertionResponse.signature
-      );
-      if (assertionResponse.userHandle) {
-        resultResponse.userHandle = this.bufferToBase64url(
-          assertionResponse.userHandle
-        );
+    // Caso REGISTRAZIONE
+    if (response.attestationObject) {
+      result.response.attestationObject = this.bufferToBase64url(response.attestationObject);
+    }
+
+    // Caso LOGIN (Assertion)
+    if (response.authenticatorData) {
+      result.response.authenticatorData = this.bufferToBase64url(response.authenticatorData);
+      result.response.signature = this.bufferToBase64url(response.signature);
+      if (response.userHandle) {
+        result.response.userHandle = this.bufferToBase64url(response.userHandle);
       }
     }
 
-    return {
-      id: credential.id,
-      rawId: this.bufferToBase64url(credential.rawId),
-      type: 'public-key' as const,
-      response: resultResponse,
-    };
+    return result;
   }
 
   private mapTransports(transports: string[]): AuthenticatorTransport[] {

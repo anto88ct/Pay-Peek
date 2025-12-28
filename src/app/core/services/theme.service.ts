@@ -31,9 +31,6 @@ export class ThemeService {
     localStorage.setItem('pay-peek-theme', theme);
     this.themeSubject.next(theme);
 
-    console.log(this.userService.getCurrentUserSync());
-
-
     if (updateBackend && this.userService.getCurrentUserSync()) {
       // Conversione obbligatoria in UPPERCASE per il BE
       const themeEnum = theme.toUpperCase();
