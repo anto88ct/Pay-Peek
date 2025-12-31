@@ -41,10 +41,8 @@ export class LanguageService {
       filter(user => !!user?.preferences?.language)
     ).subscribe(user => {
       const dbLang = user!.preferences!.language.toLowerCase() as Language;
-      console.log('Lingua ricevuta dal DB:', dbLang);
 
       if (dbLang !== this.currentLanguageSubject.value) {
-        console.log('Aggiorno lingua locale con quella del DB');
         this.setLanguage(dbLang, false);
       }
     });
@@ -72,7 +70,7 @@ export class LanguageService {
         // Convertiamo in UPPERCASE per il BE (Enum Language { IT, EN })
         const langEnum = language.toUpperCase();
         this.userService.updateLanguage(langEnum).subscribe({
-          next: () => this.notificationService.showSuccess("Done"),
+          next: () => { },
           error: (err) => this.notificationService.showError(err)
         });
       }

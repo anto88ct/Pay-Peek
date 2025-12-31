@@ -1,0 +1,38 @@
+<div class="user-file-template mb-4" *ngIf="!loading">
+    <!-- Success Banner -->
+    <div *ngIf="templateData"
+        class="template-banner success flex align-items-center justify-content-between p-3 border-round-xl border-1 surface-0 shadow-1 fade-in">
+        <div class="flex align-items-center gap-3">
+            <div
+                class="icon-circle bg-green-50 text-green-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center">
+                <i class="fa-solid fa-check text-xl"></i>
+            </div>
+            <div class="flex flex-column">
+                <span class="font-bold text-800">Template Configurato</span>
+                <span class="text-sm text-600">Il template per le buste paga è attivo.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Missing/Error Banner -->
+    <div *ngIf="!templateData"
+        class="template-banner error flex align-items-center justify-content-between p-3 border-round-xl border-1 surface-0 shadow-1 fade-in">
+        <div class="flex align-items-center gap-3">
+            <div
+                class="icon-circle bg-red-50 text-red-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center">
+                <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+            </div>
+            <div class="flex flex-column">
+                <span class="font-bold text-red-700">Template Mancante</span>
+                <span class="text-sm text-red-600">È necessario caricare un template prima di poter processare le buste
+                    paga.</span>
+            </div>
+        </div>
+        <ad-button label="Carica Template" severity="danger" icon="fa-solid fa-upload"
+            (onClick)="uploadTemplate()"></ad-button>
+    </div>
+</div>
+
+<div *ngIf="loading" class="mb-4">
+    <div class="skeleton-banner h-5rem w-full border-round-xl surface-200 animation-pulse"></div>
+</div>

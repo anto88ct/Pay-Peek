@@ -17,6 +17,36 @@
         <span class="font-bold text-primary">{{ selectedYearFolder?.year }}</span>
     </div>
 
+    <!-- User File Template Component -->
+    <app-user-file-template (templateStatus)="onTemplateStatusChange($event)" (onViewDetails)="onViewDetails($event)"
+        (onUploadTemplate)="selectCreateTemplate()">
+    </app-user-file-template>
+
+    <!-- Custom Loader Overlay -->
+    <div *ngIf="isUploadingTemplate"
+        class="fixed top-0 left-0 w-full h-full bg-black-alpha-50 z-5 flex flex-column align-items-center justify-content-center fade-in">
+        <div class="surface-card p-5 border-round-xl shadow-4 flex flex-column align-items-center gap-4"
+            style="min-width: 300px;">
+            <div class="relative w-6rem h-6rem">
+                <svg class="w-full h-full transform -rotate-90">
+                    <circle cx="50%" cy="50%" r="40%" fill="none" class="stroke-200 stroke-2" />
+                    <circle cx="50%" cy="50%" r="40%" fill="none"
+                        class="stroke-primary stroke-4 transition-all duration-500" [style.stroke-dasharray]="'251.2'"
+                        [style.stroke-dashoffset]="251.2 * (1 - uploadProgress / 100)" stroke-linecap="round" />
+                </svg>
+                <div class="absolute top-0 left-0 w-full h-full flex align-items-center justify-content-center">
+                    <span class="text-xl font-bold text-primary">{{uploadProgress}}%</span>
+                </div>
+            </div>
+
+            <div class="flex flex-column align-items-center gap-2">
+                <span class="font-bold text-xl text-800">Analisi Template in corso...</span>
+                <span class="text-600 text-sm text-center">Stiamo analizzando la tua busta paga.<br>L'operazione
+                    potrebbe richiedere qualche secondo.</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Empty State (Root) -->
     <div *ngIf="currentView === 'root' && filteredFolders.length === 0 && !searchQuery"
         class="empty-state flex flex-column align-items-center justify-content-center h-20rem border-2 border-dashed border-300 border-round-xl bg-white-alpha-50 cursor-pointer hover:bg-white-alpha-80 transition-all"
@@ -136,15 +166,29 @@
             </div>
         </div>
 
-        <div class="p-4 border-1 border-200 border-round cursor-pointer hover:surface-50 transition-colors flex align-items-center gap-3"
+        <div class="p-4 border-1 border-200 border-round cursor-pointer transition-colors flex align-items-center gap-3"
+            [ngClass]="{'opacity-50 pointer-events-none bg-gray-50': !templateExists, 'hover:surface-50': templateExists}"
             (click)="selectUploadDocuments()">
-            <div
-                class="bg-green-50 text-green-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center">
+            <div class="bg-green-50 text-green-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center"
+                [ngClass]="{'grayscale': !templateExists}">
                 <i class="fa-solid fa-file-arrow-up text-xl"></i>
             </div>
             <div class="flex flex-column">
                 <span class="font-bold text-700">Carica i tuoi documenti</span>
-                <span class="text-sm text-500">Carica le tue buste paga PDF</span>
+                <span class="text-sm text-500" *ngIf="templateExists">Carica le tue buste paga PDF</span>
+                <span class="text-sm text-red-500" *ngIf="!templateExists">Richiede Template</span>
+            </div>
+        </div>
+
+        <div class="p-4 border-1 border-200 border-round cursor-pointer hover:surface-50 transition-colors flex align-items-center gap-3"
+            (click)="selectCreateTemplate()">
+            <div
+                class="bg-purple-50 text-purple-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center">
+                <i class="fa-solid fa-file-invoice text-xl"></i>
+            </div>
+            <div class="flex flex-column">
+                <span class="font-bold text-700">Crea il template della busta paga</span>
+                <span class="text-sm text-500">Genera template da PDF</span>
             </div>
         </div>
     </div>
@@ -200,5 +244,94 @@
             <ad-button label="Annulla" severity="secondary" (onClick)="cancelPayslipUpload()"></ad-button>
             <ad-button label="Conferma" [disabled]="payslipFiles.length === 0" (onClick)="confirmUpload()"></ad-button>
         </div>
+    </div>
+</ad-dialog>
+
+<!-- Template Form Dialog -->
+<ad-dialog [(visible)]="showTemplateFormDialog" header="Dati Estratti dalla Busta Paga" [style]="{width: '900px'}">
+    <div class="grid formgrid p-fluid" *ngIf="templateFormData?.extractedData">
+
+        <div class="col-12 mt-2 mb-2">
+            <h5 class="border-bottom pb-2 text-primary">Riepilogo Economico</h5>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="Netto a Pagare"
+                [(ngModel)]="templateFormData.extractedData.totali.netto_a_pagare"></ad-input>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="Periodo (Mese/Anno)"
+                [ngModel]="templateFormData.extractedData.periodo.mese + ' ' + templateFormData.extractedData.periodo.anno"
+                (ngModelChange)="null"></ad-input>
+        </div>
+
+        <div class="col-12 mt-2 mb-2">
+            <h5 class="border-bottom pb-2 text-primary">Anagrafica</h5>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="Ragione Sociale Azienda"
+                [(ngModel)]="templateFormData.extractedData.anagrafica.azienda"></ad-input>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="Codice Fiscale Lavoratore"
+                [(ngModel)]="templateFormData.extractedData.anagrafica.cf_dipendente"></ad-input>
+        </div>
+
+        <div class="col-12 mt-2 mb-2">
+            <h5 class="border-bottom pb-2 text-primary">Inquadramento Contrattuale</h5>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="Qualifica" [(ngModel)]="templateFormData.extractedData.inquadramento.qualifica"></ad-input>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="Livello" [(ngModel)]="templateFormData.extractedData.inquadramento.livello"></ad-input>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="Data Assunzione"
+                [(ngModel)]="templateFormData.extractedData.inquadramento.data_assunzione"></ad-input>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="CCNL" [(ngModel)]="templateFormData.extractedData.inquadramento.ccnl_divisione"></ad-input>
+        </div>
+
+        <div class="col-12 mt-2 mb-2">
+            <h5 class="border-bottom pb-2 text-primary">Contatori (Ferie/Permessi)</h5>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="Saldo Ferie"
+                [(ngModel)]="templateFormData.extractedData.contatori_ratei.ferie.saldo"></ad-input>
+        </div>
+        <div class="col-12 md:col-6 field">
+            <ad-input label="Saldo ROL/Permessi"
+                [(ngModel)]="templateFormData.extractedData.contatori_ratei.permessi_rol.saldo"></ad-input>
+        </div>
+    </div>
+
+    <div class="col-12 mt-3" *ngIf="templateFormData?.extractedData?.corpo_busta">
+        <h5 class="text-primary">Dettaglio Voci (Corpo Busta)</h5>
+        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+            <table class="table table-sm table-striped small">
+                <thead>
+                    <tr>
+                        <th>Voce</th>
+                        <th>Descrizione</th>
+                        <th class="text-end">Competenza</th>
+                        <th class="text-end">Trattenuta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let v of templateFormData.extractedData.corpo_busta">
+                        <td>{{v.voce}}</td>
+                        <td>{{v.descrizione}}</td>
+                        <td class="text-end text-success">{{v.competenza}}</td>
+                        <td class="text-end text-danger">{{v.trattenuta}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="flex justify-content-end gap-2 mt-4">
+        <ad-button label="Annulla" severity="secondary" (onClick)="showTemplateFormDialog = false"></ad-button>
+        <ad-button label="Conferma e Salva" (onClick)="confirmTemplateCreation()"></ad-button>
     </div>
 </ad-dialog>
