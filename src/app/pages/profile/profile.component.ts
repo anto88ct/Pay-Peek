@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from '../../core/services/user.service';
 import { UserDto, ProfileUpdateFormDto, UserMapper } from '../../core/dto/user.dto';
@@ -24,6 +25,7 @@ import { City } from 'src/app/core/dto/city.dto';
     imports: [
         CommonModule,
         ReactiveFormsModule,
+        RouterLink,
         TranslateModule,
         AdInputComponent,
         AdButtonComponent,
@@ -57,8 +59,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private notificationService: NotificationService,
         private userService: UserService,
-        private lookupService: LookupService
+        private lookupService: LookupService,
+        private router: Router
     ) { }
+
+    goToHistory(): void {
+        this.router.navigate(['/profile/history']);
+    }
 
     ngOnInit(): void {
         this.initForm();

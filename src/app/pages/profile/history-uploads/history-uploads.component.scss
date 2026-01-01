@@ -1,0 +1,173 @@
+.history-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.text-gradient {
+    background: linear-gradient(45deg, var(--primary-color, #0d6efd), var(--secondary-color, #6610f2));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.legend-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.status-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.8rem;
+
+    &.success-icon {
+        background-color: var(--success-color, #198754);
+    }
+
+    &.warning-icon {
+        background-color: #ffc107; // Yellow/Orange
+        color: #333;
+    }
+}
+
+.year-block {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    .year-header {
+        position: relative;
+
+        h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .separator {
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color, #0d6efd);
+            border-radius: 2px;
+        }
+    }
+}
+
+.month-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    cursor: default;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .month-name {
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #495057;
+    }
+
+    .status-indicator {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .status-text {
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    &.has-file {
+        background-color: rgba(25, 135, 84, 0.05);
+        border-color: rgba(25, 135, 84, 0.1);
+
+        .status-indicator {
+            color: var(--success-color, #198754);
+        }
+
+        .status-text {
+            color: var(--success-color, #198754);
+        }
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(25, 135, 84, 0.1);
+        }
+    }
+
+    &.missing-file {
+        background-color: rgba(255, 193, 7, 0.05);
+        border-color: rgba(255, 193, 7, 0.2);
+
+        .status-indicator {
+            color: #ffc107;
+        }
+
+        .status-text {
+            color: #d39e00;
+        }
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.15);
+        }
+    }
+}
+
+.custom-alert {
+    background-color: #e7f1ff;
+    border: 1px solid #b6d4fe;
+    color: #084298;
+    border-radius: 12px;
+    padding: 1.5rem;
+    max-width: 800px;
+    display: flex;
+    align-items: flex-start;
+
+    i {
+        margin-top: 0.2rem;
+    }
+}
+
+// Animation
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+// Media Queries
+@media (max-width: 768px) {
+    .year-block {
+        padding: 1.5rem;
+    }
+
+    .month-card {
+        padding: 1rem;
+    }
+}

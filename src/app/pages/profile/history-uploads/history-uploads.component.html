@@ -1,0 +1,106 @@
+<div class="history-container fade-in">
+    <div class="container-fluid py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a routerLink="/profile" class="text-decoration-none text-muted">
+                        <i class="fas fa-user-circle me-1"></i> Profilo
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Storico Caricamenti</li>
+            </ol>
+        </nav>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-10">
+                <!-- Header -->
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="mb-1 text-gradient">
+                            <i class="fas fa-history me-2"></i>
+                            Storico Caricamenti
+                        </h2>
+                        <p class="text-muted">Visualizza lo stato dei tuoi caricamenti nel tempo</p>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div
+                    class="legend-card mb-4 p-3 d-flex flex-wrap gap-4 align-items-center justify-content-center justify-content-md-start">
+                    <span class="text-muted fw-bold small text-uppercase">Legenda:</span>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="status-icon success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <span class="small">Busta paga caricata</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="status-icon warning-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <span class="small">File mancante</span>
+                    </div>
+                </div>
+
+                <!-- Timeline / Grid -->
+                <div class="timeline-wrapper">
+                    <div class="year-block mb-5" *ngFor="let yearData of historyData">
+                        <div class="year-header mb-3">
+                            <h3 class="display-6 fw-bold">{{ yearData.year }}</h3>
+                            <div class="separator"></div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let month of yearData.months">
+                                <div class="month-card" [class.has-file]="month.hasFile"
+                                    [class.missing-file]="!month.hasFile">
+                                    <div class="month-name">{{ month.name }}</div>
+                                    <div class="status-indicator">
+                                        <i class="fas"
+                                            [ngClass]="month.hasFile ? 'fa-check-circle' : 'fa-exclamation-triangle'"></i>
+                                    </div>
+                                    <div class="status-text">
+                                        {{ month.hasFile ? 'Presente' : 'Mancante' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div *ngIf="isLoading" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Caricamento storico...</p>
+                    </div>
+
+                    <!-- Empty State (if no years found and not loading) -->
+                    <div *ngIf="!isLoading && historyData.length === 0" class="text-center py-5">
+                        <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Nessun dato disponibile.</p>
+                    </div>
+                </div>
+
+                <!-- Footer Warning & Action -->
+                <div class="footer-action mt-5 text-center">
+                    <div class="alert custom-alert d-inline-block text-start" role="alert">
+                        <i class="fas fa-info-circle me-2 fs-5 text-info"></i>
+                        <div>
+                            <strong>Consiglio:</strong> È importante mantenere aggiornato il tuo archivio.
+                            Caricare tutte le buste paga permette di avere stime più precise e un assistente virtuale
+                            più informato!
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <ad-button label="Carica Documenti" icon="fas fa-cloud-upload-alt" severity="primary"
+                            styleClass="px-4 py-2 shadow-sm" [routerLink]="['/files']">
+                        </ad-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

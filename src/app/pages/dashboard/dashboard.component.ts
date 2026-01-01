@@ -11,6 +11,9 @@ import { AdChiplistComponent } from '../../toolbox/ad-chiplist/ad-chiplist.compo
 import { FormsModule } from '@angular/forms';
 import { ThemeService } from '../../core/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
+import { FileService } from '../../core/services/file.service';
+import { PayslipDto } from '../../core/dto/payslip.dto';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',
@@ -57,11 +60,13 @@ export class DashboardComponent implements OnInit {
     ];
 
     dataItems: any[] = [];
+    allPayslips: PayslipDto[] = [];
 
     constructor(
         private http: HttpClient,
         private themeService: ThemeService,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private fileService: FileService
     ) { }
 
     ngOnInit(): void {
@@ -120,20 +125,169 @@ export class DashboardComponent implements OnInit {
     }
 
     initFilters() {
+        const currentYear = new Date().getFullYear();
         this.years = [
-            { label: '2025', value: 2025 },
-            { label: '2024', value: 2024 },
-            { label: '2023', value: 2023 }
+            { label: currentYear.toString(), value: currentYear },
+            { label: (currentYear - 1).toString(), value: currentYear - 1 },
+            { label: (currentYear - 2).toString(), value: currentYear - 2 }
         ];
-        this.selectedYear = this.years[0];
+        this.selectedYear = this.years[0].value;
     }
 
-    loadDashboardData() {
-        this.http.get<any>('assets/data/dashboard-data.json').subscribe(data => {
-            this.salaryData = data.salaryTrend;
-            this.expensesData = data.expensesBreakdown;
-            this.holidaysData = data.holidays;
+    onYearChange(event: any) {
+        // Handle dropdown change logic if needed, usually ngModel handles the value update
+        // but we need to re-process data when year changes
+        this.processData();
+    }
+
+    async loadDashboardData() {
+        try {
+            this.allPayslips = await firstValueFrom(this.fileService.getFiles());
+            console.log(this.allPayslips);
+
+            this.processData();
+        } catch (error) {
+            console.error('Error loading dashboard data', error);
+            // Fallback or empty state could be handled here
+        }
+    }
+
+    processData() {
+        if (!this.allPayslips) return;
+
+        const selectedYearVal = this.selectedYear;
+        const yearPayslips = this.allPayslips.filter(p => {
+            // Assuming extractedData.periodo.anno is "2025" or similar string
+            return parseInt(p.extractedData.periodo.anno) === selectedYearVal;
         });
+
+
+        // Sort by month (assuming mese is string 1..12 or local name, need robust parsing if it's "Gennaio")
+        // NOTE: The DTO says 'mese' is string. Often it's a Name. We need a mapper.
+        // If the backend returns "01", "02" etc it is easier. If "Gennaio", we need a map.
+        // Assuming numerical or standard IT names for now.
+        // Let's try to map typical Italian month names or just parse int.
+
+        yearPayslips.sort((a, b) => {
+            const monthA = this.parseMonth(a.extractedData.periodo.mese);
+            const monthB = this.parseMonth(b.extractedData.periodo.mese);
+            return monthA - monthB;
+        });
+
+
+        this.updateSalaryTrend(yearPayslips);
+        this.updateIncomeAnalysis(yearPayslips); // Replaces Expenses
+        this.updateHolidays(yearPayslips);
+    }
+
+    parseMonth(monthStr: string): number {
+        if (!monthStr) return 0;
+        const m = monthStr.toLowerCase().trim();
+        if (!isNaN(parseInt(m))) return parseInt(m);
+
+        const monts = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno',
+            'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+        const idx = monts.indexOf(m);
+        return idx >= 0 ? idx + 1 : 0;
+    }
+
+    parseCurrency(val: string | number): number {
+        if (typeof val === 'number') return val;
+        if (!val) return 0;
+        // Italian format: 1.234,56 -> replace . with nothing, replace , with .
+        let clean = val.replace(/\./g, '').replace(',', '.');
+        // clean non-numeric except . and -
+        clean = clean.replace(/[^0-9.-]/g, '');
+        return parseFloat(clean);
+    }
+
+    updateSalaryTrend(payslips: PayslipDto[]) {
+        const labels = payslips.map(p => p.extractedData.periodo.mese);
+        const data = payslips.map(p => p.extractedData.totali.netto_a_pagare);
+
+        console.log(labels);
+        console.log(data);
+
+        const dataset = {
+            label: 'Net Salary',
+            data: data,
+            fill: false,
+            borderColor: '#4bc0c0',
+            tension: 0.4
+        };
+
+        this.salaryData = {
+            labels: labels,
+            datasets: [dataset]
+        };
+    }
+
+    updateIncomeAnalysis(payslips: PayslipDto[]) {
+        // Aggregate all "competenza" vs "trattenuta" from all payslips of the year?
+        // Or maybe just average? Usually dashboard shows totals for the year.
+        let totalCompetenze = 0;
+        let totalTrattenute = 0;
+
+        payslips.forEach(p => {
+            // Summing from corpo_busta
+            if (p.extractedData.corpo_busta) {
+                p.extractedData.corpo_busta.forEach(item => {
+                    totalCompetenze += this.parseCurrency(item.competenza);
+                    totalTrattenute += this.parseCurrency(item.trattenuta);
+                });
+            }
+        });
+
+        this.expensesData = {
+            labels: ['Competenze', 'Trattenute'],
+            datasets: [
+                {
+                    data: [totalCompetenze, totalTrattenute],
+                    backgroundColor: [
+                        "#4CAF50", // Green
+                        "#FF5252"  // Red
+                    ],
+                    hoverBackgroundColor: [
+                        "#66BB6A",
+                        "#FF8A80"
+                    ]
+                }
+            ]
+        };
+    }
+
+    updateHolidays(payslips: PayslipDto[]) {
+        // Get the LATEST payslip to see current balance
+        if (payslips.length === 0) {
+            this.holidaysData = { labels: [], datasets: [] };
+            return;
+        }
+
+        const latest = payslips[payslips.length - 1]; // Sorted by month already
+
+        // Ferie
+        const ferieMaturato = this.parseCurrency(latest.extractedData.contatori_ratei.ferie.maturato);
+        const ferieGoduto = this.parseCurrency(latest.extractedData.contatori_ratei.ferie.goduto);
+
+        // Permessi
+        const permMaturato = this.parseCurrency(latest.extractedData.contatori_ratei.permessi_rol.maturato);
+        const permGoduto = this.parseCurrency(latest.extractedData.contatori_ratei.permessi_rol.goduto);
+
+        this.holidaysData = {
+            labels: ['Ferie', 'Permessi'],
+            datasets: [
+                {
+                    label: 'Maturate',
+                    backgroundColor: '#42A5F5',
+                    data: [ferieMaturato, permMaturato]
+                },
+                {
+                    label: 'Godute',
+                    backgroundColor: '#FFA726',
+                    data: [ferieGoduto, permGoduto]
+                }
+            ]
+        };
     }
 
     initChartOptions() {

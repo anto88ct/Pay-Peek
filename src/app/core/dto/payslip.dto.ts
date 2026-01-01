@@ -1,9 +1,12 @@
+import { ErrorResponseDto } from "./error-response.dto";
+
 export interface PayslipDto {
     id?: string;
     templateId: string;
     fileName?: string;
     extractedData: PayslipContent;
     createdAt: string;
+    extractionErrors?: ErrorResponseDto[];
 }
 
 export interface PayslipContent {

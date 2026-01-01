@@ -34,10 +34,10 @@ export class FileService extends BaseService {
         return this.post(`/files/folders/${folderId}/upload`, formData);
     }
 
-    massUpload(files: File[]): Observable<FileItemDto[]> {
+    massUpload(files: File[]): Observable<PayslipDto[]> {
         const formData = new FormData();
         files.forEach(file => formData.append('files', file));
-        return this.post<FileItemDto[]>('/files/payslips/upload', formData);
+        return this.post<PayslipDto[]>('/files/payslips/upload', formData);
     }
 
     getUserFileTemplate(userId: string): Observable<PayrollTemplate[]> {

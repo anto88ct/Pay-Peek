@@ -6,11 +6,13 @@
         </div>
 
         <div class="flex align-items-center gap-3">
+            <div class="filter-section">
+                <ad-dropdown [options]="years" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange($event)"
+                    [placeholder]="'Seleziona Anno'" class="w-full">
+                </ad-dropdown>
+            </div>
             <div class="action-section">
                 <ad-button icon="fa-solid fa-plus" [size]="'small'" (onClick)="openNewDashboardDialog()"></ad-button>
-            </div>
-            <div class="filter-section">
-                <ad-button icon="fa-solid fa-filter" [size]="'small'"></ad-button>
             </div>
         </div>
     </div>

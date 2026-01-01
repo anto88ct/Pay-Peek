@@ -458,14 +458,33 @@ export class FilesComponent implements OnInit {
 
         if (this.uploadMode === 'mass') {
             this.fileService.massUpload(this.payslipFiles).subscribe({
-                next: (response: FileItemDto[]) => {
-                    console.log("RES", response);
+                next: (results: PayslipDto[]) => {
+                    let hasErrors = false;
+
+                    results.forEach(res => {
+                        // Controllo se il singolo file ha errori di estrazione
+                        if (res.extractionErrors && res.extractionErrors.length > 0) {
+                            hasErrors = true;
+                            res.extractionErrors.forEach(err => {
+                                // Qui 'err' è un ErrorResponseDto che ha la proprietà .message
+                                // La tua funzione showError la prenderà correttamente
+                                this.notificationService.showError(err, 'Errore File');
+                            });
+                        }
+                    });
+
+                    if (!hasErrors) {
+                        this.notificationService.showSuccess('Tutti i file sono stati elaborati correttamente');
+                    }
+
                     this.payslipFiles = [];
                     this.showUploadDialog = false;
-                    this.notificationService.showSuccess('Payslips uploaded successfully');
                     this.loadData();
                 },
-                error: (err: any) => this.notificationService.showError(err)
+                error: (err: any) => {
+                    // Errore generico di rete o crash del server
+                    this.notificationService.showError(err, 'Errore Server');
+                }
             });
         } else if (this.uploadMode === 'template') {
             // For template, we only take the first file

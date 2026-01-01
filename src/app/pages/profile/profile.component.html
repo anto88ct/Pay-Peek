@@ -102,11 +102,17 @@
                             <!-- Uploaded Documents Count -->
                             <div class="col-12">
                                 <ad-label icon="fas fa-file-alt" label="Documenti Caricati"></ad-label>
-                                <div class="documents-badge">
-                                    <span class="badge">
-                                        <i class="fas fa-folder me-2"></i>
-                                        {{ profileForm.get('uploadedDocumentsCount')?.value || 0 }} documenti
-                                    </span>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="documents-badge">
+                                        <span class="badge">
+                                            <i class="fas fa-folder me-2"></i>
+                                            {{ profileForm.get('uploadedDocumentsCount')?.value || 0 }} documenti
+                                        </span>
+                                    </div>
+                                    <ad-button label="Storico" icon="fas fa-history" severity="info" [outlined]="true"
+                                        size="small" (onClick)="goToHistory()" pTooltip="Visualizza storico caricamenti"
+                                        tooltipPosition="top">
+                                    </ad-button>
                                 </div>
                             </div>
                         </div>

@@ -180,7 +180,8 @@
             </div>
         </div>
 
-        <div class="p-4 border-1 border-200 border-round cursor-pointer hover:surface-50 transition-colors flex align-items-center gap-3"
+        <div *ngIf="!templateExists"
+            class="p-4 border-1 border-200 border-round cursor-pointer hover:surface-50 transition-colors flex align-items-center gap-3"
             (click)="selectCreateTemplate()">
             <div
                 class="bg-purple-50 text-purple-500 border-circle w-3rem h-3rem flex align-items-center justify-content-center">
