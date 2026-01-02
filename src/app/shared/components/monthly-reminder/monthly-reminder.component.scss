@@ -1,0 +1,17 @@
+.reminder-card {
+    min-width: 300px;
+    max-width: 350px;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    // Box shadow is usually handled by the dropdown container, but we can add a subtle one if needed for standalone usage
+}
+
+.alert-warning {
+    border: none;
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #856404;
+}
+
+ul {
+    list-style-type: disc;
+}

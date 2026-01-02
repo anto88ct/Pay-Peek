@@ -13,6 +13,10 @@ import { AdButtonComponent } from '../../../toolbox/ad-button/ad-button.componen
 import { ResetPasswordComponent } from '../../../shared/components/reset-password/reset-password.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserService } from '../../../core/services/user.service';
+import { ReminderService } from '../../../core/services/reminder.service';
+import { Reminder } from '../../dto/reminder.dto';
+import { MonthlyReminderComponent } from '../../../shared/components/monthly-reminder/monthly-reminder.component';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-header',
@@ -26,13 +30,16 @@ import { UserService } from '../../../core/services/user.service';
     AdDropdownComponent,
     AdDialogComponent,
     AdButtonComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    MonthlyReminderComponent
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  notificationCount = 3;
+  notificationCount = 0;
+  showNotifications = false;
+  reminders: Reminder[] = [];
   profileImageUrl = '';
   userName = '';
   isDarkTheme = false;
@@ -51,7 +58,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private languageService: LanguageService,
     private userService: UserService,
     private authService: AuthService,
-    private router: Router
+    private reminderService: ReminderService,
+    private router: Router,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -89,6 +98,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   openNotifications() {
+    this.showNotifications = !this.showNotifications;
+    if (this.showNotifications) {
+      const userId = this.userService.getCurrentUserSync()?.id;
+      if (userId == null) {
+        this.notificationService.showError("User not found");
+        return;
+      }
+      this.reminderService.getUserReminder(userId).subscribe({
+        next: (reminders: Reminder[]) => {
+          this.reminders = reminders;
+          // Count incomplete reminders
+          this.notificationCount = reminders.filter(r => !r.isComplete).length;
+        },
+        error: (err) => {
+          this.notificationService.showError(err);
+          this.reminders = [];
+        }
+      });
+    }
+  }
+
+  closeNotifications() {
+    this.showNotifications = false;
   }
 
   onThemeChange(isDark: boolean): void {

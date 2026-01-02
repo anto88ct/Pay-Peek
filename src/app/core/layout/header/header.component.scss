@@ -75,3 +75,30 @@
         z-index: 10;
     }
 }
+
+.notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1050; // Higher than standard Bootstrap components
+    background-color: white;
+    min-width: 320px;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+
+    .dropdown-header {
+        background-color: #f8f9fa;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+    }
+}
+
+.dropdown-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1040; // Just below the dropdown
+    background: transparent;
+}

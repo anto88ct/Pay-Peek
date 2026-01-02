@@ -1,0 +1,34 @@
+<div class="reminder-card p-3" *ngIf="reminder">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <h6 class="m-0 fw-bold">{{ reminder.targetMonthName }} {{ reminder.targetYear }}</h6>
+        <span class="badge" [ngClass]="reminder.isComplete ? 'bg-success' : 'bg-warning text-dark'">
+            {{ reminder.isComplete ? 'Completo' : 'Incompleto' }}
+        </span>
+    </div>
+
+    <div *ngIf="reminder.isComplete; else incompleteTemplate" class="text-success d-flex align-items-center">
+        <i class="fas fa-check-circle fs-4 me-2"></i>
+        <span [innerHTML]="reminder.frontendMessage"></span>
+    </div>
+
+    <ng-template #incompleteTemplate>
+        <div class="alert alert-warning mb-0" role="alert">
+            <div class="d-flex align-items-start">
+                <i class="fas fa-exclamation-triangle mt-1 me-2"></i>
+                <div class="w-100">
+                    <p class="mb-2" [innerHTML]="reminder.frontendMessage"></p>
+                    <div *ngIf="reminder.missingFiles?.length">
+                        <small class="fw-bold">File mancanti:</small>
+                        <ul class="mb-0 ps-3 small">
+                            <li *ngFor="let file of reminder.missingFiles">{{ file }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>
+
+<div *ngIf="!reminder" class="p-3 text-center text-muted">
+    <small>Nessun promemoria disponibile.</small>
+</div>
