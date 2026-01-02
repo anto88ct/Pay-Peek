@@ -53,10 +53,10 @@ export class DashboardComponent implements OnInit {
     selectedDataItems: any[] = [];
 
     chartTypes = [
-        { type: 'bar', labelKey: 'DASHBOARD.CHART_TYPES.BAR', icon: 'assets/images/charts/bar-placeholder.png' },
-        { type: 'line', labelKey: 'DASHBOARD.CHART_TYPES.LINE', icon: 'assets/images/charts/line-placeholder.png' },
-        { type: 'pie', labelKey: 'DASHBOARD.CHART_TYPES.PIE', icon: 'assets/images/charts/pie-placeholder.png' },
-        { type: 'doughnut', labelKey: 'DASHBOARD.CHART_TYPES.DOUGHNUT', icon: 'assets/images/charts/doughnut-placeholder.png' }
+        { type: 'bar', labelKey: 'DASHBOARD.CHART_TYPES.BAR', icon: 'assets/images/bar-chart.jpg' },
+        { type: 'line', labelKey: 'DASHBOARD.CHART_TYPES.LINE', icon: 'assets/images/line-chart.jpg' },
+        { type: 'pie', labelKey: 'DASHBOARD.CHART_TYPES.PIE', icon: 'assets/images/pie-chart.jpg' },
+        { type: 'doughnut', labelKey: 'DASHBOARD.CHART_TYPES.DOUGHNUT', icon: 'assets/images/pie-chart.jpg' }
     ];
 
     dataItems: any[] = [];
