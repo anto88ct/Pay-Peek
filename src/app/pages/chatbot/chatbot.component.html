@@ -1,5 +1,4 @@
 <div class="chatbot-container">
-    <!-- Sidebar -->
     <div class="sidebar" [class.open]="isSidebarOpen">
         <div class="sidebar-header">
             <h3>{{ 'CHATBOT.HISTORY' | translate }}</h3>
@@ -7,20 +6,21 @@
                 <i class="fa-solid fa-times"></i>
             </button>
         </div>
+
         <div class="history-list">
-            <div class="history-item" *ngFor="let session of chatHistory?.sessions" (click)="loadSession(session)"
+            <div class="history-item" *ngFor="let session of sessions" (click)="loadSession(session)"
                 [class.active]="currentSession?.id === session.id">
                 <div class="history-title">{{ session.title }}</div>
-                <div class="history-date">{{ session.date | date : 'shortDate' }}</div>
+                <div class="history-date">{{ session.updatedAt | date : 'shortDate' }}</div>
             </div>
         </div>
+
         <div class="new-chat-btn-container">
             <ad-button [label]="'CHATBOT.NEW_CHAT' | translate" icon="fa-solid fa-plus" (click)="startNewChat()"
                 class="w-100"></ad-button>
         </div>
     </div>
 
-    <!-- Main Chat Area -->
     <div class="main-chat">
         <div class="chat-header">
             <button class="sidebar-toggle-btn" (click)="toggleSidebar()">
@@ -39,6 +39,7 @@
                     {{ msg.timestamp | date : 'shortTime' }}
                 </div>
             </div>
+
             <div *ngIf="isTyping" class="message bot-message typing-indicator">
                 <div class="message-content">
                     <i class="fa-solid fa-ellipsis fa-fade"></i>
@@ -47,9 +48,8 @@
         </div>
 
         <div class="input-area">
-            <div class="suggestions" *ngIf="chatHistory?.suggestions?.length">
-                <div class="suggestion-tag" *ngFor="let suggestion of chatHistory?.suggestions"
-                    (click)="useSuggestion(suggestion)">
+            <div class="suggestions" *ngIf="suggestions?.length">
+                <div class="suggestion-tag" *ngFor="let suggestion of suggestions" (click)="useSuggestion(suggestion)">
                     {{ suggestion }}
                 </div>
             </div>

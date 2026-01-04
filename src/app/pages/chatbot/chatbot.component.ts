@@ -1,29 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
 import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
-
-interface Message {
-    id: string;
-    sender: 'user' | 'bot';
-    text: string;
-    timestamp: string;
-}
-
-interface Session {
-    id: string;
-    title: string;
-    date: string;
-    messages: Message[];
-}
-
-interface ChatHistory {
-    sessions: Session[];
-    suggestions: string[];
-}
+import { ChatMessage, ChatSession } from 'src/app/core/dto/chatbot.model';
+import { ChatbotService } from 'src/app/core/services/chatbot.service';
 
 @Component({
     selector: 'app-chatbot',
@@ -35,14 +17,26 @@ interface ChatHistory {
 export class ChatbotComponent implements OnInit, AfterViewChecked {
     @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
-    chatHistory: ChatHistory | null = null;
-    currentSession: Session | null = null;
+    // Lista per la sidebar
+    sessions: ChatSession[] = [];
+
+    // Sessione attiva completa (con messaggi)
+    currentSession: ChatSession | null = null;
+    currentSessionId: string | null = null;
+
     userMessage: string = '';
     isSidebarOpen: boolean = false;
     isTyping: boolean = false;
     isListening: boolean = false;
 
-    constructor(private http: HttpClient) { }
+    // Suggerimenti statici (opzionale, visto che non arrivano dal BE per ora)
+    suggestions: string[] = [
+        "Qual è il netto dell'ultima busta?",
+        "Quante ferie ho maturato?",
+        "Spiegami le trattenute IRPEF"
+    ];
+
+    constructor(private chatbotService: ChatbotService) { }
 
     ngOnInit(): void {
         this.loadChatHistory();
@@ -52,68 +46,160 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
         this.scrollToBottom();
     }
 
+    /**
+     * Carica la lista delle chat per la sidebar
+     */
     loadChatHistory(): void {
-        this.http.get<ChatHistory>('assets/data/fake-chat-history.json').subscribe(data => {
-            this.chatHistory = data;
-            if (this.chatHistory.sessions.length > 0) {
-                this.currentSession = this.chatHistory.sessions[0];
-            } else {
+        this.chatbotService.getHistory().subscribe({
+            next: (data) => {
+                this.sessions = data;
+                // All'avvio apriamo una nuova chat pulita
+                this.startNewChat();
+            },
+            error: (err) => {
+                console.error('Errore caricamento storico', err);
                 this.startNewChat();
             }
         });
     }
 
+    /**
+     * Inizializza lo stato per una nuova chat (non ancora salvata su DB)
+     */
     startNewChat(): void {
-        const newSession: Session = {
-            id: Date.now().toString(),
+        this.currentSession = {
+            id: '', // ID vuoto = backend ne creerà uno nuovo
             title: 'Nuova Chat',
-            date: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
             messages: []
         };
-
-        if (this.chatHistory) {
-            this.chatHistory.sessions.unshift(newSession);
-        }
-        this.currentSession = newSession;
-        this.isSidebarOpen = false; // Close sidebar on mobile when starting new chat
+        this.currentSessionId = null;
+        this.isSidebarOpen = false;
     }
 
-    loadSession(session: Session): void {
-        this.currentSession = session;
-        this.isSidebarOpen = false; // Close sidebar on mobile when selecting chat
+    /**
+     * Carica una sessione specifica dal backend (click su sidebar)
+     */
+    loadSession(session: ChatSession): void {
+        this.isSidebarOpen = false;
+
+        // Ottimizzazione: se ho già i messaggi, non ricarico (opzionale)
+        // Ma per sicurezza carichiamo sempre dal server per avere lo stato aggiornato
+        this.chatbotService.getSession(session.id).subscribe({
+            next: (fullSession) => {
+                this.currentSession = fullSession;
+                this.currentSessionId = fullSession.id;
+                // Scroll dopo il rendering
+                setTimeout(() => this.scrollToBottom(), 100);
+            },
+            error: (err) => {
+                console.error('Errore caricamento sessione', err);
+            }
+        });
     }
 
     sendMessage(): void {
-        if (!this.userMessage.trim() || !this.currentSession) return;
+        if (!this.userMessage.trim()) return;
 
-        const newMessage: Message = {
-            id: Date.now().toString(),
+        const textToSend = this.userMessage;
+
+        // 1. Setup UI Optimistico
+        if (!this.currentSession) {
+            this.startNewChat();
+        }
+
+        // Aggiungi messaggio utente alla UI
+        this.currentSession!.messages.push({
             sender: 'user',
-            text: this.userMessage,
+            text: textToSend,
             timestamp: new Date().toISOString()
-        };
+        });
 
-        this.currentSession.messages.push(newMessage);
         this.userMessage = '';
         this.isTyping = true;
+        this.scrollToBottom();
 
-        // Mock bot response
-        setTimeout(() => {
-            this.isTyping = false;
-            const botResponse: Message = {
-                id: (Date.now() + 1).toString(),
-                sender: 'bot',
-                text: 'Questa è una risposta automatica simulata. In futuro sarò collegato a un vero motore AI!',
-                timestamp: new Date().toISOString()
-            };
-            this.currentSession?.messages.push(botResponse);
+        // 2. Chiamata al Service
+        // Passiamo currentSessionId (se è null, il BE crea nuova chat)
+        this.chatbotService.sendMessage(textToSend, this.currentSessionId || undefined).subscribe({
+            next: (response) => {
+                this.isTyping = false;
 
-            // Update title if it's the first message
-            if (this.currentSession?.messages.length === 2 && this.currentSession.title === 'Nuova Chat') {
-                this.currentSession.title = newMessage.text.substring(0, 30) + (newMessage.text.length > 30 ? '...' : '');
+                // Pulisci la risposta
+                const cleanedText = this.cleanBotResponse(response.answer);
+
+                // Aggiungi risposta bot alla UI
+                this.currentSession!.messages.push({
+                    sender: 'bot',
+                    text: cleanedText,
+                    timestamp: new Date().toISOString()
+                });
+
+                // 3. Gestione PRIMO messaggio di una nuova chat
+                // Se non avevamo un ID, ora lo abbiamo dal backend insieme al titolo generato
+                if (!this.currentSessionId) {
+                    this.currentSessionId = response.sessionId;
+
+                    // Aggiorniamo l'oggetto corrente
+                    if (this.currentSession) {
+                        this.currentSession.id = response.sessionId;
+                        this.currentSession.title = response.title;
+                        this.currentSession.updatedAt = new Date().toISOString();
+
+                        // Aggiungiamo alla sidebar in cima
+                        this.sessions.unshift(this.currentSession);
+                    }
+                } else {
+                    // Se era una chat esistente, la spostiamo in cima alla sidebar (aggiornamento data)
+                    this.updateSidebarOrder(this.currentSessionId);
+                }
+
+                this.scrollToBottom();
+            },
+            error: (err) => {
+                this.isTyping = false;
+                console.error('Errore invio messaggio', err);
+                this.currentSession?.messages.push({
+                    sender: 'bot',
+                    text: '⚠️ Si è verificato un errore di comunicazione con il server.',
+                    timestamp: new Date().toISOString()
+                });
+                this.scrollToBottom();
             }
+        });
+    }
 
-        }, 1500);
+    /**
+     * Sposta la sessione attiva in cima alla lista della sidebar
+     */
+    private updateSidebarOrder(sessionId: string): void {
+        const index = this.sessions.findIndex(s => s.id === sessionId);
+        if (index > -1) {
+            const session = this.sessions.splice(index, 1)[0];
+            session.updatedAt = new Date().toISOString(); // Aggiorna data visiva
+            this.sessions.unshift(session);
+        }
+    }
+
+    /**
+     * Funzione per rimuovere Markdown e Riferimenti
+     */
+    private cleanBotResponse(rawText: string): string {
+        if (!rawText) return '';
+
+        // 1. Rimuove la sezione "### References"
+        let text = rawText.split('### References')[0];
+
+        // 2. Rimuove il grassetto Markdown (**testo** -> testo)
+        text = text.replace(/\*\*/g, '');
+
+        // 3. Rimuove il corsivo Markdown (*testo* -> testo)
+        text = text.replace(/\*/g, '');
+
+        // 4. Rimuove header Markdown residui
+        text = text.replace(/###/g, '');
+
+        return text.trim();
     }
 
     useSuggestion(suggestion: string): void {
@@ -128,9 +214,8 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
     toggleVoiceDictation(): void {
         this.isListening = !this.isListening;
         if (this.isListening) {
-            // Mock listening
             setTimeout(() => {
-                this.userMessage = "Esempio di testo dettato...";
+                this.userMessage = "Sto ascoltando (funzionalità simulata)...";
                 this.isListening = false;
             }, 2000);
         }
@@ -138,7 +223,11 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
 
     private scrollToBottom(): void {
         try {
-            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+            if (this.scrollContainer) {
+                setTimeout(() => {
+                    this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+                }, 50);
+            }
         } catch (err) { }
     }
 }
