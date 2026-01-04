@@ -198,6 +198,12 @@
 
                 .message-content {
                     line-height: 1.5;
+
+                    strong,
+                    b {
+                        font-weight: 700;
+                        color: inherit;
+                    }
                 }
 
                 .message-time {

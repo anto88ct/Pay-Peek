@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AdInputComponent } from '../../toolbox/ad-input/ad-input.component';
 import { AdButtonComponent } from '../../toolbox/ad-button/ad-button.component';
-import { ChatMessage, ChatSession } from 'src/app/core/dto/chatbot.model';
+import { ChatSession } from 'src/app/core/dto/chatbot.model';
 import { ChatbotService } from 'src/app/core/services/chatbot.service';
 
 @Component({
@@ -182,22 +182,26 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
     }
 
     /**
-     * Funzione per rimuovere Markdown e Riferimenti
-     */
+         * Pulisce i riferimenti ma MANTIENE e converte la formattazione Markdown (Grassetto)
+         */
     private cleanBotResponse(rawText: string): string {
         if (!rawText) return '';
 
-        // 1. Rimuove la sezione "### References"
+        // 1. Rimuove la sezione "### References" (quella la togliamo sempre)
         let text = rawText.split('### References')[0];
 
-        // 2. Rimuove il grassetto Markdown (**testo** -> testo)
-        text = text.replace(/\*\*/g, '');
+        // 2. Converte il grassetto Markdown (**testo**) in HTML (<strong>testo</strong>)
+        // La regex cattura il testo tra i doppi asterischi
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-        // 3. Rimuove il corsivo Markdown (*testo* -> testo)
-        text = text.replace(/\*/g, '');
+        // 3. (Opzionale) Converte il corsivo (*testo*) in HTML (<em>testo</em>)
+        text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
-        // 4. Rimuove header Markdown residui
+        // 4. Rimuove header Markdown residui che non vogliamo visualizzare
         text = text.replace(/###/g, '');
+
+        // 5. Converte i "newline" (\n) in <br> per andare a capo correttamente nell'HTML
+        text = text.replace(/\n/g, '<br>');
 
         return text.trim();
     }

@@ -18,6 +18,11 @@ export class LoaderInterceptor implements HttpInterceptor {
     constructor(private loaderService: LoaderService) { }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+        if (request.headers.has('X-Skip-Loader')) {
+            const newReq = request.clone({ headers: request.headers.delete('X-Skip-Loader') });
+            return next.handle(newReq);
+        }
+
         this.loaderService.show();
 
         return next.handle(request).pipe(
@@ -29,6 +34,12 @@ export class LoaderInterceptor implements HttpInterceptor {
 // Functional interceptor for use with provideHttpClient(withInterceptors([...]))
 export const loaderInterceptorFn: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
     const loaderService = inject(LoaderService);
+
+    if (req.headers.has('X-Skip-Loader')) {
+        const newReq = req.clone({ headers: req.headers.delete('X-Skip-Loader') });
+        return next(newReq);
+    }
+
     loaderService.show();
     return next(req).pipe(
         finalize(() => loaderService.hide())

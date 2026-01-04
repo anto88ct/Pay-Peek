@@ -33,7 +33,7 @@
             <div class="message" *ngFor="let msg of currentSession?.messages"
                 [class.user-message]="msg.sender === 'user'" [class.bot-message]="msg.sender === 'bot'">
                 <div class="message-content">
-                    {{ msg.text }}
+                    <div [innerHTML]="msg.text"></div>
                 </div>
                 <div class="message-time">
                     {{ msg.timestamp | date : 'shortTime' }}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs'; // 'of' usato solo per mock temporanei se mancano endpoint
 import { map } from 'rxjs/operators';
 import { BaseService } from './base.service';
@@ -23,6 +23,7 @@ export class ChatbotService extends BaseService {
   // Invia messaggio (con sessionId opzionale)
   sendMessage(query: string, sessionId?: string): Observable<ChatResponse> {
     const payload: ChatRequest = { query, sessionId };
-    return this.post<ChatResponse>('/chat/ask', payload);
+    const headers = new HttpHeaders({ 'X-Skip-Loader': 'true' });
+    return this.post<ChatResponse>('/chat/ask', payload, { headers });
   }
 }

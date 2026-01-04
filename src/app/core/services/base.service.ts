@@ -19,10 +19,10 @@ export abstract class BaseService {
     );
   }
 
-  protected post<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.apiUrl}${endpoint}`, body).pipe(
+  protected post<T>(endpoint: string, body: any, options?: any): Observable<T> {
+    return this.http.post<T>(`${this.apiUrl}${endpoint}`, body, options).pipe(
       catchError(this.handleError.bind(this))
-    );
+    ) as Observable<T>;
   }
 
   protected put<T>(endpoint: string, body: any): Observable<T> {
