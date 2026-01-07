@@ -136,13 +136,13 @@ export class SignupComponent implements OnInit, OnDestroy {
                                     if (bioAvailable) {
                                         this.showBiometricPrompt = true;
                                     } else {
-                                        this.router.navigate(['/dashboard']);
+                                        this.router.navigate(['/walkthrough']);
                                     }
                                     this.isLoading = false;
                                 },
                                 error: (error) => {
                                     console.error('Biometric availability check failed:', error);
-                                    this.router.navigate(['/dashboard']);
+                                    this.router.navigate(['/walkthrough']);
                                     this.isLoading = false;
                                 }
                             });
@@ -161,7 +161,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
         if (!email) {
             this.notificationService.showError('Email non valida');
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/walkthrough']);
             return;
         }
 
@@ -173,7 +173,7 @@ export class SignupComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: () => {
                     this.notificationService.showSuccess('Biometria abilitata con successo');
-                    this.router.navigate(['/dashboard']);
+                    this.router.navigate(['/walkthrough']);
                 },
                 error: (error: any) => {
                     console.error('Biometric registration failed:', error);
@@ -185,7 +185,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                     }
 
                     // Navigate anyway per non bloccare l'utente
-                    this.router.navigate(['/dashboard']);
+                    this.router.navigate(['/walkthrough']);
                 },
                 complete: () => {
                     this.isBiometricLoading = false;
@@ -196,6 +196,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     skipBiometric() {
         this.showBiometricPrompt = false;
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/walkthrough']);
     }
 }

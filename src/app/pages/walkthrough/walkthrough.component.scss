@@ -1,0 +1,70 @@
+.walkthrough-content {
+    .slide-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 250px;
+        padding: 1rem;
+
+        // Mobile optimization (default)
+        .slide-image {
+            margin-bottom: 1.5rem;
+
+            i {
+                font-size: 3rem !important; // Smaller icon on mobile
+            }
+
+            img {
+                max-height: 150px; // Smaller image on mobile
+                max-width: 100%;
+                object-fit: contain;
+            }
+        }
+
+        h3 {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.25rem; // Smaller heading on mobile
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: var(--text-color-secondary);
+            font-size: 1rem; // Smaller text on mobile
+            line-height: 1.4;
+            max-width: 100%;
+        }
+    }
+}
+
+// Tablet and Desktop adjustments
+@media screen and (min-width: 768px) {
+    .walkthrough-content {
+        .slide-item {
+            min-height: 300px;
+            padding: 2rem;
+
+            .slide-image {
+                margin-bottom: 2rem;
+
+                i {
+                    font-size: 4rem !important;
+                }
+
+                img {
+                    max-height: 200px;
+                }
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 1.1rem;
+                line-height: 1.5;
+            }
+        }
+    }
+}

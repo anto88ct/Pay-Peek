@@ -22,6 +22,11 @@ export const routes: Routes = [
         loadComponent: () => import('./shared/components/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
     },
 
+    {
+        path: 'walkthrough',
+        loadComponent: () => import('./pages/walkthrough/walkthrough.component').then(m => m.WalkthroughComponent)
+    },
+
 
     {
         path: '',

@@ -16,6 +16,7 @@ export class AdDialogComponent {
   @Input() style: any = { width: '50vw' };
   @Input() draggable: boolean = false;
   @Input() resizable: boolean = false;
+  @Input() breakpoints: any;
 
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() onHide = new EventEmitter<any>();
