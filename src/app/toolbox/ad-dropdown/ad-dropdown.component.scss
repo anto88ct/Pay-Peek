@@ -102,3 +102,7 @@
         }
     }
 }
+
+:host ::ng-deep ul.p-dropdown-items {
+    padding: 0 !important;
+}

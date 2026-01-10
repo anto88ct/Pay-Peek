@@ -1,18 +1,49 @@
 [
     {
-        "question": "SETTINGS.FAQ.OVERVIEW.QUESTION",
-        "answer": "SETTINGS.FAQ.OVERVIEW.ANSWER"
+        "type": "overview",
+        "icon": "fas fa-info-circle",
+        "color": "#607D8B",
+        "titleKey": "SETTINGS.FAQ.OVERVIEW.QUESTION",
+        "descKey": "SETTINGS.FAQ.OVERVIEW.ANSWER"
     },
     {
-        "question": "SETTINGS.FAQ.UPLOAD.QUESTION",
-        "answer": "SETTINGS.FAQ.UPLOAD.ANSWER"
+        "type": "steps",
+        "icon": "fas fa-cloud-upload-alt",
+        "color": "#18BC9C",
+        "titleKey": "SETTINGS.FAQ.UPLOAD.QUESTION",
+        "steps": [
+            "SETTINGS.FAQ.UPLOAD.STEP_1",
+            "SETTINGS.FAQ.UPLOAD.STEP_2",
+            "SETTINGS.FAQ.UPLOAD.STEP_3"
+        ]
     },
     {
-        "question": "SETTINGS.FAQ.FOLDERS.QUESTION",
-        "answer": "SETTINGS.FAQ.FOLDERS.ANSWER"
+        "type": "pwa",
+        "icon": "fas fa-mobile-alt",
+        "color": "#F39C12",
+        "titleKey": "SETTINGS.FAQ.PWA.QUESTION",
+        "descKey": "SETTINGS.FAQ.PWA.ANSWER",
+        "subSections": [
+            {
+                "icon": "fab fa-android",
+                "textKey": "SETTINGS.FAQ.PWA.ANDROID"
+            },
+            {
+                "icon": "fab fa-apple",
+                "textKey": "SETTINGS.FAQ.PWA.IOS"
+            }
+        ]
     },
     {
-        "question": "SETTINGS.FAQ.PWA.QUESTION",
-        "answer": "SETTINGS.FAQ.PWA.ANSWER"
+        "type": "security",
+        "icon": "fas fa-shield-alt",
+        "color": "#e74c3c",
+        "titleKey": "SETTINGS.FAQ.SECURITY.QUESTION",
+        "descKey": "SETTINGS.FAQ.SECURITY.ANSWER",
+        "steps": [
+            "SETTINGS.FAQ.SECURITY.POINT_1",
+            "SETTINGS.FAQ.SECURITY.POINT_2",
+            "SETTINGS.FAQ.SECURITY.POINT_3"
+        ]
     }
 ]

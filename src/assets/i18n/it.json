@@ -105,19 +105,26 @@
       "TITLE": "FAQ",
       "OVERVIEW": {
         "QUESTION": "Panoramica dell'applicazione",
-        "ANSWER": "PayPeek è un'applicazione per la gestione e l'analisi delle buste paga."
+        "ANSWER": "PayPeek è la tua soluzione intelligente per la gestione delle buste paga. Carica i tuoi documenti, lascia che l'AI estragga i dati e interroga il chatbot per qualsiasi dubbio. Monitora stipendio, ferie e permessi attraverso una dashboard intuitiva e sempre aggiornata."
       },
       "UPLOAD": {
         "QUESTION": "Come caricare una busta paga?",
-        "ANSWER": "Vai nella sezione File e clicca il pulsante di caricamento."
-      },
-      "FOLDERS": {
-        "QUESTION": "Come creare una cartella?",
-        "ANSWER": "Nella sezione File, clicca il pulsante + per creare una nuova cartella."
+        "STEP_1": "Carica il template: questo primo passaggio serve all'AI per imparare la struttura della tua busta paga.",
+        "STEP_2": "Carica le tue buste paga: usa il file uploader nella sezione File. La dashboard si aggiornerà in tempo reale con i nuovi dati.",
+        "STEP_3": "Organizzazione automatica: il sistema creerà automaticamente cartelle divise per anno e mese per tenere tutto in ordine."
       },
       "PWA": {
         "QUESTION": "Come scaricare la PWA?",
-        "ANSWER": "Clicca il pulsante di installazione nella barra degli indirizzi del browser."
+        "ANSWER": "Porta PayPeek sempre con te installando la PWA:",
+        "ANDROID": "Su Android (Chrome): Clicca sull'icona opzioni (tre puntini) e seleziona 'Installa app'.",
+        "IOS": "Su iOS (Safari): Tocca il tasto 'Condividi' e scorri fino a trovare 'Aggiungi alla schermata Home'."
+      },
+      "SECURITY": {
+        "QUESTION": "I miei dati sono al sicuro?",
+        "ANSWER": "Assolutamente sì. PayPeek è progettato con la sicurezza al primo posto:",
+        "POINT_1": "Elaborazione Locale: Le tue buste paga vengono analizzate e gestite, nessun dato sensibile viene inviato a server esterni per l'archiviazione a lungo termine.",
+        "POINT_2": "Crittografia: Tutte le comunicazioni sono protette da protocolli di crittografia standard.",
+        "POINT_3": "Privacy Assoluta: I tuoi dati finanziari sono tuoi e solo tuoi. Non li condividiamo con terze parti."
       }
     },
     "SUPPORT": {

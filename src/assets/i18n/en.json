@@ -105,19 +105,26 @@
       "TITLE": "FAQ",
       "OVERVIEW": {
         "QUESTION": "App Overview",
-        "ANSWER": "PayPeek is an application for managing and analyzing payslips."
+        "ANSWER": "PayPeek is your smart solution for payslip management. Upload your documents, let AI extract the data, and ask the chatbot anything. Monitor your salary, holidays, and leave through an intuitive, real-time dashboard."
       },
       "UPLOAD": {
         "QUESTION": "How to upload a payslip?",
-        "ANSWER": "Go to the Files section and click the upload button."
-      },
-      "FOLDERS": {
-        "QUESTION": "How to create a folder?",
-        "ANSWER": "In the Files section, click the + button to create a new folder."
+        "STEP_1": "Upload the template: this first step helps the AI learn the structure of your payslip.",
+        "STEP_2": "Upload your payslips: use the file uploader in the Files section. The dashboard will update in real-time with new data.",
+        "STEP_3": "Automatic organization: the system will automatically create folders by year and month to keep everything organized."
       },
       "PWA": {
         "QUESTION": "How to download the PWA?",
-        "ANSWER": "Click the install button in your browser address bar."
+        "ANSWER": "Keep PayPeek with you by installing the PWA:",
+        "ANDROID": "On Android (Chrome): Tap the options icon (three dots) and select 'Install app'.",
+        "IOS": "On iOS (Safari): Tap the 'Share' button and scroll down to 'Add to Home Screen'."
+      },
+      "SECURITY": {
+        "QUESTION": "Are my data safe?",
+        "ANSWER": "Absolutely. PayPeek is designed with security first:",
+        "POINT_1": "Local Processing: Your payslips are analyzed and managed, no sensitive data is sent to external servers for long-term storage.",
+        "POINT_2": "Encryption: All communications are protected by standard encryption protocols.",
+        "POINT_3": "Absolute Privacy: Your financial data is yours alone. We do not share it with third parties."
       }
     },
     "SUPPORT": {

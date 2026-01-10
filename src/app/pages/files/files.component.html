@@ -1,7 +1,7 @@
 <div class="files-container p-4 fade-in">
     <!-- Header & Search -->
     <div class="flex justify-content-between align-items-center mb-4">
-        <h1 class="text-3xl font-bold mb-1 title-section">Files</h1>
+        <h1 class="text-3xl font-bold mb-1 title-section"><i class="fas fa-folder-tree me-2"></i>Files</h1>
 
         <div class="search-box">
             <ad-input icon="fa-solid fa-search" placeholder="Search folders or files..."
@@ -154,7 +154,8 @@
 <!-- Choice Dialog -->
 <ad-dialog [(visible)]="showChoiceDialog" header="Crea o Carica" [style]="{width: '400px'}">
     <div class="flex flex-column gap-3">
-        <div class="p-4 border-1 border-200 border-round cursor-pointer hover:surface-50 transition-colors flex align-items-center gap-3"
+        <!-- Create Folder ATTUALMENTE DISABILITATO -->
+        <!-- <div class="p-4 border-1 border-200 border-round cursor-pointer hover:surface-50 transition-colors flex align-items-center gap-3"
             (click)="selectCreateFolder()">
             <div
                 class="bg-primary-50 text-primary border-circle w-3rem h-3rem flex align-items-center justify-content-center">
@@ -164,7 +165,7 @@
                 <span class="font-bold text-700">Crea una cartella</span>
                 <span class="text-sm text-500">Crea manualmente una nuova cartella anno</span>
             </div>
-        </div>
+        </div> -->
 
         <div class="p-4 border-1 border-200 border-round cursor-pointer transition-colors flex align-items-center gap-3"
             [ngClass]="{'opacity-50 pointer-events-none bg-gray-50': !templateExists, 'hover:surface-50': templateExists}"

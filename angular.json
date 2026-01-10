@@ -49,6 +49,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/enviroments/enviroment.ts",
+                  "with": "src/enviroments/enviroment.prod.ts"
+                }
+              ],
               "optimization": {
                 "scripts": true,
                 "styles": {

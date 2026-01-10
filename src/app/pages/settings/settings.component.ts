@@ -16,11 +16,21 @@ interface Attachment {
     name: string;
 }
 
+interface FAQSubSection {
+    icon: string;
+    textKey: string;
+}
 
 interface FAQ {
-    question: string;
-    answer: string;
+    type: 'overview' | 'steps' | 'pwa' | 'security';
+    icon: string;
+    color: string;
+    titleKey: string;
+    descKey?: string;
+    steps?: string[];
+    subSections?: FAQSubSection[];
 }
+
 
 interface Contributor {
     name: string;

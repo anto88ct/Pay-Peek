@@ -1,23 +1,69 @@
 <div class="settings-container">
     <div class="container-fluid">
-        <h1 class="text-3xl font-bold mb-1 title-section mb-4">{{ 'SETTINGS.TITLE' | translate }}</h1>
+        <h1 class="text-3xl font-bold mb-1 title-section mb-4"><i class="fas fa-gear me-2"></i>{{ 'SETTINGS.TITLE' |
+            translate }}</h1>
 
-        <!-- FAQ Section -->
         <!-- FAQ Section -->
         <div class="settings-section mb-5">
             <ad-card padding="medium">
                 <h2 class="section-title">
                     <i class="fas fa-question-circle me-2"></i>{{ 'SETTINGS.FAQ.TITLE' | translate }}
                 </h2>
-                <p-accordion [multiple]="true" class="faq-accordion">
-                    <p-accordionTab *ngFor="let faq of faqs" [header]="faq.question | translate">
-                        <p>{{ faq.answer | translate }}</p>
+
+                <p-accordion styleClass="faq-accordion" [multiple]="true">
+                    <p-accordionTab *ngFor="let faq of faqs">
+                        <ng-template pTemplate="header">
+                            <div class="flex align-items-center gap-2 w-full">
+                                <span class="faq-icon-wrapper" [style.backgroundColor]="faq.color + '20'"
+                                    [style.color]="faq.color">
+                                    <i [class]="faq.icon"></i>
+                                </span>
+                                <span class="font-bold text-lg text-color">{{ faq.titleKey | translate }}</span>
+                            </div>
+                        </ng-template>
+
+                        <div class="faq-content p-3">
+                            <!-- Overview & Security Type (Text Based) -->
+                            <p *ngIf="faq.type === 'overview'" class="m-0 text-secondary line-height-3">
+                                {{ faq.descKey | translate }}
+                            </p>
+                            <div *ngIf="faq.type === 'security'">
+                                <p class="mb-3 text-secondary">{{ faq.descKey | translate }}</p>
+                                <ul class="list-none p-0 m-0">
+                                    <li *ngFor="let step of faq.steps" class="flex align-items-start mb-2 gap-2">
+                                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                        <span class="text-secondary">{{ step | translate }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                            <!-- Steps Type -->
+                            <div *ngIf="faq.type === 'steps'" class="steps-container">
+                                <div *ngFor="let step of faq.steps; let i = index"
+                                    class="step-item mb-3 p-2 border-round surface-ground">
+                                    <span class="step-number" [style.backgroundColor]="faq.color">{{i + 1}}</span>
+                                    <span class="step-text">{{ step | translate }}</span>
+                                </div>
+                            </div>
+
+                            <!-- PWA Type -->
+                            <div *ngIf="faq.type === 'pwa'">
+                                <p class="mb-3 text-secondary">{{ faq.descKey | translate }}</p>
+                                <div class="pwa-options flex flex-column gap-2">
+                                    <div *ngFor="let sub of faq.subSections"
+                                        class="pwa-option p-2 border-round surface-ground flex align-items-center gap-3">
+                                        <i [class]="sub.icon" class="text-2xl text-primary"></i>
+                                        <span class="text-secondary font-medium">{{ sub.textKey | translate }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </p-accordionTab>
                 </p-accordion>
             </ad-card>
         </div>
 
-        <!-- Support Section -->
         <!-- Support Section -->
         <div class="settings-section mb-5">
             <ad-card padding="medium">
@@ -61,7 +107,6 @@
             </ad-card>
         </div>
 
-        <!-- Contributions Section -->
         <!-- Contributions Section -->
         <div class="settings-section mb-5">
             <ad-card padding="medium">
